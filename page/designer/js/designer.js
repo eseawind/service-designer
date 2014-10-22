@@ -324,25 +324,15 @@ function handleEvents() {
 
     //数组或列表的一个元素值发生改变时
     $(':text.array-or-list-element').live('change', function() {
-        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var propName = $('#bean-definition-propname-hidden').val();
-        var className = $('#comp-definition-class-hidden').val();
-
-        var node = serviceEditor.getNodeByClass(className);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getArrayOrListPropertyDefinition(beanDefinitionId, propName);
-            console.info(propertyDefinition);
-            propertyDefinition.clear();
-            $('#comp-props-display-form').find(':text.array-or-list-element').each(function(){
-                var currentValue = $(this).val();
-                if(currentValue) {//空字符串也为false
-                    propertyDefinition.add(currentValue);
-                }
-            });
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        propertyDefinition.clear();
+        $('#comp-props-display-form').find(':text.array-or-list-element').each(function(){
+            var currentValue = $(this).val();
+            if(currentValue) {//空字符串也为false
+                propertyDefinition.add(currentValue);
+            }
+        });
     });
 
 
