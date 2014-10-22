@@ -156,8 +156,8 @@ function initCanvas() {
     addNode(10, 10, 'FileNotifyComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
     className = "com.kingyea.esb.components.file.FileTargetComponent";
     addNode(250, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
-    //className = "com.kingyea.esb.components.file.FileTargetComponent";
-    //addNode(450, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
+    className = "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent";
+    addNode(450, 75, 'MultiFileSplitComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
 
     className = "com.kingyea.esb.components.gateway.MulticastComponent";
     addNode(450, 235, 'MulticastComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
@@ -215,19 +215,12 @@ function handleEvents() {
     //反回上一层按钮被点击
     $('#back-to-prev-bean-definition-button').live('click', function() {
         var prevBeanDefinitionId = $(this).attr('lang');
+        var preBeanDefinition = getBeanDefinitionByForm(prevBeanDefinitionId);
+        //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
+        var lastIndex = preBeanDefinition.id.lastIndexOf("-");
+        var belongToId = preBeanDefinition.id.substring(0, lastIndex);
         var className = $('#comp-definition-class-hidden').val();
-        var node = serviceEditor.getNodeByClass(className);
-        if(node) {
-            //preBeanDefinition为feedbackStrategy引用中的一个可选BeanDefinition
-            var preBeanDefinition = node.data.searchById(prevBeanDefinitionId);
-
-            //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
-            var lastIndex = preBeanDefinition.id.lastIndexOf("-");
-            var belongToId = preBeanDefinition.id.substring(0, lastIndex);
-            preBeanDefinition.refreshPropertiesConfigForm(className, belongToId);
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }
+        preBeanDefinition.refreshPropertiesConfigForm(className, belongToId);
     });
 
     //当普通属性值被修改时
@@ -522,6 +515,13 @@ function getPropertyDefinitionByForm(_propName) {
     var node = serviceEditor.getNodeByClass(className);
     var beanDefinition = node.data.searchById(beanDefinitionId);
     return beanDefinition.getPropertyDefinition(_propName);
+}
+
+//根据Form表单中的信息，查找名称为_beanDefinitionId的Bean定义
+function getBeanDefinitionByForm(_beanDefinitionId) {
+    var className = $('#comp-definition-class-hidden').val();
+    var node = serviceEditor.getNodeByClass(className);
+    return node.data.searchById(_beanDefinitionId);
 }
 
 
