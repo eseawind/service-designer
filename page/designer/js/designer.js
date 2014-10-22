@@ -178,7 +178,7 @@ function handleEvents() {
         var propName = select.attr('name');
         var type = select.val();
         var className = $('#comp-definition-class-hidden').val();
-        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
         var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
 
@@ -189,7 +189,7 @@ function handleEvents() {
     //引用属性类型改变
     $('select.ref-bean-definition-select').live('change', function(){
         var propName = $(this).attr('name');
-        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         var value = this.value;
         if(value) {//
             $(this).next('button').attr('disabled', '');//启用配置按钮
