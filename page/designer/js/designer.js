@@ -181,12 +181,13 @@ function handleEvents() {
         var propName = select.attr('name');
         var type = select.val();
         var className = $('#comp-definition-class-hidden').val();
+        var compId = $('#comp-definition-id-hidden').val();
         var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
         var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
 
         var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
-        beanDefinition.refreshPropertiesConfigForm(className, refPropertyDefinition.belongToId);
+        beanDefinition.refreshPropertiesConfigForm(compId, className, refPropertyDefinition.belongToId);
     });
 
     //引用属性类型改变
@@ -223,31 +224,29 @@ function handleEvents() {
         var lastIndex = preBeanDefinition.id.lastIndexOf("-");
         var belongToId = preBeanDefinition.id.substring(0, lastIndex);
         var className = $('#comp-definition-class-hidden').val();
-        preBeanDefinition.refreshPropertiesConfigForm(className, belongToId);
+        var compId = $('#comp-definition-id-hidden').val();
+        preBeanDefinition.refreshPropertiesConfigForm(compId, className, belongToId);
     });
 
     //当普通属性值被修改时
     $('#comp-props-display-form').find("input.bean-prop[type='text'],select.normal-prop").live('change', function(){
         var propName = $(this).attr('name');
-        var className = $('#comp-definition-class-hidden').val();
+        var compId = $('#comp-definition-id-hidden').val();
         //检查是否是ServiceDefination
-        if(className==serviceDefinitionClass) {
-            beanDefinition = serviceEditor.serviceDefinitionData;
-            propertyDefinition = beanDefinition.getPropertyDefinition(propName);
+        if(compId.indexOf(serviceDefinitionId)!=-1) {
+            var serviceDefinition = serviceEditor.serviceDefinitionData;
+            var propertyDefinition = serviceDefinition.getPropertyDefinition(propName);
             propertyDefinition.value = this.value;
             return;
         }
-        var currentBeanDefinitionId = $('#bean-definition-id-hidden').val();
-        var node = serviceEditor.getNodeByClass(className);
-        var beanDefinition = node.data.searchById(currentBeanDefinitionId);
-        var propertyDefinition = beanDefinition.getPropertyDefinition(propName);
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
         propertyDefinition.value = this.value;
     });
 
     //点击编辑服务定义按钮
     $('#edit-service-definition-button').click(function() {
         var serviceDefinition = serviceEditor.serviceDefinitionData;
-        serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.class);
+        serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id, serviceDefinition.class);
     });
 
     //点击输出服务定义按钮
@@ -278,15 +277,16 @@ function handleEvents() {
         var propName = input.attr('name');
         var value = input.val();
         var className = $('#comp-definition-class-hidden').val();
+        var compId = $('#comp-definition-id-hidden').val();
         //console.info(propName + "," + value + "," + className + "," + beanDefinitionId);
-        console.info(getPropertyDefinitionByForm(propName));
-
         var node = serviceEditor.getNodeByClass(className);
         if(node) {
             var componentDefinition = node.data;
             var propertyDefinition = componentDefinition.getArrayOrListPropertyDefinition(beanDefinitionId, propName);
             var form = $('#comp-props-display-form');
             form.empty();
+            form.append('<div class="row prop-entry" >' +
+                '<input type="hidden" name="compDefinitionClass" value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
             form.append('<div class="row prop-entry" >' +
                 '<input type="hidden" name="compDefinitionClass" value="' +className+ '" id="comp-definition-class-hidden"/></div>');
             form.append('<div class="row prop-entry" >' +
@@ -347,6 +347,7 @@ function handleEvents() {
         var propName = input.attr('name');
         var value = input.val();
         var className = $('#comp-definition-class-hidden').val();
+        var compId = $('#comp-definition-id-hidden').val();
         //console.info(propName + "," + value + "," + className + "," + beanDefinitionId);
 
         var node = serviceEditor.getNodeByClass(className);
@@ -356,6 +357,8 @@ function handleEvents() {
             console.info(propertyDefinition);
             var form = $('#comp-props-display-form');
             form.empty();
+            form.append('<div class="row prop-entry" >' +
+                '<input type="hidden" name="compDefinitionClass" value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
             form.append('<div class="row prop-entry" >' +
                 '<input type="hidden" name="compDefinitionClass" value="' +className+ '" id="comp-definition-class-hidden"/></div>');
             form.append('<div class="row prop-entry" >' +
