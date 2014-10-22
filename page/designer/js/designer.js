@@ -225,24 +225,6 @@ function handleEvents() {
 
     //当普通属性值被修改时
     $('#comp-props-display-form').find("input.bean-prop[type='text'],select.normal-prop").live('change', function(){
-        /*var currentBeanDefinitionId = $('#bean-definition-id-hidden').val();
-        var className = $('#comp-definition-class-hidden').val();
-        var node = serviceEditor.getNodeByClass(className);
-        var propName = $(this).attr('name');
-        if(node) {
-            var beanDefinition = node.data.searchById(currentBeanDefinitionId);
-            var propertyDefinition = beanDefinition.getPropertyDefinition(propName);
-            propertyDefinition.value = this.value;
-        } else {
-            //检查是否是ServiceDefination
-            if(className==serviceDefinitionClass) {
-                beanDefinition = serviceEditor.serviceDefinitionData;
-                propertyDefinition = beanDefinition.getPropertyDefinition(propName);
-                propertyDefinition.value = this.value;
-            } else {
-                alert('类名为:' + className + "节点未找到");
-            }
-        }*/
         var propName = $(this).attr('name');
         var className = $('#comp-definition-class-hidden').val();
         //检查是否是ServiceDefination
@@ -257,8 +239,6 @@ function handleEvents() {
         var beanDefinition = node.data.searchById(currentBeanDefinitionId);
         var propertyDefinition = beanDefinition.getPropertyDefinition(propName);
         propertyDefinition.value = this.value;
-
-
     });
 
     //点击编辑服务定义按钮
