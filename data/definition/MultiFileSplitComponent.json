@@ -1,0 +1,77 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "MultiFileSplitComponent",
+        "class" : "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent"
+    },
+    "properties" : [{
+        "name" : "backupDir",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "desc" : "备份目录"
+    }, {
+        "name" : "replaceIfExist",
+        "value" : true,
+        "type" : "boolean",
+        "desc" : "是否覆盖"
+    },{
+        "name" : "repositoryDir",
+        "value" : "",
+        "type" : "string",
+        "desc" : "db4o仓库目录"
+    }, {
+        "name" : "splitPackageSize",
+        "value" : 1048756,
+        "type" : "int",
+        "desc" : "包大小"
+    }, {
+        "name" : "uncompliteSendbackDelay",
+        "value" : 10000,
+        "type" : "int",
+        "desc" : "反馈延迟"
+    }, {
+        "name" : "poolSize",
+        "value" : 50,
+        "type" : "int",
+        "desc" : "线程池大小"
+    }, {
+        "name" : "sendBlockingQueue",
+        "value" : 100,
+        "type" : "int",
+        "desc" : "发送队列大小"
+    }, {
+        "name" : "trackerLevel",
+        "value" : "INFO",
+        "type" : "string",
+        "desc" : "追踪级别",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "ERROR",
+            "value" : "ERROR"
+        }, {
+            "display" : "INFO",
+            "value" : "INFO"
+        }, {
+            "display" : "TRACE",
+            "value" : "TRACE"
+        }]
+    }, {
+        "name" : "feedbackStrategy",
+        "value" : "jms",
+        "type" : "ref-com.kingyea.esb.components.file.feedback.FeedbackStrategy",
+        "desc" : "反馈策略",
+        "required" : true
+    }, {
+        "name" : "splitProvider",
+        "value" : "",
+        "type" : "ref-com.kingyea.esb.components.file.multi.split.MultiSplitFileProvider",
+        "desc" : "交换信息解析者"
+    }]
+}

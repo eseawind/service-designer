@@ -1,0 +1,9 @@
+/**
+ * Created by zj on 14-10-15.
+ */
+{
+
+    "com.kingyea.esb.jms.ConnectionFactoryProvider" : [
+        "defaultConnectionFactoryProvider", "disablePooledConnectionFactoryProvider"
+    ]
+}

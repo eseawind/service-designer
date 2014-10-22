@@ -1,0 +1,63 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+    PropertyDefinition.input_type_radio = 1;
+    PropertyDefinition.input_type_checkbox = 2;
+    PropertyDefinition.input_type_combo = 3;
+    PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "fileNotifyComponent",
+        "class" : "com.kingyea.esb.components.file.jnotify.FileNotifyComponent"
+    },
+    "properties" : [{
+        "name" : "notifyDirectory",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "inputType" : 0,
+        "desc" : "监控目录"
+    }, {
+        "name" : "notifySubtree",
+        "value" : true,
+        "type" : "boolean",
+        "desc" : "监控子目录",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "notifyMask",
+        "value" : 15,
+        "type" : "int",
+        "desc" : "监控掩码"
+    }, {
+        "name" : "charset",
+        "value" : "UTF-8",
+        "type" : "int",
+        "desc" : "字符编码"
+    }, {
+        "name" : "idempotent",
+        "value" : "true",
+        "type" : "boolean",
+        "desc" : "使用幂等",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "idempotentRepository",
+        "value" : "file",
+        "type" : "ref-org.apache.camel.processor.idempotent.IdempotentRepository",
+        "desc" : "幂等仓库",
+        "inputType" : 4
+    }]
+}

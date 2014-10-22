@@ -1,0 +1,66 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "TimerComponent",
+        "class" : "com.kingyea.esb.components.schedule.TimerComponent"
+    },
+    "properties" : [{
+        "name" : "timerName",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "desc" : "名称"
+    }, {
+        "name" : "time",
+        "value" : "",
+        "type" : "string",
+        "desc" : "触发模式"
+    }, {
+        "name" : "period",
+        "value" : 1000,
+        "type" : "int",
+        "desc" : "触发周期"
+    }, {
+        "name" : "deply",
+        "value" : 0,
+        "type" : "int",
+        "desc" : "延迟"
+    }, {
+        "name" : "fixedRate",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "固定周期",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "daemon",
+        "value" : true,
+        "type" : "boolean",
+        "desc" : "后台调度",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "repeatCount",
+        "value" : 0,
+        "type" : "int",
+        "desc" : "重复次数"
+    }]
+}

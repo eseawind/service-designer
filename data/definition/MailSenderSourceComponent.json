@@ -1,0 +1,88 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "mailSenderSourceComponent",
+        "class" : "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent"
+    },
+    "properties" : [{
+        "name" : "host",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "desc" : "主机名"
+    }, {
+        "name" : "port",
+        "value" : 25,
+        "type" : "int",
+        "desc" : "端口号"
+    }, {
+        "name" : "username",
+        "value" : "",
+        "type" : "string",
+        "desc" : "用户名"
+    }, {
+        "name" : "password",
+        "value" : "",
+        "type" : "string",
+        "desc" : "密码"
+    }, {
+        "name" : "name",
+        "value" : "",
+        "type" : "string",
+        "desc" : "邮件标识"
+    }, {
+        "name" : "contentType",
+        "value" : "text/plain",
+        "type" : "string",
+        "desc" : "内容类型"
+    }, {
+        "name" : "from",
+        "value" : "",
+        "type" : "string",
+        "desc" : "发送者"
+    }, {
+        "name" : "to",
+        "value" : "",
+        "type" : "string",
+        "desc" : "接收者"
+    }, {
+        "name" : "cc",
+        "value" : "",
+        "type" : "string",
+        "desc" : "抄送"
+    }, {
+        "name" : "bcc",
+        "value" : "",
+        "type" : "string",
+        "desc" : "密送"
+    }, {
+        "name" : "body",
+        "value" : "",
+        "type" : "string",
+        "desc" : "邮件正文"
+    }, {
+        "name" : "freemarkerSupport",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "FreeMarker支持",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "freemarkerMap",
+        "value" : {"aaa":"bbb"},
+        "type" : "map-string-string",
+        "desc" : "freemarkerMap"
+    }]
+}

@@ -1,0 +1,66 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "fileTargetComponent",
+        "class" : "com.kingyea.esb.components.file.FileTargetComponent"
+    },
+    "properties" : [{
+        "name" : "directoryName",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "desc" : "目录名称"
+    }, {
+        "name" : "fileName",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "desc" : "文件名称"
+    }, {
+        "name" : "fileExist",
+        "value" : "Override",
+        "type" : "string",
+        "desc" : "重名策略",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "覆盖",
+            "value" : "Override"
+        }, {
+            "display" : "添加",
+            "value" : "Append"
+        }, {
+            "display" : "抛出异常",
+            "value" : "Fail"
+        }, {
+            "display" : "忽略",
+            "value" : "Ignore"
+        }, {
+            "display" : "移走原有",
+            "value" : "Move"
+        }, {
+            "display" : "生命名",
+            "value" : "TryRename"
+        }]
+    }, {
+        "name" : "tempFileName",
+        "value" : "",
+        "type" : "string",
+        "desc" : "临时文件名称"
+    }, {
+        "name" : "moveExisting",
+        "value" : "backup",
+        "type" : "string",
+        "desc" : "moveExisting"
+    }, {
+        "name" : "charset",
+        "value" : "UTF-8",
+        "type" : "string",
+        "desc" : "字符编码"
+    }]
+}

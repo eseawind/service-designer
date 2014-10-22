@@ -1,0 +1,86 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "multicastComponent",
+        "class" : "com.kingyea.esb.components.gateway.MulticastComponent"
+    },
+    "properties" : [{
+        "name" : "parallelProcessing",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "parallelProcessing",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "stopOnException",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "stopOnException",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "onPrepare",
+        "value" : "",
+        "type" : "ref-org.apahce.camel.Processor",
+        "desc" : "onPrepare"
+    }, {
+        "name" : "executorService",
+        "value" : "",
+        "type" : "ref-java.util.concurrent.ExecutorService",
+        "desc" : "executorService"
+    }, {
+        "name" : "timeout",
+        "value" : "",
+        "type" : "int",
+        "desc" : "超时时间"
+    }, {
+        "name" : "aggregationStrategy",
+        "value" : "",
+        "type" : "ref-org.apache.camel.processor.aggregate.AggregationStrategy",
+        "desc" : "聚合策略"
+    }, {
+        "name" : "shareUnitOfWork",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "shareUnitOfWork",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }, {
+        "name" : "streaming",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "streaming",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
+    }]
+}

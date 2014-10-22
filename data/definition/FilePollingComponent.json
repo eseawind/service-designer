@@ -1,0 +1,37 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+    PropertyDefinition.input_type_radio = 1;
+    PropertyDefinition.input_type_checkbox = 2;
+    PropertyDefinition.input_type_combo = 3;
+    PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "filePollingComponent",
+        "class" : "com.kingyea.esb.components.file.FilePollingComponent"
+    },
+    "properties" : [{
+        "name" : "directoryName",
+        "value" : "",
+        "type" : "string",
+        "required" : true,
+        "inputType" : 0,
+        "desc" : "目录"
+    }, {
+        "name" : "delay",
+        "value" : 1000,
+        "type" : "int",
+        "desc" : "延迟"
+    }, {
+        "name" : "noop",
+        "value" : false,
+        "type" : "boolean",
+        "desc" : "noop"
+    }, {
+        "name" : "idempotentRepository",
+        "value" : "",
+        "type" : "ref-org.apache.camel.processor.idempotent.IdempotentRepository",
+        "desc" : "密等仓库",
+        "inputType" : 4
+    }]
+}

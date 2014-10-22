@@ -1,0 +1,44 @@
+/**
+ *  PropertyDefinition.input_type_text = 0;
+ *  PropertyDefinition.input_type_radio = 1;
+ *  PropertyDefinition.input_type_checkbox = 2;
+ *  PropertyDefinition.input_type_combo = 3;
+ *  PropertyDefinition.input_type_ref = 4;
+ */
+{
+    "bean" : {
+        "id" : "jmsProducerComponent",
+        "class" : "com.kingyea.esb.components.protocol.jms.JmsProducerComponent"
+    },
+    "properties" : [{
+        "name" : "componentName",
+        "value" : "jms",
+        "type" : "string",
+        "desc" : "容器名称"
+    }, {
+        "name" : "destinationType",
+        "value" : "queue",
+        "type" : "string",
+        "desc" : "目的类型",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "队列",
+            "value" : "queue"
+        }, {
+            "display" : "主题",
+            "value" : "topic"
+        }]
+    }, {
+        "name" : "destinationName",
+        "value" : "",
+        "type" : "string",
+        "desc" : "目的地名称",
+        "required" : true
+    }, {
+        "name" : "connectionFactoryProvider",
+        "value" : "hornetq",
+        "type" : "ref-com.kingyea.esb.jms.ConnectionFactoryProvider",
+        "desc" : "连接工厂提供者",
+        "required" : false
+    }]
+}

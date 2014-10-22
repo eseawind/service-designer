@@ -1,0 +1,26 @@
+[{
+    "class" : "com.kingyea.esb.components.file.FilePollingComponent",
+    "url" : "/data/definition/FilePollingComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.schedule.TimerComponent",
+    "url" : "/data/definition/TimerComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent",
+    "url" : "/data/definition/MultiFileSplitComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.file.jnotify.FileNotifyComponent",
+    "url" : "/data/definition/FileNotifyComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.protocol.jms.JmsProducerComponent",
+    "url" : "/data/definition/JmsProducerComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent",
+    "url" : "/data/definition/MailSenderSourceComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.gateway.MulticastComponent",
+    "url" : "/data/definition/MulticastComponent.json"
+}, {
+    "class" : "com.kingyea.esb.components.file.FileTargetComponent",
+    "url" : "/data/definition/FileTargetComponent.json"
+}]
+
