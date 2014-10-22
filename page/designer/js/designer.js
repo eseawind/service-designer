@@ -400,26 +400,16 @@ function handleEvents() {
 
     //Map属性条目发生改变时
     $(':text.map-entry-key,:text.map-entry-value').live('change', function() {
-        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var propName = $('#bean-definition-propname-hidden').val();
-        var className = $('#comp-definition-class-hidden').val();
-
-        var node = serviceEditor.getNodeByClass(className);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getMapPropertyDefinition(beanDefinitionId, propName);
-            console.info(propertyDefinition);
-            propertyDefinition.clear();
-            $('#comp-props-display-form').find(':text.map-entry-key').each(function(){
-                var currentKey = $(this).val();
-                if(currentKey) {//空字符串也为false
-                    var currentValue = $(this).next(':text.map-entry-value').val();
-                    propertyDefinition.add(currentKey, currentValue);
-                }
-            });
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        propertyDefinition.clear();
+        $('#comp-props-display-form').find(':text.map-entry-key').each(function(){
+            var currentKey = $(this).val();
+            if(currentKey) {//空字符串也为false
+                var currentValue = $(this).next(':text.map-entry-value').val();
+                propertyDefinition.add(currentKey, currentValue);
+            }
+        });
     });
 
     //当选择资源值改变时
