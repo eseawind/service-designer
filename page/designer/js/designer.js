@@ -162,6 +162,9 @@ function initCanvas() {
     className = "com.kingyea.esb.components.gateway.MulticastComponent";
     addNode(450, 235, 'MulticastComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
 
+    className = "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent";
+    addNode(450, 355, 'MailSenderSourceComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
+
 
     var start = new ComponentDefinition(startComponentClass);
     addNode(5, 200, 'StartComponent', '', 'output', start);
@@ -385,28 +388,17 @@ function handleEvents() {
             '<button type="button" class="remove-map-entry">移除</button></div>')
     });
 
-    //移除数组或列表的一个元素
+    //移除Map属性的一个条目
     $('button.remove-map-entry').live('click', function(){
-        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var propName = $('#bean-definition-propname-hidden').val();
-        var className = $('#comp-definition-class-hidden').val();
-
-        var node = serviceEditor.getNodeByClass(className);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getMapPropertyDefinition(beanDefinitionId, propName);
-            var key = $(this).prevAll(':text.map-entry-key').val();
-            console.info(key);
-            propertyDefinition.remove(key);
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }
-
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var key = $(this).prevAll(':text.map-entry-key').val();
+        propertyDefinition.remove(key);
         $(this).parent().remove();
-
+        console.info(propertyDefinition);
     });
 
-    //数组或列表的一个元素值发生改变时
+    //Map属性条目发生改变时
     $(':text.map-entry-key,:text.map-entry-value').live('change', function() {
         var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var propName = $('#bean-definition-propname-hidden').val();
