@@ -14,6 +14,7 @@ var componentRegistryUrl = contextPath + "/data/ComponentRegistry.json";
 var manualConfigRefPropValue = "__ref-prop-from-manual-config__";
 var resourceRefPropValue = "__ref-prop-from-resource__";
 var resourcePropPrefix = "resource-";
+var serviceDefinitionId = "serviceDefinition";
 
 function ComponentDefinitionLoader() {
     this.loadSuccess = null;
@@ -155,8 +156,8 @@ function initCanvas() {
     addNode(10, 10, 'FileNotifyComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
     className = "com.kingyea.esb.components.file.FileTargetComponent";
     addNode(250, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
-    className = "com.kingyea.esb.components.file.FileTargetComponent";
-    addNode(450, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
+    //className = "com.kingyea.esb.components.file.FileTargetComponent";
+    //addNode(450, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
 
     className = "com.kingyea.esb.components.gateway.MulticastComponent";
     addNode(450, 235, 'MulticastComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
@@ -174,7 +175,7 @@ function handleEvents() {
     //单击引用属性配置按钮
     $('button.ref-config').live('click', function() {
         //console.info(serviceEditor);
-        var beanDefinitionId = $(this).attr('lang');
+        /*var beanDefinitionId = $(this).attr('lang');
         var select = $($(this).prev('select').get(0));
         var propName = select.attr('name');
         var type = select.val();
@@ -182,6 +183,7 @@ function handleEvents() {
         //console.info(propName + "," + type + "," + className + "," + beanDefinitionId);
 
         var node = serviceEditor.getNodeByClass(className);
+
         if(node) {
             var componentDefinition = node.data;
             console.info(componentDefinition);
@@ -195,13 +197,25 @@ function handleEvents() {
             beanDefinition.refreshPropertiesConfigForm(className, refPropertyDefinition.belongToId);
         } else {
             alert('类名为:' + className + "节点未找到");
-        }
+        }*/
+
+
+        var select = $($(this).prev('select').get(0));
+        var propName = select.attr('name');
+        var type = select.val();
+        var className = $('#comp-definition-class-hidden').val();
+        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
+        refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
+        var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
+
+        var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
+        beanDefinition.refreshPropertiesConfigForm(className, refPropertyDefinition.belongToId);
     });
 
     //引用属性类型改变
     $('select.ref-bean-definition-select').live('change', function(){
         var propName = $(this).attr('name');
-        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
         var value = this.value;
         if(value) {//
             $(this).next('button').attr('disabled', '');//启用配置按钮
@@ -244,7 +258,7 @@ function handleEvents() {
 
     //当普通属性值被修改时
     $('#comp-props-display-form').find("input.bean-prop[type='text'],select.normal-prop").live('change', function(){
-        var currentBeanDefinitionId = $('#bean-definition-id-hidden').val();
+        /*var currentBeanDefinitionId = $('#bean-definition-id-hidden').val();
         var className = $('#comp-definition-class-hidden').val();
         var node = serviceEditor.getNodeByClass(className);
         var propName = $(this).attr('name');
@@ -261,7 +275,23 @@ function handleEvents() {
             } else {
                 alert('类名为:' + className + "节点未找到");
             }
+        }*/
+        var propName = $(this).attr('name');
+        var className = $('#comp-definition-class-hidden').val();
+        //检查是否是ServiceDefination
+        if(className==serviceDefinitionClass) {
+            beanDefinition = serviceEditor.serviceDefinitionData;
+            propertyDefinition = beanDefinition.getPropertyDefinition(propName);
+            propertyDefinition.value = this.value;
+            return;
         }
+        var currentBeanDefinitionId = $('#bean-definition-id-hidden').val();
+        var node = serviceEditor.getNodeByClass(className);
+        var beanDefinition = node.data.searchById(currentBeanDefinitionId);
+        var propertyDefinition = beanDefinition.getPropertyDefinition(propName);
+        propertyDefinition.value = this.value;
+
+
     });
 
     //点击编辑服务定义按钮
@@ -479,7 +509,7 @@ function handleEvents() {
     //当选择资源值改变时
     $('select.ref-prop-resource').live('change', function(){
         var propName = $(this).attr('name');
-        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
         var value = this.value;
         if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
             refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
@@ -504,11 +534,20 @@ function getSimpleClassName(_class) {
     return _class.substr(lastIndex+1);
 }
 
-function getPropertyDefinitionByForm(_propName) {
+function getRefPropertyDefinitionByForm(_propName) {
     var beanDefinitionId = $('#bean-definition-id-hidden').val();
     var className = $('#comp-definition-class-hidden').val();
     var node = serviceEditor.getNodeByClass(className);
     return node.data.getRefPropertyDefinition(beanDefinitionId, _propName);
+}
+
+//根据Form表单中的信息，查找属性名称为_propName的属性定义
+function getPropertyDefinitionByForm(_propName) {
+    var beanDefinitionId = $('#bean-definition-id-hidden').val();
+    var className = $('#comp-definition-class-hidden').val();
+    var node = serviceEditor.getNodeByClass(className);
+    var beanDefinition = node.data.searchById(beanDefinitionId);
+    return beanDefinition.getPropertyDefinition(_propName);
 }
 
 
