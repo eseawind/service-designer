@@ -276,12 +276,12 @@ function handleEvents() {
         var value = input.val();
         var className = $('#comp-definition-class-hidden').val();
         //console.info(propName + "," + value + "," + className + "," + beanDefinitionId);
+        console.info(getPropertyDefinitionByForm(propName));
 
         var node = serviceEditor.getNodeByClass(className);
         if(node) {
             var componentDefinition = node.data;
             var propertyDefinition = componentDefinition.getArrayOrListPropertyDefinition(beanDefinitionId, propName);
-
             var form = $('#comp-props-display-form');
             form.empty();
             form.append('<div class="row prop-entry" >' +
@@ -303,8 +303,6 @@ function handleEvents() {
             }
             form.append('<div class="row prop-entry"><button type="button" id="add-array-or-list-element-button">添加</button>' +
                 '<button type="button" id="back-to-prev-bean-definition-button" lang="' +beanDefinitionId+ '">返回</button></div>');
-        } else {
-            alert('类名为:' + className + "节点未找到");
         }
 
     });
@@ -317,22 +315,11 @@ function handleEvents() {
 
     //移除数组或列表的一个元素
     $('button.remove-array-or-list-element').live('click', function(){
-        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var propName = $('#bean-definition-propname-hidden').val();
-        var className = $('#comp-definition-class-hidden').val();
-
-        var node = serviceEditor.getNodeByClass(className);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getArrayOrListPropertyDefinition(beanDefinitionId, propName);
-            var value = $(this).prev(':text').val();
-            propertyDefinition.remove(value);
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }
-
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var value = $(this).prev(':text').val();
+        propertyDefinition.remove(value);
         $(this).parent().remove();
-
     });
 
     //数组或列表的一个元素值发生改变时
