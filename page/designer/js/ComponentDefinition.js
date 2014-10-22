@@ -358,7 +358,7 @@ BeanDefinitionBuilder.buildPropertyDefinition = function(_prop, _belongTo) {
 BeanDefinitionBuilder.buildServiceDefinitionData = function() {
     var jsonData = {
         "bean" : {
-            "id" : "",
+            "id" : serviceDefinitionId,
             "class" : serviceDefinitionClass
         },
         "properties" : [{
