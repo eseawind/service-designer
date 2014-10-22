@@ -174,32 +174,6 @@ function initCanvas() {
 function handleEvents() {
     //单击引用属性配置按钮
     $('button.ref-config').live('click', function() {
-        //console.info(serviceEditor);
-        /*var beanDefinitionId = $(this).attr('lang');
-        var select = $($(this).prev('select').get(0));
-        var propName = select.attr('name');
-        var type = select.val();
-        var className = $('#comp-definition-class-hidden').val();
-        //console.info(propName + "," + type + "," + className + "," + beanDefinitionId);
-
-        var node = serviceEditor.getNodeByClass(className);
-
-        if(node) {
-            var componentDefinition = node.data;
-            console.info(componentDefinition);
-            //console.info("beanDefinitionId=" + beanDefinitionId + ",propName=" + propName);
-            var refPropertyDefinition = componentDefinition.getRefPropertyDefinition(beanDefinitionId, propName);
-            refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
-            var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
-
-            var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
-            //console.info(beanDefinition);
-            beanDefinition.refreshPropertiesConfigForm(className, refPropertyDefinition.belongToId);
-        } else {
-            alert('类名为:' + className + "节点未找到");
-        }*/
-
-
         var select = $($(this).prev('select').get(0));
         var propName = select.attr('name');
         var type = select.val();
