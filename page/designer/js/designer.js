@@ -415,7 +415,7 @@ function handleEvents() {
     //当选择资源值改变时
     $('select.ref-prop-resource').live('change', function(){
         var propName = $(this).attr('name');
-        var refPropertyDefinition = getRefPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         var value = this.value;
         if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
             refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
