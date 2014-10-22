@@ -120,13 +120,11 @@ BeanDefinition.prototype.setId = function(_id) {
  * @param _class 当前配置的ComponentDefinition类名
  * @param _belongToId 配置引用属性后，返回到的BeanDefinition ID
  */
-BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _class, _belongToId) {
+BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belongToId) {
     var form = $('#comp-props-display-form');
     form.empty();
     form.append('<div class="row prop-entry" >' +
         '<input type="hidden" name="class" value="' +_compId+ '" id="comp-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" >' +
-        '<input type="hidden" name="class" value="' +_class+ '" id="comp-definition-class-hidden"/></div>');
     form.append('<div class="row prop-entry" >' +
         '<input type="hidden" name="class" value="' +this.id+ '" id="bean-definition-id-hidden"/></div>');
     for(var i in this.propertyDefinitions) {

@@ -420,7 +420,7 @@ ComponentNode.prototype.addPoint = function(label, dir, multi) {
 ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     var componentDefinition = this.data;
     if(componentDefinition.class!=startComponentClass) {
-        componentDefinition.refreshPropertiesConfigForm(componentDefinition.id, componentDefinition.class);
+        componentDefinition.refreshPropertiesConfigForm(componentDefinition.id);
     }
 };
 
