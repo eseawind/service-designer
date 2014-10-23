@@ -28,6 +28,9 @@
         span.badge {
             cursor: pointer;
         }
+        div.panel-body {
+            padding: 0;
+        }
     </style>
     <link rel="stylesheet" href="../../js-lib/bootstrap-3.2.0-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../../js-lib/bootstrap-3.2.0-dist/css/bootstrap-theme.min.css">
@@ -54,8 +57,69 @@
     </div>
     <div class="row">
         <div class="col-md-2" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;padding: 0">
-            <ul class="list-group" id="ul-component-list">
-            </ul>
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseOne">源组件</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <ul class="list-group" id="ul-source-component-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseTwo">目的组件
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul class="list-group" id="ul-target-component-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseThree">
+                                处理组件
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul class="list-group" id="ul-process-component-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseFour">
+                                流程组件
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <ul class="list-group" id="ul-gateway-component-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-7" style="background-color: #dedef8;box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
             <div id="audio-graph"></div>

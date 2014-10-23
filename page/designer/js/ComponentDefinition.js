@@ -323,6 +323,14 @@ ComponentDefinition.prototype.getOutputLabel = function() {
     }
 };
 
+/**
+ * 获取用于显示的列表ID
+ * @returns {string}
+ */
+ComponentDefinition.prototype.getUlId = function() {
+    return "ul-" + this.type + "-component-list";
+};
+
 
 
 

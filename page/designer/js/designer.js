@@ -119,7 +119,7 @@ var audioTheme = {
 
 function initCanvas() {
     var loader = ComponentDefinitionLoader.getInstance();
-    listComponents(loader.componentDefinitions);
+    listComponents(loader.componentDefinitions.sort());
 
     serviceEditor = new ServiceEditor('audio-graph', 1000, 480, audioTheme);
     var start = new ComponentDefinition(startComponentClass);
@@ -173,7 +173,8 @@ function listComponents(_componentDefinitions) {
 function listComponent(_componentDefinition) {
     //<li class="list-group-item"><span class="badge">新</span>FilePollingComponent</li>
     var className = getSimpleClassName(_componentDefinition.class);
-    $('#ul-component-list').append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
+    var ulId = "#" + _componentDefinition.getUlId();
+    $(ulId).append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
         '<span class="badge" title="添加组件">&gt;&gt;</span>' +className+ '</li>')
 }
 
