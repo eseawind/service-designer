@@ -291,7 +291,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	ly = y+35;
 	ex = lx + mx + 10;
 	
-	var text = this.raphael.text(x+20, y+15, node.title).attr({fill: '#000', 'font-size': 16, 'font-weight': 'bold'}).xlateText();
+	var text = this.raphael.text(x+5, y+15, node.title).attr({fill: '#000', 'font-size': 14, 'font-weight': 'bold'}).xlateText();
     bbox = text.getBBox();
 	if(ex < bbox.width + 80)
 		ex = bbox.width + 80;
@@ -497,6 +497,12 @@ Point.prototype.remove = function(raphael) {
 
 /** sub为true是表示是被连接的点 **/
 Point.prototype.connect = function(raphael, other, sub) {
+    if(this.parent.data.type===ComponentDefinition.TYPE_SOURCE
+        && other.parent.data.type===ComponentDefinition.TYPE_SOURCE) {
+        alert("源组件不能连接源组件");
+        return false;
+    }
+
 	var sthis = this;
 	var editor = this.parent.parent;
 	
