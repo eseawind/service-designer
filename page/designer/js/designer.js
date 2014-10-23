@@ -307,42 +307,10 @@ function handleEvents() {
     //---------------------------------Map属性相关事件--------------------------------
     //点击配置Map元素按钮
     $('button.map-config').live('click', function() {
-        var beanDefinitionId = $(this).attr('lang');
         var input = $($(this).prev('input').get(0));
         var propName = input.attr('name');
-        var value = input.val();
-        var compId = $('#comp-definition-id-hidden').val();
-
-        var node = serviceEditor.getNodeById(compId);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getMapPropertyDefinition(beanDefinitionId, propName);
-            console.info(propertyDefinition);
-            var form = $('#comp-props-display-form');
-            form.empty();
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="compDefinitionClass" value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="beanDefinitionId" value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="beanDefinitionPropName" value="' +propName+ '" id="bean-definition-propname-hidden"/></div>');
-            if(propertyDefinition.isEmpty()) {
-                form.append('<div class="row prop-entry" >' +
-                    '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
-                    '<button type="button" class="remove-map-entry">移除</button></div>');
-            } else {
-                for(var key in propertyDefinition.value) {
-                    form.append('<div class="row prop-entry" >' +
-                        '<input class="map-entry-key" size="10" value="' +key+ '"/>=' +
-                        '<input class="map-entry-value" size="10" value="' +propertyDefinition.value[key]+ '"/>' +
-                        '<button type="button" class="remove-map-entry">移除</button></div>');
-                }
-            }
-            form.append('<div class="row prop-entry"><button type="button" id="add-map-entry-button">添加</button>' +
-                '<button type="button" id="back-to-prev-bean-definition-button" lang="' +beanDefinitionId+ '">返回</button></div>');
-        } else {
-            alert('ID为:' + compId + "节点未找到");
-        }
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        propertyDefinition.refreshPropertiesConfigForm();
     });
 
     //添加Map属性条目元素

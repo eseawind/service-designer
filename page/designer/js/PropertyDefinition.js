@@ -396,6 +396,7 @@ ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
     return this.value;
 };
 
+//当点击配置数据或列表属性时，更新属性配置表单
 ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
     var beanDefinitionId = $('#bean-definition-id-hidden').val();
     var compId = $('#comp-definition-id-hidden').val();
@@ -486,4 +487,33 @@ MapPropertyDefinition.prototype.isEmpty = function() {
         return false;
     }
     return true;
+};
+
+//当点击配置Map属性时，更新属性配置表单
+MapPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
+    var beanDefinitionId = $('#bean-definition-id-hidden').val();
+    var compId = $('#comp-definition-id-hidden').val();
+    var form = $('#comp-props-display-form');
+    form.empty();
+    form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass" ' +
+        'value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
+    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionId" ' +
+        'value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
+    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionPropName" ' +
+        'value="' +this.name+ '" id="bean-definition-propname-hidden"/></div>');
+    if(this.isEmpty()) {
+        form.append('<div class="row prop-entry" >' +
+            '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
+            '<button type="button" class="remove-map-entry">移除</button></div>');
+    } else {
+        for(var key in this.value) {
+            form.append('<div class="row prop-entry" >' +
+                '<input class="map-entry-key" size="10" value="' +key+ '"/>=' +
+                '<input class="map-entry-value" size="10" value="' +this.value[key]+ '"/>' +
+                '<button type="button" class="remove-map-entry">移除</button></div>');
+        }
+    }
+    form.append('<div class="row prop-entry"><button type="button" id="add-map-entry-button">添加</button>' +
+        '<button type="button" id="back-to-prev-bean-definition-button" ' +
+        'lang="' +beanDefinitionId+ '">返回</button></div>');
 };
