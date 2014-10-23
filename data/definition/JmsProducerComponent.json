@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "jmsProducerComponent",
+        "type" : "target",
         "class" : "com.kingyea.esb.components.protocol.jms.JmsProducerComponent"
     },
     "properties" : [{

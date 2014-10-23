@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "MultiFileSplitComponent",
+        "type" : "process",
         "class" : "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent"
     },
     "properties" : [{

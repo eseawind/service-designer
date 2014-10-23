@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "multicastComponent",
+        "type" : "gateway",
         "class" : "com.kingyea.esb.components.gateway.MulticastComponent"
     },
     "properties" : [{

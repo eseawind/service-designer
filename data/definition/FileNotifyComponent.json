@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "fileNotifyComponent",
+        "type" : "source",
         "class" : "com.kingyea.esb.components.file.jnotify.FileNotifyComponent"
     },
     "properties" : [{

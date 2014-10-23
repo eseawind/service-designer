@@ -219,8 +219,13 @@ function ComponentDefinition(_class) {
     this.outputs = [];
     this.x = 0;
     this.y = 0;
+    this.type = "";//组件类型，源组件，目的组件，流程组件，处理组件
 }
 ComponentDefinition.prototype = new BeanDefinition();
+ComponentDefinition.TYPE_SOURCE = "source";
+ComponentDefinition.TYPE_TARGET = "target";
+ComponentDefinition.TYPE_GATEWAY = "gateway";
+ComponentDefinition.TYPE_PROCESS = "process";
 
 /**
  * 转换成服务定义相关数据
@@ -308,6 +313,7 @@ BeanDefinitionBuilder.prototype.build = function() {
     var beanDefinition = new BeanDefinition(className);
     if(this.isComp) {
         beanDefinition = new ComponentDefinition(className);
+        beanDefinition.type = this.definitionData.bean.type;
     }
     beanDefinition.id = this.definitionData.bean.id;
     var properties = this.definitionData.properties;
@@ -323,10 +329,9 @@ BeanDefinitionBuilder.prototype.build = function() {
 /**
  * 构建属性定义
  * @param _prop 属性定义数据
- * //@param _beanDefinitionId  该属性定久所属的BeanDefinition ID  因为js无法处理循环引用问题
  * @returns {*} 属性定义
  */
-BeanDefinitionBuilder.buildPropertyDefinition = function(_prop, _belongTo) {
+BeanDefinitionBuilder.buildPropertyDefinition = function(_prop) {
     var propertyDefinition = null;
     var valueType = _prop.type;
     if(valueType.indexOf("ref-")!=-1) {//如果值类型是引用类型

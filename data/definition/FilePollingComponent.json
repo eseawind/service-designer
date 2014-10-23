@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "filePollingComponent",
+        "type" : "source",
         "class" : "com.kingyea.esb.components.file.FilePollingComponent"
     },
     "properties" : [{

@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "TimerComponent",
+        "type" : "source",
         "class" : "com.kingyea.esb.components.schedule.TimerComponent"
     },
     "properties" : [{

@@ -8,6 +8,7 @@
 {
     "bean" : {
         "id" : "fileTargetComponent",
+        "type" : "target",
         "class" : "com.kingyea.esb.components.file.FileTargetComponent"
     },
     "properties" : [{
