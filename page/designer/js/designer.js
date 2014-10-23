@@ -119,7 +119,7 @@ var audioTheme = {
 
 function initCanvas() {
     var loader = ComponentDefinitionLoader.getInstance();
-    //console.info(loader.componentDefinitions);
+    listComponents(loader.componentDefinitions);
 
     serviceEditor = new ServiceEditor('audio-graph', 1000, 480, audioTheme);
 
@@ -174,6 +174,19 @@ function initCanvas() {
 
     //触发编辑服务定义按钮点击事件，显示其属性配置表单
     $('#edit-service-definition-button').trigger('click');
+}
+
+function listComponents(_componentDefinitions) {
+    for(var i in _componentDefinitions) {
+        listComponent(_componentDefinitions[i]);
+    }
+}
+
+function listComponent(_componentDefinition) {
+    //<li class="list-group-item"><span class="badge">新</span>FilePollingComponent</li>
+    var className = getSimpleClassName(_componentDefinition.class);
+    $('#ul-component-list').append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
+        '<span class="badge">&gt;&gt;</span>' +className+ '</li>')
 }
 
 

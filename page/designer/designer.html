@@ -19,6 +19,15 @@
         div.toolbar {
             padding: 3px;
         }
+        ul.list-group {
+            font-size: 12px;
+        }
+        ul.list-group li {
+            padding: 5px;
+        }
+        span.badge {
+            cursor: pointer;
+        }
     </style>
     <link rel="stylesheet" href="../../js-lib/bootstrap-3.2.0-dist/css/bootstrap.css">
     <link rel="stylesheet" href="../../js-lib/bootstrap-3.2.0-dist/css/bootstrap-theme.min.css">
@@ -44,13 +53,7 @@
     </div>
     <div class="row">
         <div class="col-md-2" style="box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
-            <ul class="list-group">
-                <li class="list-group-item active">TimerComponent</li>
-                <li class="list-group-item">FilePollingComponent</li>
-                <li class="list-group-item">AddVariableToHeaderComponent</li>
-                <li class="list-group-item">FileTargetComponent</li>
-                <li class="list-group-item">JmsConsumerComponent</li>
-                <li class="list-group-item">JmsProducerComponent</li>
+            <ul class="list-group" id="ul-component-list">
             </ul>
         </div>
         <div class="col-md-7" style="background-color: #dedef8;box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
