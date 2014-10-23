@@ -71,7 +71,7 @@ PropertyDefinition.prototype.getInputLabel = function() {
     return label;
 };
 PropertyDefinition.prototype.getInputLabelHtml = function() {
-    return '<div class="row prop-entry" ><div class="prop-label">' + this.getInputLabel() + ':</div>';
+    return '<div class="row prop-entry" ><div class="prop-label">' + this.getInputLabel() + '：</div>';
 };
 PropertyDefinition.prototype.getInputHtml = function() {
     //<div class="row prop-entry" >
@@ -79,7 +79,7 @@ PropertyDefinition.prototype.getInputHtml = function() {
         // <div class="prop-input"><input name="dir" /></div>
     //</div>
     var html = this.getInputLabelHtml();
-    html += '<div class="prop-input"><input class="bean-prop" type="text" name="' +this.name+ '" value="';
+    html += '<div class="prop-input"><input size="28" class="bean-prop" type="text" name="' +this.name+ '" value="';
     html += this.value +'" /></div></div>';
     return html;
 };
@@ -271,9 +271,9 @@ RefPropertyDefinition.prototype.getConfigHtml = function(_show) {
         html += '<option value="' +resourceRefPropValue+ '">选择资源</option>';
     }
     if(!this.selectedBeanDefinitionType) {//如果选择了不使用
-        html += '</select><button disabled="disabled" type="button" class="ref-config" lang="' +this.belongToId+ '">配置</button></span>';
+        html += '</select><button disabled="disabled" type="button" class="ref-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></span>';
     } else {
-        html += '</select><button type="button" class="ref-config" lang="' +this.belongToId+ '">配置</button></span>';
+        html += '</select><button type="button" class="ref-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></span>';
     }
     return html;
 };
@@ -364,7 +364,7 @@ ArrayOrListPropertyDefinition.prototype.getInputHtml = function() {
     var html = this.getInputLabelHtml();
     var displayValue = this.getDisplayString();
     html += '<div class="prop-input"><input readonly="readonly" name="' +this.name+ '" value="' +displayValue+ '"/>';
-    html += '<button type="button" class="arrayorlist-config" lang="' +this.belongToId+ '">配置</button></div></div></div>';
+    html += '<button type="button" class="arrayorlist-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></div></div></div>';
     return html;
 };
 
@@ -410,7 +410,7 @@ ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function()
         'value="' +this.name+ '" id="bean-definition-propname-hidden"/></div>');
     if(this.value.length==0) {
         form.append('<div class="row prop-entry" ><input class="array-or-list-element"/>' +
-            '<button type="button" class="remove-array-or-list-element">移除</button></div>');
+            '<button type="button" class="remove-array-or-list-element btn btn-primary btn-xs">移除</button></div>');
     } else {
         for(var i in this.value) {
             var element = this.value[i];
@@ -419,9 +419,9 @@ ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function()
                 '<button type="button" class="remove-array-or-list-element">移除</button></div>');
         }
     }
-    form.append('<div class="row prop-entry"><button type="button" id="add-array-or-list-element-button">添加</button>' +
+    form.append('<div class="row prop-entry"><button class="btn btn-primary btn-xs" type="button" id="add-array-or-list-element-button">添加</button>' +
         '<button type="button" id="back-to-prev-bean-definition-button" ' +
-        'lang="' +beanDefinitionId+ '">返回</button></div>');
+        'lang="' +beanDefinitionId+ '" class="btn btn-primary btn-xs">返回</button></div>');
 };
 
 
@@ -454,7 +454,7 @@ MapPropertyDefinition.prototype.getInputHtml = function() {
     var html = this.getInputLabelHtml();
     var displayValue = this.getDisplayString();
     html += '<div class="prop-input"><input readonly="readonly" name="' +this.name+ '" value="' +displayValue+ '"/>';
-    html += '<button type="button" class="map-config" lang="' +this.belongToId+ '">配置</button></div></div></div>';
+    html += '<button type="button" class="map-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></div></div></div>';
     return html;
 };
 MapPropertyDefinition.prototype.getDisplayString = function() {
@@ -504,16 +504,16 @@ MapPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
     if(this.isEmpty()) {
         form.append('<div class="row prop-entry" >' +
             '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
-            '<button type="button" class="remove-map-entry">移除</button></div>');
+            '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>');
     } else {
         for(var key in this.value) {
             form.append('<div class="row prop-entry" >' +
                 '<input class="map-entry-key" size="10" value="' +key+ '"/>=' +
                 '<input class="map-entry-value" size="10" value="' +this.value[key]+ '"/>' +
-                '<button type="button" class="remove-map-entry">移除</button></div>');
+                '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>');
         }
     }
-    form.append('<div class="row prop-entry"><button type="button" id="add-map-entry-button">添加</button>' +
-        '<button type="button" id="back-to-prev-bean-definition-button" ' +
+    form.append('<div class="row prop-entry"><button class="btn btn-primary btn-xs" type="button" id="add-map-entry-button">添加</button>' +
+        '<button type="button" id="back-to-prev-bean-definition-button" class="btn btn-primary btn-xs" ' +
         'lang="' +beanDefinitionId+ '">返回</button></div>');
 };

@@ -289,7 +289,7 @@ function handleEvents() {
     //添加数组或列表元素
     $('#add-array-or-list-element-button').live('click', function(){
         $(this).parent().before('<div class="row prop-entry"><input class="array-or-list-element"/>' +
-            '<button type="button" class="remove-array-or-list-element">移除</button></div>')
+            '<button type="button" class="remove-array-or-list-element btn btn-primary btn-xs">移除</button></div>')
     });
 
     //移除数组或列表的一个元素
@@ -328,7 +328,7 @@ function handleEvents() {
     $('#add-map-entry-button').live('click', function() {
         $(this).parent().before('<div class="row prop-entry" >' +
             '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
-            '<button type="button" class="remove-map-entry">移除</button></div>')
+            '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>')
     });
 
     //移除Map属性的一个条目
@@ -383,6 +383,13 @@ function handleEvents() {
     //处理移除组件
     $('#remove-component-definition-button').click(function(){
         serviceEditor.removeSelectedComponentNode();
+    });
+
+    //只有一个字段时，按下回车表单会自动提交
+    $('input').live('keydown', function(_event){
+        if(_event.keyCode==13) {
+            return false;
+        }
     });
 }
 

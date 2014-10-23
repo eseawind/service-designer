@@ -135,8 +135,8 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belong
     //如果不是组件定义，而且不是ServiceDefination，则是引用属性引用的BeanDefinition
     if(!this.isComponentDefinition() && this.class!=serviceDefinitionClass) {
         //加上返回上一层按钮
-        var html = '<div class="row prop-entry" ><button type="button" lang="' +_belongToId+ '"' +
-            'id="back-to-prev-bean-definition-button">返回</button></div>';
+        var html = '<div class="row prop-entry back-to-prev" ><button type="button" lang="' +_belongToId+ '"' +
+            'id="back-to-prev-bean-definition-button" class="btn btn-primary btn-xs">返回</button></div>';
         form.append(html);
     }
 };
