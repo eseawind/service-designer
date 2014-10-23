@@ -269,39 +269,10 @@ function handleEvents() {
     //---------------------------------ArrayOrList属性相关事件--------------------------------
     //点击配置数组或列表元素按钮
     $('button.arrayorlist-config').live('click', function() {
-        //var beanDefinitionId = $(this).attr('lang');
-        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var input = $($(this).prev('input').get(0));
         var propName = input.attr('name');
-        var value = input.val();
-        var compId = $('#comp-definition-id-hidden').val();
-        var node = serviceEditor.getNodeById(compId);
-        if(node) {
-            var componentDefinition = node.data;
-            var propertyDefinition = componentDefinition.getArrayOrListPropertyDefinition(beanDefinitionId, propName);
-            var form = $('#comp-props-display-form');
-            form.empty();
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="compDefinitionClass" value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="beanDefinitionId" value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
-            form.append('<div class="row prop-entry" >' +
-                '<input type="hidden" name="beanDefinitionPropName" value="' +propName+ '" id="bean-definition-propname-hidden"/></div>');
-            if(propertyDefinition.value.length==0) {
-                form.append('<div class="row prop-entry" >' +
-                    '<input class="array-or-list-element"/><button type="button" class="remove-array-or-list-element">移除</button></div>');
-            } else {
-                for(var i in propertyDefinition.value) {
-                    var element = propertyDefinition.value[i];
-                    form.append('<div class="row prop-entry" >' +
-                        '<input class="array-or-list-element"  value="' +element+ '"/>' +
-                        '<button type="button" class="remove-array-or-list-element">移除</button></div>');
-                }
-            }
-            form.append('<div class="row prop-entry"><button type="button" id="add-array-or-list-element-button">添加</button>' +
-                '<button type="button" id="back-to-prev-bean-definition-button" lang="' +beanDefinitionId+ '">返回</button></div>');
-        }
-
+        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        propertyDefinition.refreshPropertiesConfigForm();
     });
 
     //添加数组或列表元素

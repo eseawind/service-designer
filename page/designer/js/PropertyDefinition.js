@@ -396,6 +396,33 @@ ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
     return this.value;
 };
 
+ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
+    var beanDefinitionId = $('#bean-definition-id-hidden').val();
+    var compId = $('#comp-definition-id-hidden').val();
+    var form = $('#comp-props-display-form');
+    form.empty();
+    form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass"' +
+        ' value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
+    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionId" ' +
+        'value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
+    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionPropName" ' +
+        'value="' +this.name+ '" id="bean-definition-propname-hidden"/></div>');
+    if(this.value.length==0) {
+        form.append('<div class="row prop-entry" ><input class="array-or-list-element"/>' +
+            '<button type="button" class="remove-array-or-list-element">移除</button></div>');
+    } else {
+        for(var i in this.value) {
+            var element = this.value[i];
+            form.append('<div class="row prop-entry" >' +
+                '<input class="array-or-list-element"  value="' +element+ '"/>' +
+                '<button type="button" class="remove-array-or-list-element">移除</button></div>');
+        }
+    }
+    form.append('<div class="row prop-entry"><button type="button" id="add-array-or-list-element-button">添加</button>' +
+        '<button type="button" id="back-to-prev-bean-definition-button" ' +
+        'lang="' +beanDefinitionId+ '">返回</button></div>');
+};
+
 
 
 //-----------------------------------------------------------------------------------------------------------------
