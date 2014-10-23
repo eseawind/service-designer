@@ -142,6 +142,7 @@ var defaultTheme = {
 	lineStrokeWidth: '3'
 };
 
+//---------------------------------------------------- ServiceEditor -----------------------------------------------
 function ServiceEditor(id, width, height, theme) {
 	if(theme == undefined)
 		this.theme = defaultTheme;
@@ -377,6 +378,18 @@ ServiceEditor.prototype.getNodeById = function(_id) {
     return null;
 };
 
+ServiceEditor.prototype.getSelectedComponentNode = function() {
+    for(var i in this.nodes) {
+        var node = this.nodes[i];
+        if(node.selected) {
+            return node;
+        }
+    }
+    return null;
+};
+
+
+//---------------------------------------------- ComponentNode -----------------------------------------------------
 function ComponentNode(id, title) {
 	this.id = id;
 	this.title = title;
