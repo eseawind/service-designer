@@ -122,58 +122,41 @@ function initCanvas() {
     listComponents(loader.componentDefinitions);
 
     serviceEditor = new ServiceEditor('audio-graph', 1000, 480, audioTheme);
-
-    function addNode(x, y, name, inputs, outputs, componentDefinition) {
-        if(inputs) {
-            inputs = inputs.split(',');
-        } else {
-            inputs = [];
-        }
-        if(outputs) {
-            outputs = outputs.split(',');
-        } else {
-            outputs = [];
-        }
-        var node = new ComponentNode(name, name);
-        componentDefinition.x = x;
-        componentDefinition.y = y;
-        node.data = componentDefinition;
-
-        for(var i in inputs) {
-            var input = inputs[i];
-            var multi = input.substring(0, 1) == '*';
-            if(multi) input = input.substring(1);
-
-            node.addPoint(input, 'in', multi);
-        }
-        for(var i in outputs)
-            if(outputs[i] != '')
-                node.addPoint(outputs[i], 'out');
-
-        serviceEditor.addNode(x, y, node);
-    }
-    var className = "com.kingyea.esb.components.file.jnotify.FileNotifyComponent";
-    addNode(10, 10, 'FileNotifyComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
-    className = "com.kingyea.esb.components.file.FileTargetComponent";
-    addNode(250, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
-    className = "com.kingyea.esb.components.file.FileTargetComponent";
-    addNode(450, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
-
-    //className = "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent";
-   // addNode(450, 75, 'MultiFileSplitComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
-
-    className = "com.kingyea.esb.components.gateway.MulticastComponent";
-    addNode(450, 235, 'MulticastComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
-
-    //className = "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent";
-    //addNode(450, 355, 'MailSenderSourceComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
-
-
     var start = new ComponentDefinition(startComponentClass);
     addNode(5, 200, 'StartComponent', '', 'output', start);
 
     //触发编辑服务定义按钮点击事件，显示其属性配置表单
     $('#edit-service-definition-button').trigger('click');
+}
+
+function addNode(x, y, name, inputs, outputs, componentDefinition) {
+    if(inputs) {
+        inputs = inputs.split(',');
+    } else {
+        inputs = [];
+    }
+    if(outputs) {
+        outputs = outputs.split(',');
+    } else {
+        outputs = [];
+    }
+    var node = new ComponentNode(name, name);
+    componentDefinition.x = x;
+    componentDefinition.y = y;
+    node.data = componentDefinition;
+
+    for(var i in inputs) {
+        var input = inputs[i];
+        var multi = input.substring(0, 1) == '*';
+        if(multi) input = input.substring(1);
+
+        node.addPoint(input, 'in', multi);
+    }
+    for(var i in outputs)
+        if(outputs[i] != '')
+            node.addPoint(outputs[i], 'out');
+
+    serviceEditor.addNode(x, y, node);
 }
 
 function listComponents(_componentDefinitions) {
@@ -438,6 +421,15 @@ function handleEvents() {
         }
     });
 
+
+    //处理添加组件
+    $('span.badge').live('click', function(){
+        var className = $(this).parent().attr('lang');
+        var label = getSimpleClassName(className);
+        var loader = ComponentDefinitionLoader.getInstance();
+        addNode(5, 10, label, '*input', 'output',
+            loader.getComponentDefinitionByClassName(className, true));
+    });
 }
 
 
