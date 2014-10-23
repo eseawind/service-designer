@@ -386,11 +386,7 @@ ArrayOrListPropertyDefinition.prototype.remove = function(_value) {
 };
 
 ArrayOrListPropertyDefinition.prototype.getDisplayString = function() {
-    var display = this.value.join(',');
-    if(display) {
-        display = display.substring(0, display.length-1);
-    }
-    return display;
+    return this.value.join(',');
 };
 ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
     return this.value;
