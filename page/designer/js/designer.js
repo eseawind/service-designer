@@ -123,13 +123,18 @@ function initCanvas() {
 
     serviceEditor = new ServiceEditor('audio-graph', 1000, 480, audioTheme);
     var start = new ComponentDefinition(startComponentClass);
-    addNode(5, 200, 'StartComponent', '', 'output', start);
+    start.type = ComponentDefinition.TYPE_START;
+    addNode(5, 200, start);
 
     //触发编辑服务定义按钮点击事件，显示其属性配置表单
     $('#edit-service-definition-button').trigger('click');
 }
 
-function addNode(x, y, name, inputs, outputs, componentDefinition) {
+function addNode(_x, _y, _componentDefinition) {
+    console.info(_componentDefinition);
+    var inputs = _componentDefinition.getInputLabel();
+    var outputs = _componentDefinition.getOutputLabel();
+    var name = getSimpleClassName(_componentDefinition.class);
     if(inputs) {
         inputs = inputs.split(',');
     } else {
@@ -141,9 +146,9 @@ function addNode(x, y, name, inputs, outputs, componentDefinition) {
         outputs = [];
     }
     var node = new ComponentNode(name, name);
-    componentDefinition.x = x;
-    componentDefinition.y = y;
-    node.data = componentDefinition;
+    _componentDefinition.x = _x;
+    _componentDefinition.y = _y;
+    node.data = _componentDefinition;
 
     for(var i in inputs) {
         var input = inputs[i];
@@ -156,7 +161,7 @@ function addNode(x, y, name, inputs, outputs, componentDefinition) {
         if(outputs[i] != '')
             node.addPoint(outputs[i], 'out');
 
-    serviceEditor.addNode(x, y, node);
+    serviceEditor.addNode(_x, _y, node);
 }
 
 function listComponents(_componentDefinitions) {
@@ -365,10 +370,8 @@ function handleEvents() {
     //处理添加组件
     $('span.badge').live('click', function(){
         var className = $(this).parent().attr('lang');
-        var label = getSimpleClassName(className);
         var loader = ComponentDefinitionLoader.getInstance();
-        addNode(5, 10, label, '*input', 'output',
-            loader.getComponentDefinitionByClassName(className, true));
+        addNode(5, 10, loader.getComponentDefinitionByClassName(className, true));
     });
 
     //处理移除组件

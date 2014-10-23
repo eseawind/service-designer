@@ -226,6 +226,7 @@ ComponentDefinition.TYPE_SOURCE = "source";
 ComponentDefinition.TYPE_TARGET = "target";
 ComponentDefinition.TYPE_GATEWAY = "gateway";
 ComponentDefinition.TYPE_PROCESS = "process";
+ComponentDefinition.TYPE_START = "start";
 
 /**
  * 转换成服务定义相关数据
@@ -297,6 +298,29 @@ ComponentDefinition.prototype.removeOutput = function(_outputId) {
         }
     }
     this.outputs = newOutputs;
+};
+
+/**
+ * 返回组件输入标签
+ * @returns {string}
+ */
+ComponentDefinition.prototype.getInputLabel = function() {
+    if(this.type===ComponentDefinition.TYPE_START) {
+        return "";
+    } else {
+        return '*input';
+    }
+};
+/**
+ * 返回组件输出标签
+ * @returns {string}
+ */
+ComponentDefinition.prototype.getOutputLabel = function() {
+    if(this.type===ComponentDefinition.TYPE_TARGET) {
+        return "";//目的组件无输出
+    } else {
+        return 'output';
+    }
 };
 
 
