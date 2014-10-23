@@ -269,7 +269,8 @@ function handleEvents() {
     //---------------------------------ArrayOrList属性相关事件--------------------------------
     //点击配置数组或列表元素按钮
     $('button.arrayorlist-config').live('click', function() {
-        var beanDefinitionId = $(this).attr('lang');
+        //var beanDefinitionId = $(this).attr('lang');
+        var beanDefinitionId = $('#bean-definition-id-hidden').val();
         var input = $($(this).prev('input').get(0));
         var propName = input.attr('name');
         var value = input.val();
