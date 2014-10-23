@@ -119,7 +119,7 @@ var audioTheme = {
 
 function initCanvas() {
     var loader = ComponentDefinitionLoader.getInstance();
-    listComponents(loader.componentDefinitions.sort());
+    listComponents(loader.componentDefinitions);
 
     serviceEditor = new ServiceEditor('audio-graph', 1000, 480, audioTheme);
     var start = new ComponentDefinition(startComponentClass);
@@ -165,6 +165,11 @@ function addNode(_x, _y, _componentDefinition) {
 }
 
 function listComponents(_componentDefinitions) {
+    _componentDefinitions = _componentDefinitions.sort(function(_definition1, _definition2){
+        var class1 = getSimpleClassName(_definition1.class);
+        var class2 = getSimpleClassName(_definition2.class);
+        return class1.localeCompare(class2);
+    });
     for(var i in _componentDefinitions) {
         listComponent(_componentDefinitions[i]);
     }
