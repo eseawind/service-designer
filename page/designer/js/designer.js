@@ -169,7 +169,7 @@ function listComponent(_componentDefinition) {
     //<li class="list-group-item"><span class="badge">新</span>FilePollingComponent</li>
     var className = getSimpleClassName(_componentDefinition.class);
     $('#ul-component-list').append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
-        '<span class="badge">&gt;&gt;</span>' +className+ '</li>')
+        '<span class="badge" title="添加组件">&gt;&gt;</span>' +className+ '</li>')
 }
 
 
@@ -369,6 +369,11 @@ function handleEvents() {
         var loader = ComponentDefinitionLoader.getInstance();
         addNode(5, 10, label, '*input', 'output',
             loader.getComponentDefinitionByClassName(className, true));
+    });
+
+    //处理移除组件
+    $('#remove-component-definition-button').click(function(){
+        serviceEditor.removeSelectedComponentNode();
     });
 }
 

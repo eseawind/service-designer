@@ -292,7 +292,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	ex = lx + mx + 10;
 	
 	var text = this.raphael.text(x+20, y+15, node.title).attr({fill: '#000', 'font-size': 16, 'font-weight': 'bold'}).xlateText();
-	bbox = text.getBBox();
+    bbox = text.getBBox();
 	if(ex < bbox.width + 80)
 		ex = bbox.width + 80;
 	
@@ -328,7 +328,6 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
         }
         //更新属性显示
         node.refreshPropertiesConfigForm();
-        //console.info(node.data);
 	});
 	
 	function start() {
@@ -360,6 +359,25 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	rect.drag(move, start, end);
 };
 
+//移除节点
+ServiceEditor.prototype.removeNode = function(_node) {
+    if(_node) {
+        if(_node.data.class!=startComponentClass) {
+            _node.remove();
+        } else {
+            alert("开始组件禁止移除");
+        }
+    } else {
+        alert("请选择要移除的组件");
+    }
+};
+
+//移除选中的节点
+ServiceEditor.prototype.removeSelectedComponentNode = function() {
+    var node = this.getSelectedComponentNode();
+    this.removeNode(node);
+};
+
 ServiceEditor.prototype.getNodeByClass = function(_class) {
     for(i in this.nodes) {
         if(this.nodes[i].data.class==_class) {
@@ -378,6 +396,7 @@ ServiceEditor.prototype.getNodeById = function(_id) {
     return null;
 };
 
+//获取选中的节点
 ServiceEditor.prototype.getSelectedComponentNode = function() {
     for(var i in this.nodes) {
         var node = this.nodes[i];
@@ -395,7 +414,7 @@ function ComponentNode(id, title) {
 	this.title = title;
     this.data = null;
 	this.points = [];
-	
+
 	this.focus = event().add(function() {
 		this.selected = true;
 	});
@@ -407,6 +426,7 @@ function ComponentNode(id, title) {
 	this.update = event().add(function() {
 		this.selected = false;
 	});
+    //移除节点
 	this.remove = event().add(function() {
 		if(this.selected)
 			this.blur();
@@ -437,7 +457,13 @@ ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     }
 };
 
+ComponentNode.prototype.addRaphaelElement = function(_element) {
+    this.raphaelElements.push(_element);
+};
 
+
+
+//---------------------------------------------- Point -----------------------------------------------------
 /**
  * 图标中的点
  * @param parent 父窗口
@@ -535,6 +561,7 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
     }
 };
 
+//更新连接线
 Point.prototype.fixConnections = function(raphael) {
 	for(var i in this.lines)
 		raphael.connection(this.lines[i]);
