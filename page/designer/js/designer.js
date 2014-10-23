@@ -156,14 +156,17 @@ function initCanvas() {
     addNode(10, 10, 'FileNotifyComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
     className = "com.kingyea.esb.components.file.FileTargetComponent";
     addNode(250, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
-    className = "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent";
-    addNode(450, 75, 'MultiFileSplitComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
+    className = "com.kingyea.esb.components.file.FileTargetComponent";
+    addNode(450, 75, 'FileTargetComponent', 'input', '', loader.getComponentDefinitionByClassName(className, true));
+
+    //className = "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent";
+   // addNode(450, 75, 'MultiFileSplitComponent', 'input', 'output', loader.getComponentDefinitionByClassName(className, true));
 
     className = "com.kingyea.esb.components.gateway.MulticastComponent";
     addNode(450, 235, 'MulticastComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
 
-    className = "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent";
-    addNode(450, 355, 'MailSenderSourceComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
+    //className = "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent";
+    //addNode(450, 355, 'MailSenderSourceComponent', '*input', 'output', loader.getComponentDefinitionByClassName(className, true));
 
 
     var start = new ComponentDefinition(startComponentClass);
