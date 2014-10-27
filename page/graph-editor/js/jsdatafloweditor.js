@@ -40,14 +40,15 @@ function event(onAdd, onRemove) {
 	return evt;
 }
 
-Raphael.fn.connection = function (obj1, obj2, line, bg, removeHook) {
-    if (obj1.line && obj1.from && obj1.to) {
-        line = obj1;
-        obj1 = line.from;
-        obj2 = line.to;
+Raphael.fn.connection = function (_fromCircle, _toCircle, line, bg, removeHook) {
+    //在mousemove的过程中也会调用此方法,_fromCircle就会为line
+    if (_fromCircle.line && _fromCircle.from && _fromCircle.to) {
+        line = _fromCircle;
+        _fromCircle = line.from;
+        _toCircle = line.to;
     }
-    var bb1 = obj1.getBBox(),
-        bb2 = obj2.getBBox(),
+    var bb1 = _fromCircle.getBBox(),
+        bb2 = _toCircle.getBBox(),
         p = [{x: bb1.x + bb1.width / 2, y: bb1.y - 1},
         {x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + 1},
         {x: bb1.x - 1, y: bb1.y + bb1.height / 2},
@@ -100,16 +101,22 @@ Raphael.fn.connection = function (obj1, obj2, line, bg, removeHook) {
                 }
 	        }
         	lineElem.dblclick(dblclick);
+            lineElem.mouseover(function(){
+                this.attr("cursor", "pointer");
+            });
         	if(bgElem != null) {
                 bgElem.dblclick(dblclick);
             }
       	}
-        return {
+        /*return {
             line: lineElem.attr({stroke: color, fill: "none"}).toBack(),
             bg: bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}).toBack(),
-            from: obj1,
-            to: obj2
-        };
+            from: _fromCircle,
+            to: _toCircle
+        };*/
+        return new Transition(lineElem.attr({stroke: color, fill: "none"}).toBack(),
+            bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}).toBack(),
+            _fromCircle, _toCircle);
     }
 };
 
@@ -135,11 +142,11 @@ var defaultTheme = {
 	
 	connectingFill: '#fff', 
 	connectingStroke: '#000', 
-	connectingStrokeWidth: '3', 
+	connectingStrokeWidth: '5',
 	
 	lineFill: 'blue', 
 	lineStroke: '#000', 
-	lineStrokeWidth: '3'
+	lineStrokeWidth: '5'
 };
 
 //---------------------------------------------------- ServiceEditor -----------------------------------------------
@@ -160,7 +167,6 @@ function ServiceEditor(id, width, height, theme) {
 	this.selected = null;
     this.serviceDefinitionData = BeanDefinitionBuilder.buildServiceDefinitionData();
 	
-	return true;
 }
 
 ServiceEditor.prototype.rigConnections = function(point) {
@@ -258,7 +264,8 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 		var point = node.points[i];
 		if(point.dir == 'out') continue;
 		point.circle = circle = this.raphael.circle(x+10, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
-		this.rigConnections(point);
+		circle.point = point;
+        this.rigConnections(point);
 		label = this.raphael.text(x+20, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
 		bbox = label.getBBox();
 		ly += bbox.height + 5;
@@ -301,7 +308,8 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
         var circleX = x + ComponentNode.WIDTH - 10;
 		//label.Point.circle = circle = this.raphael.circle(ex, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
 		label.point.circle = circle = this.raphael.circle(circleX, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
-		this.rigConnections(label.point);
+		circle.point = point;
+        this.rigConnections(label.point);
 		bbox = label.getBBox();
 		ly += bbox.height + 5;
 		temp.push(circle);
@@ -309,7 +317,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	}
 
 	//var rect = this.raphael.rect(x, y, ex+10 - x, Math.max(my, ly) - y, 10).attr({fill: this.theme.nodeFill, 'fill-opacity': 0.9});
-	var rect = this.raphael.rect(x, y, ComponentNode.WIDTH, ComponentNode.HEIGHT, 10).attr({fill: this.theme.nodeFill, 'fill-opacity': 0.9});
+	var rect = this.raphael.rect(x, y, ComponentNode.WIDTH, ComponentNode.HEIGHT, 10).attr({fill: this.theme.nodeFill, 'fill-opacity': 0.9, 'cursor': 'pointer'});
     //console.info("width=" + rect.attr('width') + "height=" + rect.attr('height'));
     var set = node.element = this.raphael.set().push(rect, text.toFront());
 	for(i in temp)
@@ -461,6 +469,18 @@ ComponentNode.prototype.addRaphaelElement = function(_element) {
     this.raphaelElements.push(_element);
 };
 
+ComponentNode.prototype.getTransitionById = function(_transitionId) {
+    for(var i in this.points) {
+        var point = this.points[i];
+        for(var j in point.lines) {
+            var transition = point.lines[j];
+            if(transition.id===_transitionId) {
+                return transition;
+            }
+        }
+    }
+    return null;
+};
 
 
 //---------------------------------------------- Point -----------------------------------------------------
@@ -483,6 +503,7 @@ function Point(parent, label, dir, multi) {
 
     //连接到的其它点
 	this.connections = [];
+    //连入该点的Transition
 	this.lines = [];
 	
 	return true;
@@ -524,7 +545,8 @@ Point.prototype.connect = function(raphael, other, sub) {
 		
 		other.connect(raphael, this, true);
 		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill, editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
-		this.lines.push(line);
+        line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
+        this.lines.push(line);
 		other.lines.push(line);
 	}
 	
@@ -540,8 +562,6 @@ Point.prototype.connect = function(raphael, other, sub) {
 };
 
 Point.prototype.removeConnection = function(raphael, other, sub) {
-    console.info(this);
-    console.info(arguments);
 	var editor = this.parent.parent;
 	for(var i in this.connections)
 		if(this.connections[i] == other) {
@@ -573,3 +593,128 @@ Point.prototype.fixConnections = function(raphael) {
 		raphael.connection(this.lines[i]);
 	raphael.safari();
 };
+
+
+//----------------------------------------Transition--------------------------------------------
+function Transition(_line, _bg, _fromCircle, _toCircle) {
+    this.line = _line;
+    this.bg = _bg;
+    this.from = _fromCircle;
+    this.to = _toCircle;
+    this.id = "";
+    this.name = "";
+    this.description = "";
+
+    var conn = this;
+    if(_line) {//判断是否是执行ExpressionConnection.prototype = new Connection();导致创建
+        _line.click(function(){
+            conn.refreshPropertiesConfigForm();
+        });
+    }
+}
+
+/**
+ * 判断该连线是否是连线类型
+ */
+Transition.prototype.isExpression = function() {
+    return this.scriptLanguage!=undefined && this.expression!=undefined;
+};
+
+/**
+ * 刷新配置表单
+ */
+Transition.prototype.refreshPropertiesConfigForm = function() {
+    var form = $('#comp-props-display-form');
+    form.empty();
+    form.append('<div class="row prop-entry" >' +
+        '<input type="hidden" value="' +this.id+ '" id="transition-id-hidden"/></div>');
+    var html = '<div class="row prop-entry" ><div class="prop-label">类型：</div>';
+    html += '<div class="prop-input"><select id="transition-type-select">' +
+        '<option selected="selected" value="' +Transition.TYPE_NORMAL+ '">普通连线</option>' +
+        '<option value="' +Transition.TYPE_EXPRESSION+ '">表达式连线</option></select></div></div>';
+
+    html += '<div class="row prop-entry" ><div class="prop-label">下一组件名称：</div>';
+    html += '<div class="prop-input"><input name="name" size="28" value="' +this.name+ '"/></div></div>';
+    html += '<div class="row prop-entry" ><div class="prop-label">下一组件描述：</div>';
+    html += '<div class="prop-input"><input name="description" size="28" value="' +this.description+ '"/></div></div>';
+
+    html += '</div>';
+    form.append(html);
+};
+
+/**
+ * 将普通连线转换为表达式连线
+ * @param _scriptLanguage 表达式语语言
+ * @param _expression 表达式字符串
+ * @returns {ExpressionTransition}
+ */
+Transition.prototype.toExpression = function(_scriptLanguage, _expression) {
+    var expressionTransition = new ExpressionTransition(this.line, this.bg, this.from, this.to);
+    expressionTransition.scriptLanguage = _scriptLanguage;
+    expressionTransition.expression = _expression;
+    expressionTransition.id = this.id;
+    return expressionTransition;
+};
+
+
+Transition.TYPE_NORMAL = "normal";
+Transition.TYPE_EXPRESSION = "expression";
+
+function ExpressionTransition(_line, _bg, _fromCircle, _toCircle) {
+    Transition.call(this, _line, _bg, _fromCircle, _toCircle);
+    this.scriptLanguage = "";
+    this.expression = "";
+    this.id = "";
+    this.name = "";
+    this.description = "";
+
+}
+ExpressionTransition.prototype = new Transition();
+
+/**
+ * 将表达式连线转换为普通连线
+ */
+ExpressionTransition.prototype.toNormal = function() {
+    var transition = new Transition(this.line, this.bg, this.from, this.to);
+    transition.id = this.id;
+    return transition;
+};
+
+/**
+ * 刷新配置表单
+ */
+ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
+    var form = $('#comp-props-display-form');
+    form.empty();
+    form.append('<div class="row prop-entry" >' +
+        '<input type="hidden" value="' +this.id+ '" id="transition-id-hidden"/></div>');
+    var html = '<div class="row prop-entry" ><div class="prop-label">类型：</div>';
+    html += '<div class="prop-input"><select id="transition-type-select">' +
+    '<option value="' +Transition.TYPE_NORMAL+ '">普通连线</option>' +
+    '<option selected="selected" value="' +Transition.TYPE_EXPRESSION+ '">表达式连线</option></select></div></div>';
+
+    html += '<div class="row prop-entry" ><div class="prop-label">下一组件名称：</div>';
+    html += '<div class="prop-input"><input name="name" size="28" value="' +this.name+ '"/></div></div>';
+    html += '<div class="row prop-entry" ><div class="prop-label">下一组件描述：</div>';
+    html += '<div class="prop-input"><input name="description" size="28" value="' +this.description+ '"/></div></div>';
+
+
+    html += '<div class="row prop-entry" ><div class="prop-label">表达式语言：</div>';
+    html += '<div class="prop-input"><select name="scriptLanguage">';
+    for(var i in expressionLanguages) {
+        var lang = expressionLanguages[i];
+        if(lang==this.scriptLanguage) {
+            html += '<option selected="selected" value="' +lang+ '">' +lang+ '</option>';
+        } else {
+            html += '<option value="' +lang+ '">' +lang+ '</option>';
+        }
+    }
+    html += '</select></div></div>';
+
+    html += '<div class="row prop-entry" ><div class="prop-label">表达式：</div>';
+    html += '<div class="prop-input"><input name="expression" size="28" value="' +this.expression+ '"/></div></div>';
+
+    html += '</div>';
+    form.append(html);
+};
+

@@ -15,6 +15,8 @@ var manualConfigRefPropValue = "__ref-prop-from-manual-config__";
 var resourceRefPropValue = "__ref-prop-from-resource__";
 var resourcePropPrefix = "resource-";
 var serviceDefinitionId = "serviceDefinition";
+var transitionIdSeparator = "_to_";
+var expressionLanguages = ["ognl", "javascript", "el", "xpath"];
 
 function ComponentDefinitionLoader() {
     this.loadSuccess = null;
@@ -390,6 +392,49 @@ function handleEvents() {
         if(_event.keyCode==13) {
             return false;
         }
+    });
+
+    //当连线类型改变时
+    $('#transition-type-select').live('change', function() {
+        //transitionId由相互连接的组件定义ID构成
+        var transitionId = $('#transition-id-hidden').val();
+        var compIds = transitionId.split(transitionIdSeparator);
+        var node = serviceEditor.getNodeById(compIds[0]);
+        var transition = node.getTransitionById(transitionId);
+        var newTransition = null;
+        console.info(this.value);
+        if(this.value==Transition.TYPE_EXPRESSION) {
+            //将普通连线更改为表达式连线
+            newTransition = transition.toExpression("ognl", "");
+        } else if(this.value==Transition.TYPE_NORMAL) {//将表达式连线更改为普通连线
+            if(transition instanceof ExpressionTransition) {
+                newTransition = transition.toNormal();
+            }
+        }
+        console.info(newTransition);
+        if(newTransition==null) {//如果新的连线不存在则表达转换出错
+            alert("新连线为空");
+            return;
+        }
+
+        //连线所在点的所有连线
+        var transitions = transition.from.point.lines;
+        console.info(transitions);
+        for(var i in transitions) {
+            if(transitions[i].id===transitionId) {
+                transitions.splice(i, 1, newTransition);//将连线From组件定义保存的连线替换成新的连线对象
+                break;
+            }
+        }
+
+        transitions = transition.to.point.lines;
+        for(var i in transitions) {
+            if(transitions[i].id===transitionId) {
+                transitions.splice(i, 1, newTransition);//将连线to组件定义保存的连线替换成新的连线对象
+                break;
+            }
+        }
+        newTransition.refreshPropertiesConfigForm();
     });
 }
 
