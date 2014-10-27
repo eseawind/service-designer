@@ -546,7 +546,6 @@ Point.prototype.connect = function(raphael, other, sub) {
 		
 		other.connect(raphael, this, true);
 		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill, editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
-        console.info(line);
         line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
         this.lines.push(line);
 		other.lines.push(line);
@@ -570,13 +569,15 @@ Point.prototype.connect = function(raphael, other, sub) {
 };
 
 Point.prototype.removeConnection = function(raphael, other, sub) {
+    var transition = null;
 	var editor = this.parent.parent;
 	for(var i in this.connections)
 		if(this.connections[i] == other) {
 			this.connections.splice(i, 1);
 			if(sub !== true) {
+                transition = this.lines[i];
 				other.removeConnection(raphael, this, true);
-				raphael.removeConnection(this.lines[i]);
+				raphael.removeConnection(transition);
 			}
 			this.lines.splice(i, 1);
 			break;
@@ -592,6 +593,10 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
         this.parent.data.removeOutput(other.parent.data.id);
     } else {//断开点
         this.parent.data.removeInput(other.parent.data.id);
+
+        //移除相应的输入与输出
+        this.parent.data.removeTransitionInput(transition);
+        other.parent.data.removeTransitionOutput(transition);
     }
 };
 
