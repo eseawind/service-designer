@@ -680,6 +680,14 @@ Transition.prototype.toExpression = function(_scriptLanguage, _expression) {
 Transition.TYPE_NORMAL = "normal";
 Transition.TYPE_EXPRESSION = "expression";
 
+Transition.prototype.toServiceDefinition = function() {
+    var definition = {};
+    definition.targetRef = this.getToTargetRef();
+    definition.name = this.name;
+    definition.description = this.description;
+    return definition;
+};
+
 function ExpressionTransition(_line, _bg, _fromCircle, _toCircle) {
     Transition.call(this, _line, _bg, _fromCircle, _toCircle);
     this.scriptLanguage = "";
@@ -738,3 +746,10 @@ ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
     form.append(html);
 };
 
+
+ExpressionTransition.prototype.toServiceDefinition = function() {
+    var definition = Transition.prototype.toServiceDefinition.call(this);
+    definition.scriptLanguage = this.scriptLanguage;
+    definition.expression = this.expression;
+    return definition;
+};
