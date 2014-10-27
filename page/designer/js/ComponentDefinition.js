@@ -220,6 +220,8 @@ function ComponentDefinition(_class) {
     this.x = 0;
     this.y = 0;
     this.type = "";//组件类型，源组件，目的组件，流程组件，处理组件
+    this.transitionInputs = [];
+    this.transitionOutputs = [];
 }
 ComponentDefinition.prototype = new BeanDefinition();
 ComponentDefinition.TYPE_SOURCE = "source";
@@ -329,6 +331,55 @@ ComponentDefinition.prototype.getOutputLabel = function() {
  */
 ComponentDefinition.prototype.getUlId = function() {
     return "ul-" + this.type + "-component-list";
+};
+
+/**
+ * 添加transitionInput
+ * @param _transitionInput
+ * @param _override 如果已经存在(id相同)，是否替换原有transitionInput
+ */
+ComponentDefinition.prototype.addTransitionInputs = function(_transitionInput, _override) {
+    if(_override) {
+        var exists = false;
+        for(var i in this.transitionInputs) {
+            var transitionInput = this.transitionInputs[i];
+            if(transitionInput.id===_transitionInput.id) {
+                this.transitionInputs.splice(i, 1, _transitionInput);
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) {
+            this.transitionInputs.push(_transitionInput);
+        }
+    } else {
+        this.transitionInputs.push(_transitionInput);
+    }
+
+};
+
+/**
+ * 添加transitionOutput
+ * @param _transitionOutput
+ * @param _override 如果已经存在(id相同)，则替换原有transitionOutput
+ */
+ComponentDefinition.prototype.addTransitionOutputs = function(_transitionOutput, _override) {
+    if(_override) {
+        var exists = false;
+        for(var i in this.transitionOutputs) {
+            var transitionOutput = this.transitionOutputs[i];
+            if(transitionOutput.id===_transitionOutput.id) {
+                this.transitionOutputs.splice(i, 1, _transitionOutput);
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) {
+            this.transitionOutputs.push(_transitionOutput);
+        }
+    } else {
+        this.transitionOutputs.push(_transitionOutput);
+    }
 };
 
 

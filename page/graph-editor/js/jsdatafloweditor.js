@@ -536,7 +536,8 @@ Point.prototype.connect = function(raphael, other, sub) {
 	
 	this.connections.push(other);
 	this.circle.attr({fill: editor.theme.pointActive});
-	if(sub !== true) {
+	var line = null;
+    if(sub !== true) {
 		function remove() {
 			//sthis.removeConnection(raphael, other);
             other.removeConnection(raphael, sthis);
@@ -545,6 +546,7 @@ Point.prototype.connect = function(raphael, other, sub) {
 		
 		other.connect(raphael, this, true);
 		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill, editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
+        console.info(line);
         line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
         this.lines.push(line);
 		other.lines.push(line);
@@ -555,8 +557,14 @@ Point.prototype.connect = function(raphael, other, sub) {
     //连接完成之后，把前后ComponentDefinition连接起来
     if(sub) {//被连接点
         this.parent.data.addInput(other.parent.data.id);
+        if(line) {
+            this.parent.data.addTransitionInputs(line);
+        }
     } else {//连接点
         this.parent.data.addOutput(other.parent.data.id);
+        if(line) {
+            this.parent.data.addTransitionOutputs(line);
+        }
     }
 	return true;
 };
@@ -601,7 +609,7 @@ function Transition(_line, _bg, _fromCircle, _toCircle) {
     this.bg = _bg;
     this.from = _fromCircle;
     this.to = _toCircle;
-    this.id = "";
+    this.id = "";//transitionId由相互连接的组件定义ID构成
     this.name = "";
     this.description = "";
 
@@ -614,10 +622,17 @@ function Transition(_line, _bg, _fromCircle, _toCircle) {
 }
 
 /**
- * 判断该连线是否是连线类型
+ * 获取From组件定义ID
  */
-Transition.prototype.isExpression = function() {
-    return this.scriptLanguage!=undefined && this.expression!=undefined;
+Transition.prototype.getFromTargetRef = function() {
+    return this.id.split(transitionIdSeparator)[0];
+};
+
+/**
+ * 获取To组件定义ID
+ */
+Transition.prototype.getToTargetRef = function() {
+    return this.id.split(transitionIdSeparator)[1];
 };
 
 /**
