@@ -338,24 +338,23 @@ ComponentDefinition.prototype.getUlId = function() {
  * @param _transitionInput
  * @param _override 如果已经存在(id相同)，是否替换原有transitionInput
  */
-ComponentDefinition.prototype.addTransitionInputs = function(_transitionInput, _override) {
+ComponentDefinition.prototype.addTransitionInput = function(_transitionInput, _override) {
     if(_override) {
-        var exists = false;
-        for(var i in this.transitionInputs) {
-            var transitionInput = this.transitionInputs[i];
-            if(transitionInput.id===_transitionInput.id) {
-                this.transitionInputs.splice(i, 1, _transitionInput);
-                exists = true;
-                break;
-            }
-        }
-        if(!exists) {
-            this.transitionInputs.push(_transitionInput);
-        }
-    } else {
-        this.transitionInputs.push(_transitionInput);
+        this.removeTransitionInput(_transitionInput);
     }
+    this.transitionInputs.push(_transitionInput);
 
+};
+
+ComponentDefinition.prototype.removeTransitionInput = function(_transitionInput) {
+    for(var i in this.transitionInputs) {
+        var transitionInput = this.transitionInputs[i];
+        if(transitionInput.id===_transitionInput.id) {
+            this.transitionInputs.splice(i, 1);
+            return transitionInput;
+        }
+    }
+    return null;
 };
 
 /**
@@ -363,23 +362,28 @@ ComponentDefinition.prototype.addTransitionInputs = function(_transitionInput, _
  * @param _transitionOutput
  * @param _override 如果已经存在(id相同)，则替换原有transitionOutput
  */
-ComponentDefinition.prototype.addTransitionOutputs = function(_transitionOutput, _override) {
+ComponentDefinition.prototype.addTransitionOutput = function(_transitionOutput, _override) {
     if(_override) {
-        var exists = false;
-        for(var i in this.transitionOutputs) {
-            var transitionOutput = this.transitionOutputs[i];
-            if(transitionOutput.id===_transitionOutput.id) {
-                this.transitionOutputs.splice(i, 1, _transitionOutput);
-                exists = true;
-                break;
-            }
-        }
-        if(!exists) {
-            this.transitionOutputs.push(_transitionOutput);
-        }
+        this.removeTransitionOutput(_transitionOutput);
     } else {
         this.transitionOutputs.push(_transitionOutput);
     }
+};
+
+/**
+ * 移除 _transitionOutput
+ * @param _transitionOutput
+ * @returns {*}
+ */
+ComponentDefinition.prototype.removeTransitionOutput = function(_transitionOutput) {
+    for(var i in this.transitionOutputs) {
+        var transitionOutput = this.transitionOutputs[i];
+        if(transitionOutput.id===_transitionOutput.id) {
+            this.transitionOutputs.splice(i, 1);
+            return transitionOutput;
+        }
+    }
+    return null;
 };
 
 

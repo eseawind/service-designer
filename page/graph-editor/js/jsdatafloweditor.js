@@ -558,12 +558,12 @@ Point.prototype.connect = function(raphael, other, sub) {
     if(sub) {//被连接点
         this.parent.data.addInput(other.parent.data.id);
         if(line) {
-            this.parent.data.addTransitionInputs(line);
+            this.parent.data.addTransitionInput(line);
         }
     } else {//连接点
         this.parent.data.addOutput(other.parent.data.id);
         if(line) {
-            this.parent.data.addTransitionOutputs(line);
+            this.parent.data.addTransitionOutput(line);
         }
     }
 	return true;
