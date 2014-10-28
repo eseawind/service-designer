@@ -114,8 +114,8 @@ Raphael.fn.connection = function (_fromCircle, _toCircle, line, bg, removeHook) 
             from: _fromCircle,
             to: _toCircle
         };*/
-        return new Transition(lineElem.attr({stroke: color, fill: "none"}).toBack(),
-            bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}).toBack(),
+        return new Transition(lineElem.attr({stroke: color, fill: "none", "stroke-width":"5"}).toBack(),
+            bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1]}).toBack(),
             _fromCircle, _toCircle);
     }
 };
@@ -140,13 +140,16 @@ var defaultTheme = {
 	pointInactive: '#fff', 
 	pointActive: '#ccc',
 	
-	connectingFill: '#fff', 
+	connectingFill: '#fff',
 	connectingStroke: '#000', 
-	connectingStrokeWidth: '5',
+	connectingStrokeWidth: '7',
 	
 	lineFill: 'blue', 
 	lineStroke: '#000', 
-	lineStrokeWidth: '5'
+	lineStrokeWidth: '7',
+
+    expressionTransitionStroke: '#00ff00',
+    transitionStroke: 'blue'
 };
 
 //---------------------------------------------------- ServiceEditor -----------------------------------------------
@@ -183,7 +186,8 @@ ServiceEditor.prototype.rigConnections = function(point) {
 				connecting = other;
 			} else
 				connecting = point;
-			var line = sthis.raphael.connection(connecting.circle, circle, sthis.theme.connectingFill, sthis.theme.connectingStroke + '|' + sthis.theme.connectingStrokeWidth);
+			var line = sthis.raphael.connection(connecting.circle, circle, sthis.theme.connectingFill,
+                sthis.theme.connectingStroke + '|' + sthis.theme.connectingStrokeWidth);
 			var jo = $(sthis.raphael.element);
 			var mouseup = function() {
 				circle.remove();
@@ -545,7 +549,8 @@ Point.prototype.connect = function(raphael, other, sub) {
 		}
 		
 		other.connect(raphael, this, true);
-		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill, editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
+		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill,
+            editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
         line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
         this.lines.push(line);
 		other.lines.push(line);
@@ -675,6 +680,7 @@ Transition.prototype.toExpression = function(_scriptLanguage, _expression) {
     expressionTransition.expression = _expression;
     expressionTransition.id = this.id;
     expressionTransition.class = expressionTransitionClass;
+    expressionTransition.line.attr("stroke", defaultTheme.expressionTransitionStroke);
     return expressionTransition;
 };
 
@@ -709,6 +715,7 @@ ExpressionTransition.prototype.toNormal = function() {
     var transition = new Transition(this.line, this.bg, this.from, this.to);
     transition.id = this.id;
     transition.class = transitionClass;
+    transition.line.attr("stroke", defaultTheme.transitionStroke);
     return transition;
 };
 
