@@ -134,7 +134,6 @@ function initCanvas() {
 }
 
 function addNode(_x, _y, _componentDefinition) {
-    console.info(_componentDefinition);
     var inputs = _componentDefinition.getInputLabel();
     var outputs = _componentDefinition.getOutputLabel();
     var name = getSimpleClassName(_componentDefinition.class);
@@ -456,6 +455,7 @@ function handleEvents() {
         var url = contextPath + '/data/service/SEND_FILE_SERVICE.json';
         $.getJSON(url, function(_data){
             var serviceDefinitionData = _data;
+            serviceEditor.reset();
         });
     });
 }

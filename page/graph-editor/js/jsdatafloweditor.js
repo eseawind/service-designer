@@ -172,6 +172,17 @@ function ServiceEditor(id, width, height, theme) {
 	
 }
 
+ServiceEditor.prototype.reset = function() {
+    for(var i in this.nodes) {
+        var node = this.nodes[i];
+        if(node.data.class!=startComponentClass) {
+            this.removeNode(node);
+        }
+    }
+    this.selected = null;
+    this.serviceDefinitionData = BeanDefinitionBuilder.buildServiceDefinitionData();
+};
+
 ServiceEditor.prototype.rigConnections = function(point) {
 	var sthis = this;
 	point.circle.mousedown(
