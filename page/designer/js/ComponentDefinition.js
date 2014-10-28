@@ -117,7 +117,7 @@ BeanDefinition.prototype.setId = function(_id) {
 
 /**
  * 刷新ComponentDefinition属性配置表单
- * @param _class 当前配置的ComponentDefinition类名
+ * @param _compId 当前配置的ComponentDefinition ID
  * @param _belongToId 配置引用属性后，返回到的BeanDefinition ID
  */
 BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belongToId) {
@@ -147,11 +147,8 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belong
  * @returns {boolean}
  */
 BeanDefinition.prototype.isComponentDefinition = function() {
-    var comp = false;
-    if(this.inputs) {
-        comp = true;
-    }
-    return comp;
+    //var is = this instanceof ComponentDefinition;//为什么返回false
+    return this.transitionInputs!=null;
 };
 
 
@@ -215,8 +212,6 @@ BeanDefinition.prototype.getMapPropertyDefinition = function(_beanDefinitionId, 
 
 function ComponentDefinition(_class) {
     BeanDefinition.call(this, _class);
-    this.inputs = [];
-    this.outputs = [];
     this.x = 0;
     this.y = 0;
     this.type = "";//组件类型，源组件，目的组件，流程组件，处理组件
@@ -241,13 +236,6 @@ ComponentDefinition.prototype.toServiceDefinition = function() {
     definition.y = this.y;
     definition.outputs = [];
 
-    /*for(var i in this.outputs) {
-        var outoutId = this.outputs[i];
-        var transition = {};
-        var outputBeanDefinition = serviceEditor.getNodeById(outoutId).data;
-        transition.targetRef = outputBeanDefinition.toServiceDefinition();
-        definition.outputs.push(transition);
-    }*/
     for(var i in this.transitionOutputs) {
         var transitionOutput = this.transitionOutputs[i];
         definition.outputs.push(transitionOutput.toServiceDefinition());
@@ -255,56 +243,6 @@ ComponentDefinition.prototype.toServiceDefinition = function() {
     return definition;
 };
 
-ComponentDefinition.prototype.addInput = function(_inputId) {
-    //判断_inputId是否已经存在
-    if(!this.containsInput(_inputId)) {//不存在才添加
-        this.inputs.push(_inputId);
-    }
-};
-//判断_inputId是否已经存在
-ComponentDefinition.prototype.containsInput = function(_inputId) {
-    for(var i in this.inputs) {
-        if(this.inputs[i]===_inputId) {
-            return true;
-        }
-    }
-    return false;
-};
-
-ComponentDefinition.prototype.addOutput = function(_outputId) {
-    //判断_outputId是否已经存在
-    if(!this.containsOutput(_outputId)) {//不存在才添加
-        this.outputs.push(_outputId);
-    }
-};
-
-//判断_outputId是否已经存在
-ComponentDefinition.prototype.containsOutput = function(_outputId) {
-    for(var i in this.outputs) {
-        if(this.outputs[i]===_outputId) {
-            return true;
-        }
-    }
-    return false;
-};
-ComponentDefinition.prototype.removeInput = function(_inputId) {
-    var newInputs = [];
-    for(var i in this.inputs) {
-        if(this.inputs[i]!=_inputId) {
-            newInputs.push(this.inputs[i]);
-        }
-    }
-    this.inputs = newInputs;
-};
-ComponentDefinition.prototype.removeOutput = function(_outputId) {
-    var newOutputs = [];
-    for(var i in this.outputs) {
-        if(this.outputs[i]!=_outputId) {
-            newOutputs.push(this.outputs[i]);
-        }
-    }
-    this.outputs = newOutputs;
-};
 
 /**
  * 返回组件输入标签

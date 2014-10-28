@@ -560,12 +560,10 @@ Point.prototype.connect = function(raphael, other, sub) {
 
     //连接完成之后，把前后ComponentDefinition连接起来
     if(sub) {//被连接点
-        this.parent.data.addInput(other.parent.data.id);
         if(line) {
             this.parent.data.addTransitionInput(line);
         }
     } else {//连接点
-        this.parent.data.addOutput(other.parent.data.id);
         if(line) {
             this.parent.data.addTransitionOutput(line);
         }
@@ -594,12 +592,8 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
 	this.parent.disconnect(this, other);
 
     //连接线断开后，断开相互连接的两个ComponentDefinition
-    if(sub) {//被断开点
-        this.parent.data.removeOutput(other.parent.data.id);
-    } else {//断开点
-        this.parent.data.removeInput(other.parent.data.id);
-
-        //移除相应的输入与输出
+    if(sub !== true) {
+        //只会进入一次，所以移除输入与输出一起进行
         this.parent.data.removeTransitionInput(transition);
         other.parent.data.removeTransitionOutput(transition);
     }
