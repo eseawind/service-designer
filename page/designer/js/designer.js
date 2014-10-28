@@ -435,8 +435,8 @@ function handleEvents() {
         }
         newTransition.refreshPropertiesConfigForm();
 
-        fromNode.data.addTransitionOutput(newTransition, true);
-        toNode.data.addTransitionInput(newTransition, true);
+        fromNode.data.addOutput(newTransition, true);
+        toNode.data.addInput(newTransition, true);
     });
 
     //修改连线属性值时

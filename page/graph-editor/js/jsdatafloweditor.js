@@ -574,11 +574,11 @@ Point.prototype.connect = function(raphael, other, sub) {
     //连接完成之后，把前后ComponentDefinition连接起来
     if(sub) {//被连接点
         if(line) {
-            this.parent.data.addTransitionInput(line);
+            this.parent.data.addInput(line);
         }
     } else {//连接点
         if(line) {
-            this.parent.data.addTransitionOutput(line);
+            this.parent.data.addOutput(line);
         }
     }
 	return true;
@@ -607,8 +607,8 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
     //连接线断开后，断开相互连接的两个ComponentDefinition
     if(sub !== true) {
         //只会进入一次，所以移除输入与输出一起进行
-        this.parent.data.removeTransitionInput(transition);
-        other.parent.data.removeTransitionOutput(transition);
+        this.parent.data.removeInput(transition);
+        other.parent.data.removeOutput(transition);
     }
 };
 

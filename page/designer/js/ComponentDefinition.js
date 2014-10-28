@@ -149,7 +149,7 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belong
 BeanDefinition.prototype.isComponentDefinition = function() {
     //因为ComponentDefinition是通过Jquery.extends方法克隆过来的，已经丢失了类信息
     //var is = this instanceof ComponentDefinition;return is;//为什么返回false
-    return this.transitionInputs!=null;
+    return this.inputs!=null;
 };
 
 
@@ -204,8 +204,8 @@ function ComponentDefinition(_class) {
     this.x = 0;
     this.y = 0;
     this.type = "";//组件类型，源组件，目的组件，流程组件，处理组件
-    this.transitionInputs = [];
-    this.transitionOutputs = [];
+    this.inputs = [];
+    this.outputs = [];
 }
 ComponentDefinition.prototype = new BeanDefinition();
 ComponentDefinition.TYPE_SOURCE = "source";
@@ -225,8 +225,8 @@ ComponentDefinition.prototype.toServiceDefinition = function() {
     definition.y = this.y;
     definition.outputs = [];
 
-    for(var i in this.transitionOutputs) {
-        var transitionOutput = this.transitionOutputs[i];
+    for(var i in this.outputs) {
+        var transitionOutput = this.outputs[i];
         definition.outputs.push(transitionOutput.toServiceDefinition());
     }
     return definition;
@@ -266,23 +266,23 @@ ComponentDefinition.prototype.getUlId = function() {
 
 /**
  * 添加transitionInput
- * @param _transitionInput
+ * @param _input
  * @param _override 如果已经存在(id相同)，是否替换原有transitionInput
  */
-ComponentDefinition.prototype.addTransitionInput = function(_transitionInput, _override) {
+ComponentDefinition.prototype.addInput = function(_input, _override) {
     if(_override) {
-        this.removeTransitionInput(_transitionInput);
+        this.removeInput(_input);
     }
-    this.transitionInputs.push(_transitionInput);
+    this.inputs.push(_input);
 
 };
 
-ComponentDefinition.prototype.removeTransitionInput = function(_transitionInput) {
-    for(var i in this.transitionInputs) {
-        var transitionInput = this.transitionInputs[i];
-        if(transitionInput.id===_transitionInput.id) {
-            this.transitionInputs.splice(i, 1);
-            return transitionInput;
+ComponentDefinition.prototype.removeInput = function(_input) {
+    for(var i in this.inputs) {
+        var input = this.inputs[i];
+        if(input.id===_input.id) {
+            this.inputs.splice(i, 1);
+            return input;
         }
     }
     return null;
@@ -290,27 +290,27 @@ ComponentDefinition.prototype.removeTransitionInput = function(_transitionInput)
 
 /**
  * 添加transitionOutput
- * @param _transitionOutput
+ * @param _Output
  * @param _override 如果已经存在(id相同)，则替换原有transitionOutput
  */
-ComponentDefinition.prototype.addTransitionOutput = function(_transitionOutput, _override) {
+ComponentDefinition.prototype.addOutput = function(_Output, _override) {
     if(_override) {
-        this.removeTransitionOutput(_transitionOutput);
+        this.removeOutput(_Output);
     }
-    this.transitionOutputs.push(_transitionOutput);
+    this.outputs.push(_Output);
 };
 
 /**
  * 移除 _transitionOutput
- * @param _transitionOutput
+ * @param _output
  * @returns {*}
  */
-ComponentDefinition.prototype.removeTransitionOutput = function(_transitionOutput) {
-    for(var i in this.transitionOutputs) {
-        var transitionOutput = this.transitionOutputs[i];
-        if(transitionOutput.id===_transitionOutput.id) {
-            this.transitionOutputs.splice(i, 1);
-            return transitionOutput;
+ComponentDefinition.prototype.removeOutput = function(_output) {
+    for(var i in this.outputs) {
+        var output = this.outputs[i];
+        if(output.id===_output.id) {
+            this.outputs.splice(i, 1);
+            return output;
         }
     }
     return null;
