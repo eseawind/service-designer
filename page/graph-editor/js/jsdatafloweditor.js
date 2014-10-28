@@ -41,7 +41,7 @@ function event(onAdd, onRemove) {
 }
 
 Raphael.fn.connection = function (_fromCircle, _toCircle, line, bg, removeHook) {
-    //在mousemove的过程中也会调用此方法,_fromCircle就会为line
+    //在mousemove的过程中也会调用此方法,_fromCircle就会为transition
     if (_fromCircle.line && _fromCircle.from && _fromCircle.to) {
         line = _fromCircle;
         _fromCircle = line.from;

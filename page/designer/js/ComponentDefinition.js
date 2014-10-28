@@ -321,7 +321,7 @@ ComponentDefinition.prototype.restore = function(_componentDefinition) {
     for(var i in this.propertyDefinitions) {
         var propertyDefinition = this.propertyDefinitions[i];
         var propName = propertyDefinition.name;
-        if(_componentDefinition[propName]!=null && _componentDefinition[propName!=undefined]) {
+        if(_componentDefinition[propName]!=null && _componentDefinition[propName]!=undefined) {
             if(propertyDefinition.isRef()) {//为引用属性
 
             } else if(propertyDefinition.isArrayOrList()) {//数组或列表属性
@@ -335,7 +335,15 @@ ComponentDefinition.prototype.restore = function(_componentDefinition) {
     }
 
     //TODO 处理inputs与outputs，因为传回来的数据只有outputs，所以只处理输出
-
+    for(var i in _componentDefinition.outputs) {
+        var outputTransition = _componentDefinition.outputs[i];//transition
+        var targetRef = outputTransition.targetRef;
+        var className = targetRef.class;
+        var loader = ComponentDefinitionLoader.getInstance();
+        var outputComponentDefinition = loader.getComponentDefinitionByClassName(className, true);
+        addNode(targetRef.x, targetRef.y, outputComponentDefinition);
+        outputComponentDefinition.restore(targetRef);
+    }
 };
 
 
