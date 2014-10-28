@@ -620,7 +620,8 @@ function Transition(_line, _bg, _fromCircle, _toCircle) {
 
     var conn = this;
     if(_line) {//判断是否是执行ExpressionConnection.prototype = new Connection();导致创建
-        _line.click(function(){
+        _line.click(function(e){
+            (e.originalEvent || e).preventDefault();
             conn.refreshPropertiesConfigForm();
         });
     }
@@ -654,9 +655,9 @@ Transition.prototype.refreshPropertiesConfigForm = function() {
         '<option value="' +Transition.TYPE_EXPRESSION+ '">表达式连线</option></select></div></div>';
 
     html += '<div class="row prop-entry" ><div class="prop-label">下一组件名称：</div>';
-    html += '<div class="prop-input"><input name="name" size="28" value="' +this.name+ '"/></div></div>';
+    html += '<div class="prop-input"><input class="transition-prop" name="name" size="28" value="' +this.name+ '"/></div></div>';
     html += '<div class="row prop-entry" ><div class="prop-label">下一组件描述：</div>';
-    html += '<div class="prop-input"><input name="description" size="28" value="' +this.description+ '"/></div></div>';
+    html += '<div class="prop-input"><input class="transition-prop" name="description" size="28" value="' +this.description+ '"/></div></div>';
 
     html += '</div>';
     form.append(html);
@@ -673,6 +674,7 @@ Transition.prototype.toExpression = function(_scriptLanguage, _expression) {
     expressionTransition.scriptLanguage = _scriptLanguage;
     expressionTransition.expression = _expression;
     expressionTransition.id = this.id;
+    expressionTransition.class = expressionTransitionClass;
     return expressionTransition;
 };
 
@@ -682,9 +684,11 @@ Transition.TYPE_EXPRESSION = "expression";
 
 Transition.prototype.toServiceDefinition = function() {
     var definition = {};
-    definition.targetRef = this.getToTargetRef();
+    var outputComponentDefinition = serviceEditor.getNodeById(this.getToTargetRef()).data;
+    definition.targetRef = outputComponentDefinition.toServiceDefinition();
     definition.name = this.name;
     definition.description = this.description;
+    definition.class = transitionClass;
     return definition;
 };
 
@@ -695,7 +699,6 @@ function ExpressionTransition(_line, _bg, _fromCircle, _toCircle) {
     this.id = "";
     this.name = "";
     this.description = "";
-
 }
 ExpressionTransition.prototype = new Transition();
 
@@ -705,6 +708,7 @@ ExpressionTransition.prototype = new Transition();
 ExpressionTransition.prototype.toNormal = function() {
     var transition = new Transition(this.line, this.bg, this.from, this.to);
     transition.id = this.id;
+    transition.class = transitionClass;
     return transition;
 };
 
@@ -722,13 +726,13 @@ ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
     '<option selected="selected" value="' +Transition.TYPE_EXPRESSION+ '">表达式连线</option></select></div></div>';
 
     html += '<div class="row prop-entry" ><div class="prop-label">下一组件名称：</div>';
-    html += '<div class="prop-input"><input name="name" size="28" value="' +this.name+ '"/></div></div>';
+    html += '<div class="prop-input"><input class="transition-prop" name="name" size="28" value="' +this.name+ '"/></div></div>';
     html += '<div class="row prop-entry" ><div class="prop-label">下一组件描述：</div>';
-    html += '<div class="prop-input"><input name="description" size="28" value="' +this.description+ '"/></div></div>';
+    html += '<div class="prop-input"><input class="transition-prop" name="description" size="28" value="' +this.description+ '"/></div></div>';
 
 
     html += '<div class="row prop-entry" ><div class="prop-label">表达式语言：</div>';
-    html += '<div class="prop-input"><select name="scriptLanguage">';
+    html += '<div class="prop-input"><select name="scriptLanguage" class="transition-prop">';
     for(var i in expressionLanguages) {
         var lang = expressionLanguages[i];
         if(lang==this.scriptLanguage) {
@@ -740,7 +744,7 @@ ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
     html += '</select></div></div>';
 
     html += '<div class="row prop-entry" ><div class="prop-label">表达式：</div>';
-    html += '<div class="prop-input"><input name="expression" size="28" value="' +this.expression+ '"/></div></div>';
+    html += '<div class="prop-input"><input class="transition-prop" name="expression" size="28" value="' +this.expression+ '"/></div></div>';
 
     html += '</div>';
     form.append(html);
@@ -751,5 +755,6 @@ ExpressionTransition.prototype.toServiceDefinition = function() {
     var definition = Transition.prototype.toServiceDefinition.call(this);
     definition.scriptLanguage = this.scriptLanguage;
     definition.expression = this.expression;
+    definition.class = expressionTransitionClass;
     return definition;
 };

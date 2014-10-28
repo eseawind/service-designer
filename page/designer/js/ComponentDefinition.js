@@ -241,12 +241,16 @@ ComponentDefinition.prototype.toServiceDefinition = function() {
     definition.y = this.y;
     definition.outputs = [];
 
-    for(var i in this.outputs) {
+    /*for(var i in this.outputs) {
         var outoutId = this.outputs[i];
         var transition = {};
         var outputBeanDefinition = serviceEditor.getNodeById(outoutId).data;
         transition.targetRef = outputBeanDefinition.toServiceDefinition();
         definition.outputs.push(transition);
+    }*/
+    for(var i in this.transitionOutputs) {
+        var transitionOutput = this.transitionOutputs[i];
+        definition.outputs.push(transitionOutput.toServiceDefinition());
     }
     return definition;
 };
@@ -365,9 +369,8 @@ ComponentDefinition.prototype.removeTransitionInput = function(_transitionInput)
 ComponentDefinition.prototype.addTransitionOutput = function(_transitionOutput, _override) {
     if(_override) {
         this.removeTransitionOutput(_transitionOutput);
-    } else {
-        this.transitionOutputs.push(_transitionOutput);
     }
+    this.transitionOutputs.push(_transitionOutput);
 };
 
 /**

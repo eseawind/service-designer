@@ -17,6 +17,8 @@ var resourcePropPrefix = "resource-";
 var serviceDefinitionId = "serviceDefinition";
 var transitionIdSeparator = "_to_";
 var expressionLanguages = ["ognl", "javascript", "el", "xpath"];
+var transitionClass = "com.kingyea.camel.runtime.Transition";
+var expressionTransitionClass = "com.kingyea.camel.runtime.ExpressionTransition";
 
 function ComponentDefinitionLoader() {
     this.loadSuccess = null;
@@ -435,8 +437,20 @@ function handleEvents() {
         }
         newTransition.refreshPropertiesConfigForm();
 
-        fromNode.data.addTransitionOutputs(newTransition, true);
-        toNode.data.addTransitionInputs(newTransition, true);
+        fromNode.data.addTransitionOutput(newTransition, true);
+        toNode.data.addTransitionInput(newTransition, true);
+    });
+
+    //修改连线属性值时
+    $('.transition-prop').live('change', function(){
+        var propName = $(this).attr("name");
+        //transitionId由相互连接的组件定义ID构成
+        var transitionId = $('#transition-id-hidden').val();
+        var compIds = transitionId.split(transitionIdSeparator);
+        var fromNode = serviceEditor.getNodeById(compIds[0]);
+        var toNode = serviceEditor.getNodeById(compIds[1]);
+        var transition = fromNode.getTransitionById(transitionId);
+        transition[propName] = this.value;
     });
 }
 
