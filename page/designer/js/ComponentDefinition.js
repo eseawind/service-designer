@@ -147,7 +147,8 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belong
  * @returns {boolean}
  */
 BeanDefinition.prototype.isComponentDefinition = function() {
-    //var is = this instanceof ComponentDefinition;//为什么返回false
+    //因为ComponentDefinition是通过Jquery.extends方法克隆过来的，已经丢失了类信息
+    //var is = this instanceof ComponentDefinition;return is;//为什么返回false
     return this.transitionInputs!=null;
 };
 
