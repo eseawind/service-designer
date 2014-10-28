@@ -172,6 +172,7 @@ function ServiceEditor(id, width, height, theme) {
 	
 }
 
+//重至画布，移除 除开始组件的其它组件，重新初始化serviceDefinitionData
 ServiceEditor.prototype.reset = function() {
     for(var i in this.nodes) {
         var node = this.nodes[i];
@@ -401,13 +402,14 @@ ServiceEditor.prototype.removeSelectedComponentNode = function() {
     this.removeNode(node);
 };
 
-ServiceEditor.prototype.getNodeByClass = function(_class) {
+ServiceEditor.prototype.getNodesByClass = function(_class) {
+    var nodes = [];
     for(i in this.nodes) {
         if(this.nodes[i].data.class==_class) {
-            return this.nodes[i];
+            nodes.push(this.nodes[i]);
         }
     }
-    return null;
+    return nodes;
 };
 
 ServiceEditor.prototype.getNodeById = function(_id) {

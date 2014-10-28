@@ -264,7 +264,7 @@ function handleEvents() {
         var serviceDefinition = serviceEditor.serviceDefinitionData.toServiceDefinition();
         delete serviceDefinition.class;
         delete serviceDefinition.id;
-        serviceDefinition.startComponent = serviceEditor.getNodeByClass(startComponentClass).data.toServiceDefinition();
+        serviceDefinition.startComponent = serviceEditor.getNodesByClass(startComponentClass)[0].data.toServiceDefinition();
         serviceDefinition.nodeCode = nodeCode;
         console.info(serviceEditor.nodes);
         console.info(serviceDefinition);
@@ -454,8 +454,9 @@ function handleEvents() {
     $('#load-service-definition-button').click(function(){
         var url = contextPath + '/data/service/SEND_FILE_SERVICE.json';
         $.getJSON(url, function(_data){
-            var serviceDefinitionData = _data;
             serviceEditor.reset();
+            serviceEditor.restore(_data);
+            console.info(serviceEditor);
         });
     });
 }
