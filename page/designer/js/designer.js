@@ -270,12 +270,6 @@ function handleEvents() {
         console.info(serviceEditor.nodes);
         console.info(serviceDefinition);
         console.info(JSON.stringify(serviceDefinition));
-
-        /*var definitions = [];
-        for(var i in serviceEditor.nodes) {
-            definitions.push(serviceEditor.nodes[i].data);
-        }
-        console.info(JSON.stringify(definitions));*/
     });
 
     $('#upload-service-definition-button').click(function() {
@@ -455,6 +449,14 @@ function handleEvents() {
         var fromNode = serviceEditor.getNodeById(compIds[0]);
         var transition = fromNode.getTransitionById(transitionId);
         transition[propName] = this.value;
+    });
+
+    //加载服务定义按钮被点击
+    $('#load-service-definition-button').click(function(){
+        var url = contextPath + '/data/service/SEND_FILE_SERVICE.json';
+        $.getJSON(url, function(_data){
+            var serviceDefinitionData = _data;
+        });
     });
 }
 
