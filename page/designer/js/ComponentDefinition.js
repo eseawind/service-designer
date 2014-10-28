@@ -317,6 +317,28 @@ ComponentDefinition.prototype.removeOutput = function(_output) {
 };
 
 
+ComponentDefinition.prototype.restore = function(_componentDefinition) {
+    for(var i in this.propertyDefinitions) {
+        var propertyDefinition = this.propertyDefinitions[i];
+        var propName = propertyDefinition.name;
+        if(_componentDefinition[propName]!=null && _componentDefinition[propName!=undefined]) {
+            if(propertyDefinition.isRef()) {//为引用属性
+
+            } else if(propertyDefinition.isArrayOrList()) {//数组或列表属性
+
+            } else if(propertyDefinition.isMap()) {//Map属性
+
+            } else {
+                propertyDefinition.value = _componentDefinition[propName];
+            }
+        }
+    }
+
+    //TODO 处理inputs与outputs，因为传回来的数据只有outputs，所以只处理输出
+
+};
+
+
 
 
 //-------------------------------- BeanDefinitionBuilder -------------------------

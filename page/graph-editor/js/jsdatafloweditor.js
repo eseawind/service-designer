@@ -176,10 +176,9 @@ function ServiceEditor(id, width, height, theme) {
 ServiceEditor.prototype.reset = function() {
     for(var i in this.nodes) {
         var node = this.nodes[i];
-        if(node.data.class!=startComponentClass) {
-            this.removeNode(node);
-        }
+        node.remove();
     }
+    this.nodes = [];
     this.selected = null;
     this.serviceDefinitionData = BeanDefinitionBuilder.buildServiceDefinitionData();
 };
@@ -388,6 +387,13 @@ ServiceEditor.prototype.removeNode = function(_node) {
     if(_node) {
         if(_node.data.class!=startComponentClass) {
             _node.remove();
+            for(var i in this.nodes) {
+                if(_node.data.id===this.nodes[i].data.id) {
+                    this.nodes.splice(i, 1);
+                    break;
+                }
+            }
+
         } else {
             alert("开始组件禁止移除");
         }
@@ -460,7 +466,7 @@ function ComponentNode(id, title) {
 			this.points[i].remove(this.raphael);
 	});
 	this.selected = false;
-	
+
 	return true;
 }
 
@@ -771,4 +777,33 @@ ExpressionTransition.prototype.toServiceDefinition = function() {
     definition.expression = this.expression;
     definition.class = expressionTransitionClass;
     return definition;
+};
+
+
+
+
+
+
+//---------------------------------------数据还原代码-----------------------------
+
+//根据服务定义对象还原画布及其数据
+ServiceEditor.prototype.restore = function(_serviceDefinition) {
+    //还原serviceDefinitionData
+    for(var i in this.serviceDefinitionData.propertyDefinitions) {
+        var propertyDefinition = this.serviceDefinitionData.propertyDefinitions[i];
+        var propName = propertyDefinition.name;
+        if(_serviceDefinition[propName]!=null && _serviceDefinition[propName]!=undefined) {
+            propertyDefinition.value = _serviceDefinition[propName];
+        }
+    }
+
+    //还原StartComponent
+    this.restoreComponent(_serviceDefinition.startComponent);
+};
+
+ServiceEditor.prototype.restoreComponent = function(_startComponent) {
+    var startComponentDefinition = new ComponentDefinition(_startComponent.class);
+    startComponentDefinition.type = ComponentDefinition.TYPE_START;
+    addNode(_startComponent.x, _startComponent.y, startComponentDefinition);
+    startComponentDefinition.restore(_startComponent);
 };
