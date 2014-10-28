@@ -37,11 +37,11 @@ function PropertyDefinition(_name, _value, _type) {
     this.value = _value;
     this.type = _type;
     /** 该属性定义所属的BeanDefinition**/
-    this.belongTo = null;
     this.inputType = PropertyDefinition.input_type_text;
     this.required = false;
     this.desc = null;
     /** 该属性定义所属的BeanDefinition ID, js循环引用出现问题**/
+    //在BeanDefinition.setId()方法中设置
     this.belongToId = ""
 }
 PropertyDefinition.input_type_text = 0;
@@ -155,13 +155,6 @@ RefPropertyDefinition.prototype.loadRefBeanDefinitions = function() {
             }
         }
 
-        //如果只有一种类型，则赋给当前选择类型
-        /*if(this.beanDefinitions.length<2) {
-            this.selectedBeanDefinitionType = this.beanDefinitions[0].type;
-        }
-        if(this.selectedBeanDefinitionType==null) {//如果还未配置当前选择的type
-            this.selectedBeanDefinitionType = this.beanDefinitions[0].type;
-        }*/
     } else {
         alert("引用属性:" + className + "未找到");
     }
@@ -308,16 +301,6 @@ RefPropertyDefinition.prototype.setBelongToId = function(_id) {
     for(var i in this.beanDefinitions) {
         var beanDefinition = this.beanDefinitions[i].definition;
         beanDefinition.setId(this.belongToId + "-" + getSimpleClassName(beanDefinition.class) + i);
-    }
-};
-
-/**
- * 将该引用属性的各个可引用的BeanDefinition的属性设置belongTo属性值
- */
-RefPropertyDefinition.prototype.assignRefBeanDefinitionPropertyBelongTo = function() {
-    for(var i in this.beanDefinitions) {
-        var beanDefinition = this.beanDefinitions[i].definition;
-        beanDefinition.assignPropertyBelongTo();
     }
 };
 

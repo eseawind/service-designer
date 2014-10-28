@@ -85,7 +85,6 @@ ComponentDefinitionLoader.prototype.getComponentDefinitionByClassName = function
         var componentDefinition = this.componentDefinitions[i];
         if(componentDefinition.class==_class) {
             var clonedComponentDefinition = _clone ? $.extend(true, {}, componentDefinition) : componentDefinition;
-            clonedComponentDefinition.assignPropertyBelongTo();
             return clonedComponentDefinition;
         }
     }

@@ -153,18 +153,6 @@ BeanDefinition.prototype.isComponentDefinition = function() {
 };
 
 
-/**
- * 为当前BeanDefinition的所有属性设置BelongTo属性
- */
-BeanDefinition.prototype.assignPropertyBelongTo = function() {
-    for(var i in this.propertyDefinitions) {
-        var propertyDefinition = this.propertyDefinitions[i];
-        propertyDefinition.belongTo = this;
-        if(propertyDefinition.isRef()) {//如果是引用属性，则将引用属性的各个可引用的BeanDefinition的属性也设置belongTo属性值
-            propertyDefinition.assignRefBeanDefinitionPropertyBelongTo();
-        }
-    }
-};
 
 /**
  * 在BeanDefinition ID为_beanDefinitionId的BeanDefinition中搜寻名这_propName的ArrayOrListPropertyDefinition
@@ -374,8 +362,7 @@ BeanDefinitionBuilder.buildPropertyDefinition = function(_prop) {
     } else {
         propertyDefinition = new PropertyDefinition(_prop.name, _prop.value, _prop.type);
     }
-    //propertyDefinition.beanDefinitionId = _beanDefinitionId;
-    if(propertyDefinition.loadRefBeanDefinitions) {
+    if(propertyDefinition instanceof RefPropertyDefinition) {//如果是引用属性，则要加载引用BeanDefinition
         propertyDefinition.loadRefBeanDefinitions();
     }
 
