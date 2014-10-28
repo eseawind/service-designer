@@ -316,7 +316,10 @@ ComponentDefinition.prototype.removeOutput = function(_output) {
     return null;
 };
 
-
+/**
+ * 组件定义还原
+ * @param _componentDefinition 从远程加载的组件定义数据
+ */
 ComponentDefinition.prototype.restore = function(_componentDefinition) {
     for(var i in this.propertyDefinitions) {
         var propertyDefinition = this.propertyDefinitions[i];
