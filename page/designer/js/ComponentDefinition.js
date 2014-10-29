@@ -257,7 +257,11 @@ BeanDefinition.prototype.restore = function(_beanDefinition, _isComp) {
 
 
 //-------------------------------- ComponentDefinition -------------------------
-
+/**
+ * 组件定义类
+ * @param _class 类名
+ * @constructor
+ */
 function ComponentDefinition(_class) {
     BeanDefinition.call(this, _class);
     this.x = 0;
@@ -339,6 +343,11 @@ ComponentDefinition.prototype.addInput = function(_input, _override) {
 
 };
 
+/**
+ * 移除输入连线
+ * @param _input
+ * @returns {*}
+ */
 ComponentDefinition.prototype.removeInput = function(_input) {
     for(var i in this.inputs) {
         var input = this.inputs[i];
@@ -383,11 +392,21 @@ ComponentDefinition.prototype.removeOutput = function(_output) {
 
 
 //-------------------------------- BeanDefinitionBuilder -------------------------
-
+/**
+ * BeanDefinition建造者
+ * @param _definitionData
+ * @param _isComp
+ * @constructor
+ */
 function BeanDefinitionBuilder(_definitionData, _isComp) {
     this.definitionData = _definitionData;
     this.isComp = _isComp;
 }
+
+/**
+ * 构建BeanDefinition
+ * @returns {BeanDefinition}
+ */
 BeanDefinitionBuilder.prototype.build = function() {
     var className = this.definitionData.bean.class;
     var beanDefinition = new BeanDefinition(className);
@@ -439,6 +458,10 @@ BeanDefinitionBuilder.buildPropertyDefinition = function(_prop) {
     return propertyDefinition;
 };
 
+/**
+ * 构建ServiceDefinition BeanDefinition
+ * @returns {*}
+ */
 BeanDefinitionBuilder.buildServiceDefinitionData = function() {
     var jsonData = {
         "bean" : {

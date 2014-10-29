@@ -469,16 +469,29 @@ ComponentNode.WIDTH = 133;
 //组件高度
 ComponentNode.HEIGHT = 54;
 
-
+/**
+ * 设置输入点
+ * @param _label 输入点标签
+ * @returns {ComponentNode}
+ */
 ComponentNode.prototype.setInputPoint = function(_label) {
     this.inputPoint = new Point(this, _label, "in", true);
     return this;
 };
+
+/**
+ * 设置输出出点
+ * @param _label 输出标签
+ * @returns {ComponentNode}
+ */
 ComponentNode.prototype.setOutputPoint = function(_label) {
     this.outputPoint = new Point(this, _label, "out", true);
     return this;
 };
 
+/**
+ * 刷新其属性配置表单
+ */
 ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     var componentDefinition = this.data;
     if(componentDefinition.class!=startComponentClass) {
@@ -486,6 +499,11 @@ ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     }
 };
 
+/**
+ * 根据Transition ID获取Transition
+ * @param _transitionId
+ * @returns {*}
+ */
 ComponentNode.prototype.getTransitionById = function(_transitionId) {
     if(this.inputPoint) {
         var lines = this.inputPoint.getLines();
@@ -560,6 +578,10 @@ function Point(parent, label, dir, multi) {
 	//this.lines = [];改为从ComponentDefinition.inputs或outputs中获取
 }
 
+/**
+ * 获取该点的连线
+ * @returns {*}
+ */
 Point.prototype.getLines = function() {
     if(this.isInput()) {
         return this.parent.data.inputs;
@@ -579,6 +601,7 @@ Point.prototype.isOutput = function() {
     return this.dir=="out";
 };
 
+//移除点
 Point.prototype.remove = function(raphael) {
 	for(var i in this.connections) {
         this.connections[i].removeConnection(raphael, this, true);
@@ -639,6 +662,7 @@ Point.prototype.connect = function(raphael, other, sub) {
 	return line;
 };
 
+//移除连线
 Point.prototype.removeConnection = function(raphael, other, sub) {
     var transition = null;
 	var editor = this.parent.parent;
@@ -698,6 +722,14 @@ Point.prototype.fixConnections = function(raphael) {
 
 
 //----------------------------------------Transition--------------------------------------------
+/**
+ * 普通连线
+ * @param _line Raphael连线对象
+ * @param _bg Raphael背景对象
+ * @param _fromCircle Raphael源点
+ * @param _toCircle Raphael目的点
+ * @constructor
+ */
 function Transition(_line, _bg, _fromCircle, _toCircle) {
     this.line = _line;
     this.bg = _bg;
@@ -772,6 +804,10 @@ Transition.prototype.toExpression = function(_scriptLanguage, _expression) {
 Transition.TYPE_NORMAL = "normal";
 Transition.TYPE_EXPRESSION = "expression";
 
+/**
+ * 返回服务定义相关数据
+ * @returns {{}}
+ */
 Transition.prototype.toServiceDefinition = function() {
     var definition = {};
     console.info(this.id);
@@ -783,6 +819,14 @@ Transition.prototype.toServiceDefinition = function() {
     return definition;
 };
 
+/**
+ * 表达式连线
+ * @param _line Raphael连线对象
+ * @param _bg Raphael背景对象
+ * @param _fromCircle Raphael源点
+ * @param _toCircle Raphael目的点
+ * @constructor
+ */
 function ExpressionTransition(_line, _bg, _fromCircle, _toCircle) {
     Transition.call(this, _line, _bg, _fromCircle, _toCircle);
     this.scriptLanguage = "";
@@ -842,7 +886,10 @@ ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
     form.append(html);
 };
 
-
+/**
+ * 返回服务定义相关数据
+ * @returns {*}
+ */
 ExpressionTransition.prototype.toServiceDefinition = function() {
     var definition = Transition.prototype.toServiceDefinition.call(this);
     definition.scriptLanguage = this.scriptLanguage;

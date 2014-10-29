@@ -49,20 +49,40 @@ PropertyDefinition.input_type_radio = 1;
 PropertyDefinition.input_type_checkbox = 2;
 PropertyDefinition.input_type_combo = 3;
 
+/**
+ * 判断是否是引用属性
+ * @returns {boolean}
+ */
 PropertyDefinition.prototype.isRef = function() {
     return this.type.indexOf("ref-")!=-1;
 };
+/**
+ * 判断是否是数据或列表属性
+ * @returns {boolean}
+ */
 PropertyDefinition.prototype.isArrayOrList = function() {
     return this.type.indexOf("array-")!=-1 || this.type.indexOf("list-")!=-1;
 };
+/**
+ * 判断是否是Map属性
+ * @returns {boolean}
+ */
 PropertyDefinition.prototype.isMap = function() {
     return this.type.indexOf("map-")!=-1;
 };
 
+/**
+ * 设置该属性所属的Bean定义的ID
+ * @param _id Bean定义ID
+ */
 PropertyDefinition.prototype.setBelongToId = function(_id) {
     this.belongToId = _id;
 };
 
+/**
+ * 获取属性字段标签
+ * @returns {*}
+ */
 PropertyDefinition.prototype.getInputLabel = function() {
     var label = this.name;
     if(this.desc) {
@@ -70,6 +90,11 @@ PropertyDefinition.prototype.getInputLabel = function() {
     }
     return label;
 };
+
+/**
+ * 获取属性字段标签的html字符串
+ * @returns {string}
+ */
 PropertyDefinition.prototype.getInputLabelHtml = function() {
     return '<div class="row prop-entry" ><div class="prop-label">' + this.getInputLabel() + '：</div>';
 };
@@ -91,7 +116,13 @@ function ComboPropertyDefinition(_name, _value, _type, _selectValues) {
     this.selectValues = _selectValues;
     this.inputType = PropertyDefinition.input_type_combo;
 }
+
+//继承自PropertyDefinition
 ComboPropertyDefinition.prototype = new PropertyDefinition();
+
+/**
+ * 获取html字符串，用于显示表单
+ * */
 ComboPropertyDefinition.prototype.getInputHtml = function() {
     //<div class="row prop-entry" >
         //<div class="prop-label">固定频率:</div>
@@ -119,12 +150,13 @@ ComboPropertyDefinition.prototype.getInputHtml = function() {
 /** 引用属性定义 **/
 function RefPropertyDefinition(_name, _value, _type) {
     PropertyDefinition.call(this, _name, _value, _type);
-    this.beanDefinitions = [];
-    this.selectedBeanDefinitionType = null;
-    this.resources = null;
-    this.selectedResource = null;
-    this.valueMode = null;
+    this.beanDefinitions = [];//可使用的Bean定义
+    this.selectedBeanDefinitionType = null; //当前选择的Bean定义类型
+    this.resources = null;//可引用的资源
+    this.selectedResource = null;//当前选择的资源
+    this.valueMode = null;//值类型，选择资源或手动配置
 }
+//继承自PropertyDefinition
 RefPropertyDefinition.prototype = new PropertyDefinition();
 RefPropertyDefinition.VALUE_MODE_RESOURCE = "resource";
 RefPropertyDefinition.VALUE_MODE_CONFIG = "config";
@@ -137,6 +169,9 @@ RefPropertyDefinition.prototype.getAbstractType = function(){
     return this.type.split("-")[1];
 };
 
+/**
+ * 加载该引用属性引用的Bean定义
+ */
 RefPropertyDefinition.prototype.loadRefBeanDefinitions = function() {
     var className = this.getAbstractType();
     this.resources = ComponentDefinitionLoader.getInstance().getResourcesByClassName(className);
@@ -312,6 +347,10 @@ RefPropertyDefinition.prototype.setBelongToId = function(_id) {
     }
 };
 
+/**
+ * 返回服务定义相关数据
+ * @returns {*}
+ */
 RefPropertyDefinition.prototype.toServiceDefinition = function() {
     if(this.valueMode==RefPropertyDefinition.VALUE_MODE_RESOURCE) {//如果是资源模式
         if(this.selectedResource) {//如果选择了资源，没有选择不使用
@@ -339,6 +378,7 @@ function ArrayOrListPropertyDefinition(_name, _value, _type) {
         this.value = _value;
     }
 }
+//继承自PropertyDefinition
 ArrayOrListPropertyDefinition.prototype = new PropertyDefinition();
 
 /**
@@ -359,26 +399,45 @@ ArrayOrListPropertyDefinition.prototype.getInputHtml = function() {
     return html;
 };
 
+/**
+ * 清空数据
+ */
 ArrayOrListPropertyDefinition.prototype.clear = function() {
     this.value = [];
 };
 
+/**
+ * 添加某值
+ * @param _value
+ */
 ArrayOrListPropertyDefinition.prototype.add = function(_value) {
     this.value.push(_value);
 };
+
+/**
+ * 移除某个值
+ * @param _value
+ */
 ArrayOrListPropertyDefinition.prototype.remove = function(_value) {
-    var newValues = [];
     for(var i in this.value) {
-        if(this.value[i]!==_value) {
-            newValues.push(this.value[i]);
+        if(this.value[i]===_value) {
+            this.value.splice(i, 1);
         }
     }
-    this.value = newValues;
 };
 
+/**
+ * 获取显示字符串
+ * @returns {string}
+ */
 ArrayOrListPropertyDefinition.prototype.getDisplayString = function() {
     return this.value.join(',');
 };
+
+/**
+ * 返回服务定义相关数据
+ * @returns {Array}
+ */
 ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
     return this.value;
 };
@@ -425,6 +484,7 @@ function MapPropertyDefinition(_name, _value, _type) {
         this.value = _value;
     }
 }
+//继承自PropertyDefinition
 MapPropertyDefinition.prototype = new PropertyDefinition();
 
 /**
@@ -444,6 +504,11 @@ MapPropertyDefinition.prototype.getInputHtml = function() {
     html += '<button type="button" class="map-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></div></div></div>';
     return html;
 };
+
+/**
+ * 获取显示字符串
+ * @returns {string}
+ */
 MapPropertyDefinition.prototype.getDisplayString = function() {
     var display = "";
     for(var key in this.value) {
@@ -454,21 +519,43 @@ MapPropertyDefinition.prototype.getDisplayString = function() {
     }
     return display;
 };
+
+/**
+ * 返回服务定义相关数据
+ * @returns {{}|*}
+ */
 MapPropertyDefinition.prototype.toServiceDefinition = function() {
     return this.value;
 };
 
+/**
+ * 清空Map
+ */
 MapPropertyDefinition.prototype.clear = function() {
     this.value = {};
 };
 
+/**
+ * 添加一个条目
+ * @param _key
+ * @param _value
+ */
 MapPropertyDefinition.prototype.add = function(_key, _value) {
     this.value[_key] = _value;
 };
+
+/**
+ * 根据key移除一个条目
+ * @param _key
+ */
 MapPropertyDefinition.prototype.remove = function(_key) {
     delete this.value[_key];
 };
 
+/**
+ * 判断是否为空
+ * @returns {boolean}
+ */
 MapPropertyDefinition.prototype.isEmpty = function() {
     for(var key in this.value) {
         return false;
