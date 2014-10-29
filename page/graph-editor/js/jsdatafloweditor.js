@@ -805,5 +805,5 @@ ServiceEditor.prototype.restoreComponent = function(_startComponent) {
     var startComponentDefinition = new ComponentDefinition(_startComponent.class);
     startComponentDefinition.type = ComponentDefinition.TYPE_START;
     addNode(_startComponent.x, _startComponent.y, startComponentDefinition);
-    startComponentDefinition.restore(_startComponent);
+    startComponentDefinition.restore(_startComponent, true);
 };

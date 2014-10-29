@@ -197,6 +197,65 @@ BeanDefinition.prototype.getMapPropertyDefinition = function(_beanDefinitionId, 
 };
 
 
+/**
+ * Bean定义还原，如果是组件，则要将组件相关数据还原放到该方法外部，目的是为了还原BeanDefinition
+ * 与ComponentDefinition共用此方法
+ * @param _beanDefinition 从远程加载的组件定义数据
+ * @param _isComp 是否是组件，否则为普通BeanDefinition
+ */
+BeanDefinition.prototype.restore = function(_beanDefinition, _isComp) {
+    this.id = _beanDefinition.id;
+    for(var i in this.propertyDefinitions) {
+        var propertyDefinition = this.propertyDefinitions[i];
+        var propName = propertyDefinition.name;
+        if(_beanDefinition[propName]!=null && _beanDefinition[propName]!=undefined) {
+            var propValue = _beanDefinition[propName];
+            if(propertyDefinition.isRef()) {//为引用属性
+                //如果是资源类型
+                if(("string"===typeof(propValue)) && propValue.indexOf(resourcePropPrefix)!=-1) {
+                    propertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
+                    var selectedResource = _beanDefinition[propName].split(refPropertySeparator)[1];
+                    propertyDefinition.selectedResource = selectedResource;
+                } else {
+                    propertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
+                    for(var i in propertyDefinition.beanDefinitions) {//迭代引用属性中的beanDefinitions
+                        var beanDefinitionData = propertyDefinition.beanDefinitions[i];
+                        //如果类名相等，则表示找到了需要还原的beanDefinitionData
+                        if(beanDefinitionData.definition.class==propValue.class) {
+                            propertyDefinition.selectedBeanDefinitionType = beanDefinitionData.type;
+                            var beanDefinition = beanDefinitionData.definition;
+                            //还原引用属性引用的BeanDefinition
+                            beanDefinition.restore(propValue, false);
+                            break;
+                        }
+                    }
+                }
+            } else if(propertyDefinition.isArrayOrList()) {//数组或列表属性
+
+            } else if(propertyDefinition.isMap()) {//Map属性
+
+            } else {
+                propertyDefinition.value = _beanDefinition[propName];
+            }
+        }
+    }
+
+    //因为传回来的数据只有outputs，所以只处理输出
+    if(_isComp) {//只组件才有outputs
+        for(var i in _beanDefinition.outputs) {
+            var outputTransition = _beanDefinition.outputs[i];//transition
+            var targetRef = outputTransition.targetRef;
+            var className = targetRef.class;
+            var loader = ComponentDefinitionLoader.getInstance();
+            var outputComponentDefinition = loader.getComponentDefinitionByClassName(className, true);
+            addNode(targetRef.x, targetRef.y, outputComponentDefinition);
+            outputComponentDefinition.restore(targetRef, true);
+        }
+    }
+
+};
+
+
 //-------------------------------- ComponentDefinition -------------------------
 
 function ComponentDefinition(_class) {
@@ -316,38 +375,6 @@ ComponentDefinition.prototype.removeOutput = function(_output) {
     return null;
 };
 
-/**
- * 组件定义还原
- * @param _componentDefinition 从远程加载的组件定义数据
- */
-ComponentDefinition.prototype.restore = function(_componentDefinition) {
-    for(var i in this.propertyDefinitions) {
-        var propertyDefinition = this.propertyDefinitions[i];
-        var propName = propertyDefinition.name;
-        if(_componentDefinition[propName]!=null && _componentDefinition[propName]!=undefined) {
-            if(propertyDefinition.isRef()) {//为引用属性
-
-            } else if(propertyDefinition.isArrayOrList()) {//数组或列表属性
-
-            } else if(propertyDefinition.isMap()) {//Map属性
-
-            } else {
-                propertyDefinition.value = _componentDefinition[propName];
-            }
-        }
-    }
-
-    //TODO 处理inputs与outputs，因为传回来的数据只有outputs，所以只处理输出
-    for(var i in _componentDefinition.outputs) {
-        var outputTransition = _componentDefinition.outputs[i];//transition
-        var targetRef = outputTransition.targetRef;
-        var className = targetRef.class;
-        var loader = ComponentDefinitionLoader.getInstance();
-        var outputComponentDefinition = loader.getComponentDefinitionByClassName(className, true);
-        addNode(targetRef.x, targetRef.y, outputComponentDefinition);
-        outputComponentDefinition.restore(targetRef);
-    }
-};
 
 
 

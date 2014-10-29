@@ -15,6 +15,7 @@ var manualConfigRefPropValue = "__ref-prop-from-manual-config__";
 var resourceRefPropValue = "__ref-prop-from-resource__";
 var resourcePropPrefix = "resource-";
 var serviceDefinitionId = "serviceDefinition";
+var refPropertySeparator = "-";
 var transitionIdSeparator = "_to_";
 var expressionLanguages = ["ognl", "javascript", "el", "xpath"];
 var transitionClass = "com.kingyea.camel.runtime.Transition";
