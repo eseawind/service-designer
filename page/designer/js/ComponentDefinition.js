@@ -231,11 +231,11 @@ BeanDefinition.prototype.restore = function(_beanDefinition, _isComp) {
                     }
                 }
             } else if(propertyDefinition.isArrayOrList()) {//数组或列表属性
-
+                propertyDefinition.value = propValue;
             } else if(propertyDefinition.isMap()) {//Map属性
-
+                propertyDefinition.value = propValue;//ArrayOrList与Map特意分开判断，方便以后区别
             } else {
-                propertyDefinition.value = _beanDefinition[propName];
+                propertyDefinition.value = propValue;
             }
         }
     }

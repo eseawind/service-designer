@@ -11,32 +11,26 @@
         "outputs": [
             {
                 "targetRef": {
-                    "class": "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent",
-                    "id": "MultiFileSplitComponent1",
-                    "backupDir": "/temp/bak",
-                    "replaceIfExist": true,
-                    "repositoryDir": "/temp/db4o",
-                    "splitPackageSize": 1048756,
-                    "uncompliteSendbackDelay": 10000,
-                    "poolSize": 50,
-                    "sendBlockingQueue": 100,
-                    "trackerLevel": "ERROR",
-                    "feedbackStrategy": {
-                        "class": "com.kingyea.esb.components.file.feedback.JmsFeedbackStrategy",
-                        "id": "MultiFileSplitComponent1-JmsFeedbackStrategy0",
-                        "destinationName": "KingyeaTracker",
-                        "connectionFactoryProvider": "resource-defaultConnectionFactoryProvider"
+                    "class": "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent",
+                    "id": "mailSenderSourceComponent1",
+                    "host": "localhost",
+                    "port": 25,
+                    "username": "root",
+                    "password": "kingyea",
+                    "name": "xxx",
+                    "contentType": "text/plain",
+                    "from": "zhangsan",
+                    "to": "lisi",
+                    "cc": "wangwu",
+                    "bcc": "zhaoliu",
+                    "body": "content",
+                    "freemarkerSupport": false,
+                    "freemarkerMap": {
+                        "aaa": "bbb",
+                        "ccc": "ddd"
                     },
-                    "splitProvider": {
-                        "class": "com.kingyea.esb.components.file.multi.split.SingleFileSplitProvider",
-                        "id": "MultiFileSplitComponent1-SingleFileSplitProvider1",
-                        "receivers": [
-                            "boundary-switchin",
-                            "government"
-                        ]
-                    },
-                    "x": 335,
-                    "y": 109,
+                    "x": 387,
+                    "y": 100,
                     "outputs": []
                 },
                 "name": "",
