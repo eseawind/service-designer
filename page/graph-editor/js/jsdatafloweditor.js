@@ -445,6 +445,8 @@ function ComponentNode(id, title) {
 	this.title = title;
     this.data = null;
 	this.points = [];
+    this.inputPoint = null;
+    this.outputPoint = null;
 
 	this.focus = event().add(function() {
 		this.selected = true;
@@ -476,8 +478,8 @@ ComponentNode.WIDTH = 133;
 ComponentNode.HEIGHT = 54;
 
 
-ComponentNode.prototype.addPoint = function(label, dir, multi) {
-	var npoint = this[label] = new Point(this, label, dir, multi);
+ComponentNode.prototype.addPoint = function(label, dir) {
+	var npoint = new Point(this, label, dir, true);
 	this.points.push(npoint);
 	return this;
 };
