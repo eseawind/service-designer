@@ -1,10 +1,3 @@
-function property(getter, setter) {
-	return function(value) {
-		if(value == undefined) return getter.call(this);
-		else return setter.call(this, value);
-	};
-}
-
 function event(onAdd, onRemove) {
 	onAdd = onAdd == undefined ? null : onAdd;
 	onRemove = onRemove == undefined ? null : onRemove;
@@ -108,12 +101,6 @@ Raphael.fn.connection = function (_fromCircle, _toCircle, line, bg, removeHook) 
                 bgElem.dblclick(dblclick);
             }
       	}
-        /*return {
-            line: lineElem.attr({stroke: color, fill: "none"}).toBack(),
-            bg: bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1] || 3}).toBack(),
-            from: _fromCircle,
-            to: _toCircle
-        };*/
         return new Transition(lineElem.attr({stroke: color, fill: "none", "stroke-width":"5"}).toBack(),
             bg && bg.split && bgElem.attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": bg.split("|")[1]}).toBack(),
             _fromCircle, _toCircle);
@@ -275,20 +262,6 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	mx = 0;
 
     //绘制输入点
-	/*for(i in node.points) {
-		var point = node.points[i];
-		if(point.dir == 'out') continue;
-		point.circle = circle = this.raphael.circle(x+10, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
-		circle.point = point;
-        this.rigConnections(point);
-		label = this.raphael.text(x+20, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
-		bbox = label.getBBox();
-		ly += bbox.height + 5;
-		if(bbox.width > mx)
-			mx = bbox.width;
-		temp.push(circle);
-		temp.push(label);
-	}*/
     var point = node.inputPoint;
     if(point) {//判断输入点存在，因为有点组件没有输入点
         point.circle = circle = this.raphael.circle(x+10, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
@@ -311,19 +284,6 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	ly = y+35;
 
     //绘制输出点
-	/*for(i in node.points) {
-		var point = node.points[i];
-		if(point.dir == 'in') continue;
-        var textX = x + ComponentNode.WIDTH - 55;
-		label = this.raphael.text(textX, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
-		//label = this.raphael.text(lx, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
-		label.point = point;
-		bbox = label.getBBox();
-		ly += bbox.height + 5;
-		if(bbox.width > mx)
-			mx = bbox.width;
-		labels.push(label);
-	}*/
     point = node.outputPoint;
     if(point) {
         var textX = x + ComponentNode.WIDTH - 55;
@@ -469,7 +429,6 @@ function ComponentNode(id, title) {
 	this.id = id;
 	this.title = title;
     this.data = null;
-	//this.points = [];
     this.inputPoint = null;
     this.outputPoint = null;
 
@@ -489,8 +448,6 @@ function ComponentNode(id, title) {
 		if(this.selected)
 			this.blur();
 		this.element.remove();
-		/*for(var i in this.points)
-			this.points[i].remove(this.raphael);*/
         if(this.inputPoint) {
             this.inputPoint.remove(this.raphael);
         }
@@ -506,12 +463,6 @@ ComponentNode.WIDTH = 133;
 //组件高度
 ComponentNode.HEIGHT = 54;
 
-
-/*ComponentNode.prototype.addPoint = function(label, dir) {
-	var npoint = new Point(this, label, dir, true);
-	this.points.push(npoint);
-	return this;
-};*/
 
 ComponentNode.prototype.setInputPoint = function(_label) {
     this.inputPoint = new Point(this, _label, "in", true);
@@ -529,21 +480,7 @@ ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     }
 };
 
-/*ComponentNode.prototype.addRaphaelElement = function(_element) {
-    this.raphaelElements.push(_element);
-};*/
-
 ComponentNode.prototype.getTransitionById = function(_transitionId) {
-    /*for(var i in this.points) {
-        var point = this.points[i];
-        for(var j in point.lines) {
-            var transition = point.lines[j];
-            if(transition.id===_transitionId) {
-                return transition;
-            }
-        }
-    }
-    return null;*/
     if(this.inputPoint) {
         for(var j in this.inputPoint.lines) {
             var transition = this.inputPoint.lines[j];
@@ -565,24 +502,10 @@ ComponentNode.prototype.getTransitionById = function(_transitionId) {
 
 //获取输入点
 ComponentNode.prototype.getInputPoint = function() {
-    /*for(var i in this.points) {
-        var point = this.points[i];
-        if(point.isInput()) {
-            return point;
-        }
-    }
-    return null;*/
     return this.inputPoint;
 };
 //获取输入出点
 ComponentNode.prototype.getOutputPoint = function() {
-    /*for(var i in this.points) {
-        var point = this.points[i];
-        if(point.isOutput()) {
-            return point;
-        }
-    }
-    return null;*/
     return this.outputPoint;
 };
 //从本组件连向另一组件
@@ -688,7 +611,6 @@ Point.prototype.connect = function(raphael, other, sub) {
 	var line = null;
     if(sub !== true) {
 		function remove() {
-			//sthis.removeConnection(raphael, other);
             other.removeConnection(raphael, sthis);
 			raphael.safari();
 		}
