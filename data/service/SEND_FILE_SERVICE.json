@@ -72,11 +72,11 @@
                                             "x": 564,
                                             "y": 263
                                         },
-                                        "name": "xxx",
-                                        "description": "yyy",
+                                        "name": "aaaaaaaa",
+                                        "description": "bbbbbb",
                                         "class": "com.kingyea.camel.runtime.ExpressionTransition",
-                                        "scriptLanguage": "ognl",
-                                        "expression": "xxxxxxxxxx"
+                                        "scriptLanguage": "javascript",
+                                        "expression": "zzzzzzz"
                                     }
                                 ]
                             },

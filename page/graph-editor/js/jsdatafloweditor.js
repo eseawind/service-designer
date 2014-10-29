@@ -543,12 +543,22 @@ ComponentNode.prototype.connectTo = function(_outputTransition) {
                 break;
             }
         }
+        transitions = outputPoint.lines;
+        for(var i in transitions) {
+            if(transitions[i].id===transition.id) {
+                transitions.splice(i, 1, newTransition);//将组件定义保存的连线替换成新的连线对象
+                break;
+            }
+        }
     }
     newTransition.name = _outputTransition.name;
     newTransition.description = _outputTransition.description;
 
     this.data.addOutput(newTransition, true);
     otherNode.data.addInput(newTransition, true);
+
+    //newTransition对象保存在了四个地方，ComponentDefinition的inputs与outputs，inputPoint.lines,outputPoint.lines
+    //叵要替换，则要把四个地方全部替换
 };
 
 
