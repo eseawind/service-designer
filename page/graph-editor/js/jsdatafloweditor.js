@@ -469,7 +469,7 @@ function ComponentNode(id, title) {
 	this.id = id;
 	this.title = title;
     this.data = null;
-	this.points = [];
+	//this.points = [];
     this.inputPoint = null;
     this.outputPoint = null;
 
@@ -489,8 +489,14 @@ function ComponentNode(id, title) {
 		if(this.selected)
 			this.blur();
 		this.element.remove();
-		for(var i in this.points)
-			this.points[i].remove(this.raphael);
+		/*for(var i in this.points)
+			this.points[i].remove(this.raphael);*/
+        if(this.inputPoint) {
+            this.inputPoint.remove(this.raphael);
+        }
+        if(this.outputPoint) {
+            this.outputPoint.remove(this.raphael);
+        }
 	});
 	this.selected = false;
 }
@@ -501,11 +507,11 @@ ComponentNode.WIDTH = 133;
 ComponentNode.HEIGHT = 54;
 
 
-ComponentNode.prototype.addPoint = function(label, dir) {
+/*ComponentNode.prototype.addPoint = function(label, dir) {
 	var npoint = new Point(this, label, dir, true);
 	this.points.push(npoint);
 	return this;
-};
+};*/
 
 ComponentNode.prototype.setInputPoint = function(_label) {
     this.inputPoint = new Point(this, _label, "in", true);
@@ -523,15 +529,32 @@ ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     }
 };
 
-ComponentNode.prototype.addRaphaelElement = function(_element) {
+/*ComponentNode.prototype.addRaphaelElement = function(_element) {
     this.raphaelElements.push(_element);
-};
+};*/
 
 ComponentNode.prototype.getTransitionById = function(_transitionId) {
-    for(var i in this.points) {
+    /*for(var i in this.points) {
         var point = this.points[i];
         for(var j in point.lines) {
             var transition = point.lines[j];
+            if(transition.id===_transitionId) {
+                return transition;
+            }
+        }
+    }
+    return null;*/
+    if(this.inputPoint) {
+        for(var j in this.inputPoint.lines) {
+            var transition = this.inputPoint.lines[j];
+            if(transition.id===_transitionId) {
+                return transition;
+            }
+        }
+    }
+    if(this.outputPoint) {
+        for(var i in this.outputPoint.lines) {
+            transition = this.outputPoint.lines[i];
             if(transition.id===_transitionId) {
                 return transition;
             }
@@ -542,23 +565,25 @@ ComponentNode.prototype.getTransitionById = function(_transitionId) {
 
 //获取输入点
 ComponentNode.prototype.getInputPoint = function() {
-    for(var i in this.points) {
+    /*for(var i in this.points) {
         var point = this.points[i];
         if(point.isInput()) {
             return point;
         }
     }
-    return null;
+    return null;*/
+    return this.inputPoint;
 };
 //获取输入出点
 ComponentNode.prototype.getOutputPoint = function() {
-    for(var i in this.points) {
+    /*for(var i in this.points) {
         var point = this.points[i];
         if(point.isOutput()) {
             return point;
         }
     }
-    return null;
+    return null;*/
+    return this.outputPoint;
 };
 //从本组件连向另一组件
 ComponentNode.prototype.connectTo = function(_outputTransition) {
