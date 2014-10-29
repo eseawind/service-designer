@@ -582,7 +582,7 @@ Point.prototype.connect = function(raphael, other, sub) {
     if(this.parent.data.type===ComponentDefinition.TYPE_SOURCE
         && other.parent.data.type===ComponentDefinition.TYPE_SOURCE) {
         alert("源组件不能连接源组件");
-        return false;
+        return null;
     }
 
 	var sthis = this;
@@ -590,9 +590,9 @@ Point.prototype.connect = function(raphael, other, sub) {
 
 	if(sub !== true) {
 		if(!this.multi && this.connections.length != 0) {
-            return false;
+            return null;
         } else if(!other.multi && other.connections.length != 0) {
-            return false;
+            return null;
         }
 	}
 
@@ -626,7 +626,7 @@ Point.prototype.connect = function(raphael, other, sub) {
             this.parent.data.addOutput(line);
         }
     }
-	return true;
+	return line;
 };
 
 Point.prototype.removeConnection = function(raphael, other, sub) {
