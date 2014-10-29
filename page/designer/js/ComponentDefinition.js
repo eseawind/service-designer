@@ -282,11 +282,14 @@ ComponentDefinition.prototype.toServiceDefinition = function() {
     var definition = BeanDefinition.prototype.toServiceDefinition.call(this);
     definition.x = this.x;
     definition.y = this.y;
-    definition.outputs = [];
 
-    for(var i in this.outputs) {
-        var transitionOutput = this.outputs[i];
-        definition.outputs.push(transitionOutput.toServiceDefinition());
+    //如果是目的组件则没有输出
+    if(this.type!=ComponentDefinition.TYPE_TARGET) {
+        definition.outputs = [];
+        for(var i in this.outputs) {
+            var transitionOutput = this.outputs[i];
+            definition.outputs.push(transitionOutput.toServiceDefinition());
+        }
     }
     return definition;
 };

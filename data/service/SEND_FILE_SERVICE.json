@@ -1,43 +1,94 @@
 {
+    "serviceId": "SEND_FILE_SERVICE",
+    "description": "文件发送",
+    "serviceName": "SEND_FILE_SERVICE",
+    "vendor": "金越软件",
+    "businessType": "FILE_SEND",
     "autoStart": false,
-    "trace": false,
+    "trace": "true",
     "enableMonitor": true,
     "businessSequence": 1,
     "startComponent": {
         "class": "com.kingyea.camel.runtime.component.StartComponent",
         "id": "StartComponent0",
-        "x": 5,
-        "y": 200,
+        "x": 1,
+        "y": 35,
         "outputs": [
             {
                 "targetRef": {
-                    "class": "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent",
-                    "id": "mailSenderSourceComponent1",
-                    "host": "localhost",
-                    "port": 25,
-                    "username": "root",
-                    "password": "kingyea",
-                    "name": "xxx",
-                    "contentType": "text/plain",
-                    "from": "zhangsan",
-                    "to": "lisi",
-                    "cc": "wangwu",
-                    "bcc": "zhaoliu",
-                    "body": "content",
-                    "freemarkerSupport": false,
-                    "freemarkerMap": {
-                        "aaa": "bbb",
-                        "ccc": "ddd"
+                    "class": "com.kingyea.esb.components.file.jnotify.FileNotifyComponent",
+                    "id": "fileNotifyComponent1",
+                    "notifyDirectory": "/temp/in",
+                    "notifySubtree": true,
+                    "notifyMask": 15,
+                    "charset": "UTF-8",
+                    "idempotent": "true",
+                    "idempotentRepository": {
+                        "class": "org.apache.camel.processor.idempotent.FileIdempotentRepository",
+                        "id": "fileNotifyComponent1-FileIdempotentRepository0",
+                        "fileStore": "/temp/idempotent",
+                        "maxFileStoreSize": 1048576
                     },
-                    "x": 387,
-                    "y": 100,
-                    "outputs": []
+                    "x": 142,
+                    "y": 165,
+                    "outputs": [
+                        {
+                            "targetRef": {
+                                "class": "com.kingyea.esb.components.gateway.MulticastComponent",
+                                "id": "multicastComponent2",
+                                "parallelProcessing": false,
+                                "stopOnException": false,
+                                "shareUnitOfWork": false,
+                                "streaming": false,
+                                "timeout": 60000,
+                                "x": 361,
+                                "y": 163,
+                                "outputs": [
+                                    {
+                                        "targetRef": {
+                                            "class": "com.kingyea.esb.components.file.FileTargetComponent",
+                                            "id": "fileTargetComponent3",
+                                            "directoryName": "/temp/out1",
+                                            "fileName": "out1.data",
+                                            "fileExist": "Override",
+                                            "moveExisting": "backup",
+                                            "charset": "UTF-8",
+                                            "x": 563,
+                                            "y": 48,
+                                            "outputs": []
+                                        },
+                                        "name": "",
+                                        "description": "",
+                                        "class": "com.kingyea.camel.runtime.Transition"
+                                    },
+                                    {
+                                        "targetRef": {
+                                            "class": "com.kingyea.esb.components.file.FileTargetComponent",
+                                            "id": "fileTargetComponent4",
+                                            "directoryName": "/temp/out2",
+                                            "fileName": "out2.data",
+                                            "fileExist": "Override",
+                                            "moveExisting": "backup",
+                                            "charset": "UTF-8",
+                                            "x": 564,
+                                            "y": 263,
+                                            "outputs": []
+                                        },
+                                        "name": "",
+                                        "description": "",
+                                        "class": "com.kingyea.camel.runtime.Transition"
+                                    }
+                                ]
+                            },
+                            "name": "",
+                            "description": "",
+                            "class": "com.kingyea.camel.runtime.Transition"
+                        }
+                    ]
                 },
-                "name": "xxx",
-                "description": "yyy",
-                "class": "com.kingyea.camel.runtime.ExpressionTransition",
-                "scriptLanguage": "javascript",
-                "expression": "xtayfjpk"
+                "name": "",
+                "description": "",
+                "class": "com.kingyea.camel.runtime.Transition"
             }
         ]
     },
