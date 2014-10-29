@@ -531,7 +531,23 @@ ComponentNode.prototype.connectTo = function(_outputTransition) {
     var outputPoint = this.getOutputPoint();
     var otherNode = this.parent.getNodeById(_outputTransition.targetRef.id);
     var inputPoint = otherNode.getInputPoint();
-    outputPoint.connect(this.parent.raphael, inputPoint);
+    var transition = outputPoint.connect(this.parent.raphael, inputPoint);
+    var newTransition = transition;
+    if(_outputTransition.class===expressionTransitionClass) {//如果是表达式连线
+        var scriptLanguage = _outputTransition.scriptLanguage ? _outputTransition.scriptLanguage : "ognl";
+        newTransition = transition.toExpression(scriptLanguage, _outputTransition.expression);
+
+        var transitions = inputPoint.lines;
+        for(var i in transitions) {
+            if(transitions[i].id===transition.id) {
+                transitions.splice(i, 1, newTransition);//将组件定义保存的连线替换成新的连线对象
+                break;
+            }
+        }
+    }
+
+    this.data.addOutput(newTransition, true);
+    otherNode.data.addInput(newTransition, true);
 };
 
 
