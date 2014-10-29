@@ -468,8 +468,6 @@ function ComponentNode(id, title) {
 			this.points[i].remove(this.raphael);
 	});
 	this.selected = false;
-
-	return true;
 }
 
 //组件宽度
@@ -483,6 +481,14 @@ ComponentNode.prototype.addPoint = function(label, dir) {
 	this.points.push(npoint);
 	return this;
 };
+
+ComponentNode.prototype.setInputPoint = function(_label) {
+    this.inputPoint = new Point(this, _label, "in", true);
+};
+ComponentNode.prototype.setOutputPoint = function(_label) {
+    this.outputPoint = new Point(this, _label, "out", true);
+};
+
 ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     var componentDefinition = this.data;
     if(componentDefinition.class!=startComponentClass) {
