@@ -544,6 +544,8 @@ ComponentNode.prototype.connectTo = function(_outputTransition) {
             }
         }
     }
+    newTransition.name = _outputTransition.name;
+    newTransition.description = _outputTransition.description;
 
     this.data.addOutput(newTransition, true);
     otherNode.data.addInput(newTransition, true);
