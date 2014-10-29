@@ -145,10 +145,12 @@ function addNode(_x, _y, _componentDefinition) {
     node.data = _componentDefinition;
 
     if(inputLabel) {//如果长度为0则不添加输入点
-        node.addPoint(inputLabel, 'in');
+        //node.addPoint(inputLabel, 'in');
+        node.setInputPoint(inputLabel);
     }
     if(outputLabel) {//如果长度为0则不添加输出点
-        node.addPoint(outputLabel, 'out');
+        //node.addPoint(outputLabel, 'out');
+        node.setOutputPoint(outputLabel);
     }
     serviceEditor.addNode(_x, _y, node);
 }

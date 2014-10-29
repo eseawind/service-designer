@@ -275,7 +275,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	mx = 0;
 
     //绘制输入点
-	for(i in node.points) {
+	/*for(i in node.points) {
 		var point = node.points[i];
 		if(point.dir == 'out') continue;
 		point.circle = circle = this.raphael.circle(x+10, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
@@ -288,7 +288,21 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 			mx = bbox.width;
 		temp.push(circle);
 		temp.push(label);
-	}
+	}*/
+    var point = node.inputPoint;
+    if(point) {//判断输入点存在，因为有点组件没有输入点
+        point.circle = circle = this.raphael.circle(x+10, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
+        circle.point = point;
+        this.rigConnections(point);
+        label = this.raphael.text(x+20, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
+        bbox = label.getBBox();
+        ly += bbox.height + 5;
+        if(bbox.width > mx)
+            mx = bbox.width;
+        temp.push(circle);
+        temp.push(label);
+    }
+
 	lx = (mx != 0) ? mx + 25 : 0;
 	lx += x + 25;
 	mx = 0;
@@ -297,7 +311,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 	ly = y+35;
 
     //绘制输出点
-	for(i in node.points) {
+	/*for(i in node.points) {
 		var point = node.points[i];
 		if(point.dir == 'in') continue;
         var textX = x + ComponentNode.WIDTH - 55;
@@ -309,19 +323,32 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 		if(bbox.width > mx)
 			mx = bbox.width;
 		labels.push(label);
-	}
+	}*/
+    point = node.outputPoint;
+    if(point) {
+        var textX = x + ComponentNode.WIDTH - 55;
+        label = this.raphael.text(textX, ly, point.label).attr({fill: '#000', 'font-size': 12}).xlateText().toFront();
+        label.point = point;
+        bbox = label.getBBox();
+        ly += bbox.height + 5;
+        if(bbox.width > mx)
+            mx = bbox.width;
+        labels.push(label);
+    }
+
 	ly = y+35;
 	ex = lx + mx + 10;
-	
+
+    //绘制组件标题
 	var text = this.raphael.text(x+5, y+15, node.title).attr({fill: '#000', 'font-size': 14, 'font-weight': 'bold'}).xlateText();
     bbox = text.getBBox();
 	if(ex < bbox.width + 80)
 		ex = bbox.width + 80;
-	
+
+    //绘制输出Point
 	for(i in labels) {
 		var label = labels[i];
         var circleX = x + ComponentNode.WIDTH - 10;
-		//label.Point.circle = circle = this.raphael.circle(ex, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
 		label.point.circle = circle = this.raphael.circle(circleX, ly, 7.5).attr({stroke: '#000', fill: this.theme.pointInactive}).toFront();
 		circle.point = point;
         this.rigConnections(label.point);
@@ -331,9 +358,7 @@ ServiceEditor.prototype.addNode = function(x, y, node) {
 		temp.push(label);
 	}
 
-	//var rect = this.raphael.rect(x, y, ex+10 - x, Math.max(my, ly) - y, 10).attr({fill: this.theme.nodeFill, 'fill-opacity': 0.9});
 	var rect = this.raphael.rect(x, y, ComponentNode.WIDTH, ComponentNode.HEIGHT, 10).attr({fill: this.theme.nodeFill, 'fill-opacity': 0.9, 'cursor': 'pointer'});
-    //console.info("width=" + rect.attr('width') + "height=" + rect.attr('height'));
     var set = node.element = this.raphael.set().push(rect, text.toFront());
 	for(i in temp)
 		set.push(temp[i].toFront());
@@ -484,9 +509,11 @@ ComponentNode.prototype.addPoint = function(label, dir) {
 
 ComponentNode.prototype.setInputPoint = function(_label) {
     this.inputPoint = new Point(this, _label, "in", true);
+    return this;
 };
 ComponentNode.prototype.setOutputPoint = function(_label) {
     this.outputPoint = new Point(this, _label, "out", true);
+    return this;
 };
 
 ComponentNode.prototype.refreshPropertiesConfigForm = function() {
