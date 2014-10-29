@@ -303,7 +303,7 @@ ComponentDefinition.prototype.getInputLabel = function() {
     if(this.type===ComponentDefinition.TYPE_START) {
         return "";
     } else {
-        return '*input';
+        return 'input';
     }
 };
 /**

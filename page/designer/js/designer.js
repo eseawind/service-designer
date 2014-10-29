@@ -135,35 +135,17 @@ function initCanvas() {
 }
 
 function addNode(_x, _y, _componentDefinition) {
-    var inputs = _componentDefinition.getInputLabel();
-    var outputs = _componentDefinition.getOutputLabel();
+    var inputLabel = _componentDefinition.getInputLabel();
+    var outputLabel = _componentDefinition.getOutputLabel();
     var name = getSimpleClassName(_componentDefinition.class);
-    if(inputs) {
-        inputs = inputs.split(',');
-    } else {
-        inputs = [];
-    }
-    if(outputs) {
-        outputs = outputs.split(',');
-    } else {
-        outputs = [];
-    }
+
     var node = new ComponentNode(name, name);
     _componentDefinition.x = _x;
     _componentDefinition.y = _y;
     node.data = _componentDefinition;
 
-    for(var i in inputs) {
-        var input = inputs[i];
-        var multi = input.substring(0, 1) == '*';
-        if(multi) input = input.substring(1);
-
-        node.addPoint(input, 'in', multi);
-    }
-    for(var i in outputs)
-        if(outputs[i] != '')
-            node.addPoint(outputs[i], 'out');
-
+    node.addPoint(inputLabel, 'in', true);
+    node.addPoint(outputLabel, 'out');
     serviceEditor.addNode(_x, _y, node);
 }
 
