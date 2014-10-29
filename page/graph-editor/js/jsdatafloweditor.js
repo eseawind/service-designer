@@ -571,7 +571,7 @@ function Point(parent, label, dir, multi) {
     //连接到的其它点
 	this.connections = [];
     //连入该点的Transition
-	//this.lines = [];
+	//this.lines = [];改为从ComponentDefinition.inputs或outputs中获取
 }
 
 Point.prototype.getLines = function() {
@@ -602,8 +602,6 @@ Point.prototype.remove = function(raphael) {
     for(var j in lines) {
         raphael.removeConnection(lines[j]);
     }
-	/*for(var i in this.lines)
-		raphael.removeConnection(this.lines[i]);*/
 };
 
 /** sub为true是表示是被连接的点 **/
@@ -638,8 +636,6 @@ Point.prototype.connect = function(raphael, other, sub) {
 		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill,
             editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
         line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
-        //this.lines.push(line);
-		//other.lines.push(line);
 	}
 	
 	this.parent.connect(this, other);
@@ -668,7 +664,6 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
 				other.removeConnection(raphael, this, true);
 				raphael.removeConnection(transition);
 			}
-			//this.lines.splice(i, 1);
             //移除一个点时，不要将自己的transition移除，而且还要将连接自己的transition移除
             if(this.isOutput()) {
                 var transitionId = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
@@ -708,8 +703,6 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
 
 //更新连接线
 Point.prototype.fixConnections = function(raphael) {
-	/*for(var i in this.lines)
-		raphael.connection(this.lines[i]);*/
     var lines = this.getLines();
     for(var i in lines) {
         raphael.connection(lines[i]);
