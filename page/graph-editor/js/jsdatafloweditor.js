@@ -505,6 +505,35 @@ ComponentNode.prototype.getTransitionById = function(_transitionId) {
     return null;
 };
 
+//获取输入点
+ComponentNode.prototype.getInputPoint = function() {
+    for(var i in this.points) {
+        var point = this.points[i];
+        if(point.isInput()) {
+            return point;
+        }
+    }
+    return null;
+};
+//获取输入出点
+ComponentNode.prototype.getOutputPoint = function() {
+    for(var i in this.points) {
+        var point = this.points[i];
+        if(point.isOutput()) {
+            return point;
+        }
+    }
+    return null;
+};
+//从本组件连向另一组件
+ComponentNode.prototype.connectTo = function(_outputTransition) {
+    console.info(_outputTransition);
+    var outputPoint = this.getOutputPoint();
+    var otherNode = this.parent.getNodeById(_outputTransition.targetRef.id);
+    var inputPoint = otherNode.getInputPoint();
+    outputPoint.connect(this.parent.raphael, inputPoint);
+};
+
 
 //---------------------------------------------- Point -----------------------------------------------------
 /**
@@ -532,6 +561,15 @@ function Point(parent, label, dir, multi) {
 	return true;
 }
 
+//判断是否是输入入点
+Point.prototype.isInput = function() {
+    return this.dir=="in";
+};
+//判断是否是输出点
+Point.prototype.isOutput = function() {
+    return this.dir=="out";
+};
+
 Point.prototype.remove = function(raphael) {
 	for(var i in this.connections)
 		this.connections[i].removeConnection(raphael, this, true);
@@ -549,14 +587,15 @@ Point.prototype.connect = function(raphael, other, sub) {
 
 	var sthis = this;
 	var editor = this.parent.parent;
-	
+
 	if(sub !== true) {
-		if(!this.multi && this.connections.length != 0)
-			return false;
-		else if(!other.multi && other.connections.length != 0)
-			return false;
+		if(!this.multi && this.connections.length != 0) {
+            return false;
+        } else if(!other.multi && other.connections.length != 0) {
+            return false;
+        }
 	}
-	
+
 	this.connections.push(other);
 	this.circle.attr({fill: editor.theme.pointActive});
 	var line = null;
@@ -799,11 +838,30 @@ ServiceEditor.prototype.restore = function(_serviceDefinition) {
 
     //还原StartComponent
     this.restoreComponent(_serviceDefinition.startComponent);
+    this.restoreTransition(_serviceDefinition.startComponent);
 };
 
+/**
+ * 还原组件属性值
+ * @param _startComponent 从远程加载的组件定义数据
+ */
 ServiceEditor.prototype.restoreComponent = function(_startComponent) {
     var startComponentDefinition = new ComponentDefinition(_startComponent.class);
     startComponentDefinition.type = ComponentDefinition.TYPE_START;
     addNode(_startComponent.x, _startComponent.y, startComponentDefinition);
     startComponentDefinition.restore(_startComponent, true);
+};
+
+/**
+ * 还原连线
+ * @param _componentDefinition 从远程加载的组件定义数据
+ */
+ServiceEditor.prototype.restoreTransition = function(_componentDefinition) {
+    var startNode = serviceEditor.getNodeById(_componentDefinition.id);
+    for(var i in _componentDefinition.outputs) {
+        var outputTransition = _componentDefinition.outputs[i];
+        startNode.connectTo(outputTransition);
+        var targetRef = outputTransition.targetRef;
+        this.restoreTransition(targetRef);
+    }
 };

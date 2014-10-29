@@ -33,9 +33,11 @@
                     "y": 100,
                     "outputs": []
                 },
-                "name": "",
-                "description": "",
-                "class": "com.kingyea.camel.runtime.Transition"
+                "name": "xxx",
+                "description": "yyy",
+                "class": "com.kingyea.camel.runtime.ExpressionTransition",
+                "scriptLanguage": "javascript",
+                "expression": "xtayfjpk"
             }
         ]
     },
