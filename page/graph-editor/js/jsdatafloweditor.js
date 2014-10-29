@@ -527,7 +527,6 @@ ComponentNode.prototype.getOutputPoint = function() {
 };
 //从本组件连向另一组件
 ComponentNode.prototype.connectTo = function(_outputTransition) {
-    console.info(_outputTransition);
     var outputPoint = this.getOutputPoint();
     var otherNode = this.parent.getNodeById(_outputTransition.targetRef.id);
     var inputPoint = otherNode.getInputPoint();

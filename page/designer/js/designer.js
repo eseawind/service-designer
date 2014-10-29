@@ -457,7 +457,8 @@ function handleEvents() {
         $.getJSON(url, function(_data){
             serviceEditor.reset();
             serviceEditor.restore(_data);
-            console.info(serviceEditor);
+            //触发编辑服务定义按钮点击事件，显示其属性配置表单
+            $('#edit-service-definition-button').trigger('click');
         });
     });
 }
