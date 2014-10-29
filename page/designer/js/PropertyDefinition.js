@@ -129,8 +129,16 @@ RefPropertyDefinition.prototype = new PropertyDefinition();
 RefPropertyDefinition.VALUE_MODE_RESOURCE = "resource";
 RefPropertyDefinition.VALUE_MODE_CONFIG = "config";
 
+/**
+ * 获取引用属性声明的抽象类型
+ * @returns {*}
+ */
+RefPropertyDefinition.prototype.getAbstractType = function(){
+    return this.type.split("-")[1];
+};
+
 RefPropertyDefinition.prototype.loadRefBeanDefinitions = function() {
-    var className = this.type.split("-")[1];
+    var className = this.getAbstractType();
     this.resources = ComponentDefinitionLoader.getInstance().getResourcesByClassName(className);
     if(this.resources) {
         this.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
