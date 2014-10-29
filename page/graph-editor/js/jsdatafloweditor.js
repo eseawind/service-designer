@@ -552,7 +552,6 @@ ComponentNode.prototype.connectTo = function(_outputTransition) {
  * @param label 标签
  * @param dir 方向
  * @param multi 是否可以连接多次
- * @returns {boolean}
  */
 function Point(parent, label, dir, multi) {
 	this.parent = parent;
@@ -567,9 +566,17 @@ function Point(parent, label, dir, multi) {
 	this.connections = [];
     //连入该点的Transition
 	this.lines = [];
-	
-	return true;
 }
+
+Point.prototype.getLines = function() {
+    if(this.isInput()) {
+        return this.parent.data.inputs;
+    }
+    if(this.isOutput()) {
+        return this.parent.data.outputs;
+    }
+    return null;
+};
 
 //判断是否是输入入点
 Point.prototype.isInput = function() {
@@ -581,8 +588,15 @@ Point.prototype.isOutput = function() {
 };
 
 Point.prototype.remove = function(raphael) {
-	for(var i in this.connections)
-		this.connections[i].removeConnection(raphael, this, true);
+	for(var i in this.connections) {
+        this.connections[i].removeConnection(raphael, this, true);
+    }
+
+    /*var lines = this.getLines();
+    for(var j in lines) {
+        raphael.removeConnection(lines[j]);
+    }
+    this.lines = [];*/
 	for(var i in this.lines)
 		raphael.removeConnection(this.lines[i]);
 };
@@ -650,6 +664,27 @@ Point.prototype.removeConnection = function(raphael, other, sub) {
 				raphael.removeConnection(transition);
 			}
 			this.lines.splice(i, 1);
+            //移除一个点时，不要将自己的transition移除，而且还要将连接自己的transition移除
+            if(this.isOutput()) {
+                var transitionId = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
+                console.info(transitionId);
+                var outputs = this.parent.data.outputs;
+                for(var i in outputs) {
+                    if(outputs[i].id==transitionId) {
+                        outputs.splice(i, 1);
+                    }
+                }
+            }
+            if(this.isInput()) {
+                transitionId = other.parent.data.id + transitionIdSeparator + this.parent.data.id;
+                console.info(transitionId);
+                var inputs = this.parent.data.inputs;
+                for(var i in inputs) {
+                    if(inputs[i].id==transitionId) {
+                        inputs.splice(i, 1);
+                    }
+                }
+            }
 			break;
 		}
 	
@@ -751,6 +786,7 @@ Transition.TYPE_EXPRESSION = "expression";
 
 Transition.prototype.toServiceDefinition = function() {
     var definition = {};
+    console.info(this.id);
     var outputComponentDefinition = serviceEditor.getNodeById(this.getToTargetRef()).data;
     definition.targetRef = outputComponentDefinition.toServiceDefinition();
     definition.name = this.name;
