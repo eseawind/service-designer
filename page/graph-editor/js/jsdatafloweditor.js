@@ -488,16 +488,18 @@ ComponentNode.prototype.refreshPropertiesConfigForm = function() {
 
 ComponentNode.prototype.getTransitionById = function(_transitionId) {
     if(this.inputPoint) {
-        for(var j in this.inputPoint.lines) {
-            var transition = this.inputPoint.lines[j];
+        var lines = this.inputPoint.getLines();
+        for(var j in lines) {
+            var transition = lines[i];
             if(transition.id===_transitionId) {
                 return transition;
             }
         }
     }
     if(this.outputPoint) {
-        for(var i in this.outputPoint.lines) {
-            transition = this.outputPoint.lines[i];
+        lines = this.outputPoint.getLines();
+        for(var i in lines) {
+            transition = lines[i];
             if(transition.id===_transitionId) {
                 return transition;
             }

@@ -407,21 +407,6 @@ function handleEvents() {
         }
 
         //连线所在点的所有连线
-        var transitions = transition.from.point.lines;
-        for(var i in transitions) {
-            if(transitions[i].id===transitionId) {
-                transitions.splice(i, 1, newTransition);//将连线From组件定义保存的连线替换成新的连线对象
-                break;
-            }
-        }
-
-        transitions = transition.to.point.lines;
-        for(var i in transitions) {
-            if(transitions[i].id===transitionId) {
-                transitions.splice(i, 1, newTransition);//将连线to组件定义保存的连线替换成新的连线对象
-                break;
-            }
-        }
         newTransition.refreshPropertiesConfigForm();
 
         fromNode.data.addOutput(newTransition, true);
