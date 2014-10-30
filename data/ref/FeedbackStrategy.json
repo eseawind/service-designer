@@ -1,0 +1,23 @@
+{
+    "com.kingyea.esb.components.file.feedback.FeedbackStrategy" : [{
+        "type" : "jms",
+        "definition" : {
+            "bean" : {
+                "id" : "jmsFeedbackStrategy",
+                "class" : "com.kingyea.esb.components.file.feedback.JmsFeedbackStrategy"
+            },
+            "properties" : [{
+                "name" : "destinationName",
+                "value" : "",
+                "type" : "string",
+                "desc" : "目的名称",
+                "required" : true
+            }, {
+                "name" : "connectionFactoryProvider",
+                "value" : "hornetq",
+                "type" : "ref-com.kingyea.esb.jms.ConnectionFactoryProvider",
+                "desc" : "连接工厂提供者"
+            }]
+        }
+    }]
+}

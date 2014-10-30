@@ -1,0 +1,37 @@
+{
+    "org.apache.camel.processor.idempotent.IdempotentRepository" : [{
+        "type" : "file",
+        "definition" : {
+            "bean" : {
+                "id" : "fileIdempotentRepository",
+                "class" : "org.apache.camel.processor.idempotent.FileIdempotentRepository"
+            },
+            "properties" : [{
+                "name" : "fileStore",
+                "value" : "",
+                "type" : "string",
+                "required" : true,
+                "desc" : "文件路径"
+            }, {
+                "name" : "maxFileStoreSize",
+                "value" : 1048576,
+                "type" : "int",
+                "desc" : "最大大小"
+            }]
+        }
+    }, {
+        "type" : "memory",
+        "definition" : {
+            "bean" : {
+                "id" : "fileIdempotentRepository",
+                "class" : "org.apache.camel.processor.idempotent.MemoryIdempotentRepository"
+            },
+            "properties" : [{
+                "name" : "cacheSize",
+                "value" : 1000,
+                "type" : "int",
+                "desc" : "缓存大小"
+            }]
+        }
+    }]
+}

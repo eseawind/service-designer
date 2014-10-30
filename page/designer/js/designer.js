@@ -7,9 +7,9 @@ var serviceDefinitionClass = "com.kingyea.camel.runtime.ServiceDefination";
 var startComponentClass = "com.kingyea.camel.runtime.component.StartComponent";
 var nodeCode = "intranet-switchin";
 
-var refMappingUrl = contextPath + "/data/RefMapping.json";
 var resourceMappingUrl = contextPath + "/data/ResourceMapping.json";
 var componentRegistryUrl = contextPath + "/data/ComponentRegistry.json";
+var refRegistryUrl = contextPath + "/data/RefRegistry.json";
 
 var manualConfigRefPropValue = "__ref-prop-from-manual-config__";
 var resourceRefPropValue = "__ref-prop-from-resource__";
@@ -23,6 +23,7 @@ var expressionTransitionClass = "com.kingyea.camel.runtime.ExpressionTransition"
 
 function ComponentDefinitionLoader() {
     this.loadSuccess = null;
+    this.loadRefSuccess = null;
     this.componentRegistry = null;
     this.refMapping = null;
     this.resourceMapping = null;
@@ -39,12 +40,22 @@ ComponentDefinitionLoader.getInstance = function() {
 
 ComponentDefinitionLoader.prototype.load = function() {
     var loader = this;
-    $.getJSON(refMappingUrl, function(data){
-        loader.refMapping = data;
-        loader.loadComponentDefinitions();
+    loader.refMapping = {};
+    $.getJSON(refRegistryUrl, function(_registry){
+        var count = 0;
+        for(var i in _registry) {
+            var refUrl = _registry[i];
+            $.getJSON(contextPath + refUrl, function(_data){
+                $.extend(loader.refMapping, _data);
+                count++;
+                if(count==_registry.length) {//引用属性加载完毕
+                    loader.loadRefSuccess.call(loader);
+                }
+            });
+        }
     });
-    $.getJSON(resourceMappingUrl, function(data){
-        loader.resourceMapping = data;
+    $.getJSON(resourceMappingUrl, function(_data){
+        loader.resourceMapping = _data;
     });
 };
 
@@ -108,6 +119,9 @@ $(function(){
     var loader = ComponentDefinitionLoader.getInstance();
     loader.loadSuccess = function() {
         initCanvas();
+    };
+    loader.loadRefSuccess = function() {
+        loader.loadComponentDefinitions();
     };
     loader.load();
 

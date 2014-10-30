@@ -1,0 +1,10 @@
+[
+    "/data/ref/IdempotentRepository.json",
+    "/data/ref/AggregationStrategy.json",
+    "/data/ref/ConnectionFactoryProvider.json",
+    "/data/ref/ExecutorService.json",
+    "/data/ref/FeedbackStrategy.json",
+    "/data/ref/MultiSplitFileProvider.json",
+    "/data/ref/Processor.json"
+]
+

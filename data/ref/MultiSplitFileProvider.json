@@ -1,0 +1,39 @@
+{
+    "com.kingyea.esb.components.file.multi.split.MultiSplitFileProvider" : [{
+        "type" : "XML",
+        "definition" : {
+            "bean" : {
+                "id" : "xmlMultiSplitProvider",
+                "class" : "com.kingyea.esb.components.file.multi.split.XMLMultiSplitProvider"
+            },
+            "properties" : [{
+                "name" : "fileXpathExprs",
+                "value" : [],
+                "type" : "array-string",
+                "desc" : "文件路径",
+                "required" : true
+            }, {
+                "name" : "destinationXpathExprs",
+                "value" : [],
+                "type" : "list-string",
+                "desc" : "目的地路径",
+                "required" : true
+            }]
+        }
+    }, {
+        "type" : "SingleFile",
+        "definition" : {
+            "bean" : {
+                "id" : "singleFileSplitProvider",
+                "class" : "com.kingyea.esb.components.file.multi.split.SingleFileSplitProvider"
+            },
+            "properties" : [{
+                "name" : "receivers",
+                "value" : [],
+                "type" : "array-string",
+                "desc" : "接收者",
+                "required" : true
+            }]
+        }
+    }]
+}
