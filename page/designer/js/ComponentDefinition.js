@@ -23,7 +23,7 @@ BeanDefinition.prototype.toServiceDefinition = function() {
                 definition[propertyDefinition.name] = result;
             }
         } else {
-            var value = propertyDefinition.value;
+            var value = propertyDefinition.getValue();
             if(value!=null && value!=undefined && ""!==value) {
                 definition[propertyDefinition.name] = value;
             }

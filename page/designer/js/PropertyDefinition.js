@@ -50,6 +50,22 @@ PropertyDefinition.input_type_checkbox = 2;
 PropertyDefinition.input_type_combo = 3;
 
 /**
+ * 获取值方法，针对boolean类型作一定的转换
+ * @returns {*}
+ */
+PropertyDefinition.prototype.getValue = function() {
+    if(this.type==="boolean") {
+        if(this.value==="true") {
+            return true;
+        } else if(this.value==="false") {
+            return false;
+        }
+    }
+    return this.value;
+};
+
+
+/**
  * 判断是否是引用属性
  * @returns {boolean}
  */

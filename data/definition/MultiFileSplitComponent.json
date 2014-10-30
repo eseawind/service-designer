@@ -21,7 +21,15 @@
         "name" : "replaceIfExist",
         "value" : true,
         "type" : "boolean",
-        "desc" : "是否覆盖"
+        "desc" : "是否覆盖",
+        "inputType" : 3,
+        "selectValues" : [{
+            "display" : "是",
+            "value" : true
+        }, {
+            "display" : "否",
+            "value" : false
+        }]
     },{
         "name" : "repositoryDir",
         "value" : "",
