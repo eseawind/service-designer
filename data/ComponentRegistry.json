@@ -1,6 +1,6 @@
 [{
-    "class" : "com.kingyea.esb.components.file.FilePollingComponent",
-    "url" : "/data/definition/FilePollingComponent.json"
+    "class" : "com.kingyea.esb.components.file.FilePollingComponent",//组件类名
+    "url" : "/data/definition/FilePollingComponent.json"//组件定义文件URL
 }, {
     "class" : "com.kingyea.esb.components.schedule.TimerComponent",
     "url" : "/data/definition/TimerComponent.json"

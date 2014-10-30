@@ -1,7 +1,8 @@
 {
+    //引用属性接口(基)类名
     "com.kingyea.esb.jms.ConnectionFactoryProvider" : [{
-        "type" : "hornetq",
-        "definition" : {
+        "type" : "hornetq",//实现类型
+        "definition" : {//引用属性定义数据，同组件定义
             "bean" : {
                 "id" : "hornetQConnectionFactoryProvider",
                 "class" : "com.kingyea.esb.jms.hornetq.HornetQConnectionFactoryProvider"

@@ -1,5 +1,5 @@
 [
-    "/data/ref/IdempotentRepository.json",
+    "/data/ref/IdempotentRepository.json",//引用属性定义文件URL
     "/data/ref/AggregationStrategy.json",
     "/data/ref/ConnectionFactoryProvider.json",
     "/data/ref/ExecutorService.json",

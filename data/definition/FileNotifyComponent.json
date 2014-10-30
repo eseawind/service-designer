@@ -1,29 +1,29 @@
 /**
- *  PropertyDefinition.input_type_text = 0;
-    PropertyDefinition.input_type_radio = 1;
-    PropertyDefinition.input_type_checkbox = 2;
-    PropertyDefinition.input_type_combo = 3;
-    PropertyDefinition.input_type_ref = 4;
+ *  PropertyDefinition.input_type_text = 0;普通文件输入框
+    PropertyDefinition.input_type_radio = 1; 单选框(未使用)
+    PropertyDefinition.input_type_checkbox = 2; 复选框(未使用)
+    PropertyDefinition.input_type_combo = 3; 下拉列表
+    PropertyDefinition.input_type_ref = 4; 引用属性
  */
 {
     "bean" : {
-        "id" : "fileNotifyComponent",
-        "type" : "source",
-        "class" : "com.kingyea.esb.components.file.jnotify.FileNotifyComponent"
-    },
+        "id" : "fileNotifyComponent",//Bean ID
+        "type" : "source", //组件类型
+        "class" : "com.kingyea.esb.components.file.jnotify.FileNotifyComponent"//组件类名
+    },//组件可配置属性
     "properties" : [{
-        "name" : "notifyDirectory",
-        "value" : "",
-        "type" : "string",
-        "required" : true,
-        "inputType" : 0,
-        "desc" : "监控目录"
+        "name" : "notifyDirectory",//属性名称
+        "value" : "",//属性默认值
+        "type" : "string",//属性值类型
+        "required" : true,//是否必须
+        "inputType" : 0,//输入框类型
+        "desc" : "监控目录"//属性描述
     }, {
         "name" : "notifySubtree",
         "value" : true,
         "type" : "boolean",
         "desc" : "监控子目录",
-        "inputType" : 3,
+        "inputType" : 3,//如果是下拉列表框，要附加可选项信息
         "selectValues" : [{
             "display" : "是",
             "value" : true
@@ -57,7 +57,7 @@
     }, {
         "name" : "idempotentRepository",
         "value" : "file",
-        "type" : "ref-org.apache.camel.processor.idempotent.IdempotentRepository",
+        "type" : "ref-org.apache.camel.processor.idempotent.IdempotentRepository",//引用属性，以ref-开头
         "desc" : "幂等仓库",
         "inputType" : 4
     }]
