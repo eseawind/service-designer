@@ -650,14 +650,10 @@ Point.prototype.connect = function(raphael, other, sub) {
 	this.parent.connect(this, other);
 
     //连接完成之后，把前后ComponentDefinition连接起来
-    if(sub) {//被连接点
-        if(line) {
-            this.parent.data.addInput(line);
-        }
-    } else {//连接点
-        if(line) {
-            this.parent.data.addOutput(line);
-        }
+    //sub为true时，没有再执行连接代码，所以line为null
+    if(!sub) {
+        this.parent.data.addOutput(line);
+        other.parent.data.addInput(line);
     }
 	return line;
 };
