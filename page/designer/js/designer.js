@@ -268,6 +268,11 @@ function handleEvents() {
     $('#edit-service-definition-button').click(function() {
         var serviceDefinition = serviceEditor.serviceDefinitionData;
         serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id);
+
+        var url = contextPath + getComponentFragmentUrl(serviceDefinitionClass);
+        loadPropsConfigForm(url, function(){
+            alert("加载成功")
+        });
     });
 
     //点击输出服务定义按钮
@@ -487,6 +492,32 @@ function getBeanDefinitionByForm(_beanDefinitionId) {
     var compId = $('#comp-definition-id-hidden').val();
     var node = serviceEditor.getNodeById(compId);
     return node.data.searchById(_beanDefinitionId);
+}
+
+//获取属性配置div对象(jquery)
+function getPropsConfigDiv() {
+    return $('#props-config-form-div');
+}
+
+/**
+ * 加载属性配置表单至DIV中
+ * @param _url 表单URL
+ * @param _callback 回调函数
+ */
+function loadPropsConfigForm(_url, _callback) {
+    getPropsConfigDiv().load(_url, function(){
+        _callback();
+    });
+}
+
+/**
+ * 获取组件属性配置片段URL
+ * @param _class 组件或引用组件完整类型
+ * @returns {*}
+ */
+function getComponentFragmentUrl(_class) {
+    var loader = ComponentDefinitionLoader.getInstance();
+    return loader.fragmentRegistry[_class];
 }
 
 

@@ -13,13 +13,11 @@
         });
     </script>
     <style>
-        /*div.prop-entry {margin-top: 5px;}
-        div.prop-label {float: left;width: 35%;text-align: right;}
-        div.prop-input {float: left;}*/
         div.form-group {
             margin: 0;
             padding: 0;
             margin-top: 5px;
+            height: 35px;;
         }
         label.control-label {
             margin: 0;
@@ -27,29 +25,80 @@
         }
 
         #form-panel {
-            width: 370px;
+            width: 340px;
         }
+        #props-config-form-div {
+            overflow: auto;
+            height: 500px;
+        }
+
     </style>
 </head>
 <body>
     <div class="panel panel-default" id="form-panel">
         <div class="panel-heading">
-            <h3 class="panel-title">
-                带有 title 的面板标题
-            </h3>
+            <h3 class="panel-title">组件属性配置</h3>
         </div>
         <div class="panel-body" id="props-config-form-div">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" >
                 <div class="form-group">
-                    <label for="firstname" class="col-sm-3 control-label">姓名姓名姓名</label>
+                    <label  class="col-sm-3 control-label">服务ID</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="firstname" value="xxx">
+                        <input type="text" class="form-control" name="serviceId">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="lastname" class="col-sm-3 control-label">年龄</label>
+                    <label  class="col-sm-3 control-label">服务名称</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="lastname" >
+                        <input type="text" class="form-control" name="serviceName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">服务描述</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  name="description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">服务提供商</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  name="vendor">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">自启动</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  name="autoStart">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">业务类型</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  name="businessType">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">服务序列号</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control"  name="businessSequence">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">服务跟踪</label>
+                    <div class="col-sm-9">
+                        <select name="trace" class="form-control">
+                            <option value="true">是</option>
+                            <option value="false">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">服务监控</label>
+                    <div class="col-sm-9">
+                        <select name="enableMonitor" class="form-control">
+                            <option value="true">是</option>
+                            <option value="false">否</option>
+                        </select>
                     </div>
                 </div>
             </form>
