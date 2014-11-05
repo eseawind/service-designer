@@ -268,11 +268,6 @@ function handleEvents() {
     $('#edit-service-definition-button').click(function() {
         var serviceDefinition = serviceEditor.serviceDefinitionData;
         serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id);
-
-        var url = contextPath + getComponentFragmentUrl(serviceDefinitionClass);
-        loadPropsConfigForm(url, function(){
-            alert("加载成功")
-        });
     });
 
     //点击输出服务定义按钮
@@ -499,12 +494,32 @@ function getPropsConfigDiv() {
     return $('#props-config-form-div');
 }
 
+//获取属性配置form对象(jquery)
+function getPropsConfigForm() {
+    var forms = getPropsConfigDiv().find("form");
+    if(forms.length===0) {
+        alert("属性配置表单未找到");
+        return null;
+    }
+    return $(forms.get(0));
+}
+
+function getCompAndBeanIdHiddenHtml(_compId, _beanId) {
+    var html = '<input type="hidden" class="comp-definition-id-hidden" value="' + _compId;
+    html += '" />';
+    html += '<input type="hidden" class="bean-definition-id-hidden" value="' + _beanId;
+    html += '" />';
+    return html;
+}
+
 /**
  * 加载属性配置表单至DIV中
  * @param _url 表单URL
  * @param _callback 回调函数
  */
 function loadPropsConfigForm(_url, _callback) {
+    var configDiv = getPropsConfigDiv();
+    configDiv.empty();
     getPropsConfigDiv().load(_url, function(){
         _callback();
     });

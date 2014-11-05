@@ -118,27 +118,13 @@ BeanDefinition.prototype.setId = function(_id) {
 /**
  * 刷新ComponentDefinition属性配置表单
  * @param _compId 当前配置的ComponentDefinition ID
- * @param _belongToId 配置引用属性后，返回到的BeanDefinition ID
  */
-BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _belongToId) {
-    var form = $('#comp-props-display-form');
-    form.empty();
-    form.append('<div class="row prop-entry" >' +
-        '<input type="hidden" name="class" value="' +_compId+ '" id="comp-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" >' +
-        '<input type="hidden" name="class" value="' +this.id+ '" id="bean-definition-id-hidden"/></div>');
-    for(var i in this.propertyDefinitions) {
-        var propDefinition = this.propertyDefinitions[i];
-        form.append(propDefinition.getInputHtml());
-    }
-
-    //如果不是组件定义，而且不是ServiceDefination，则是引用属性引用的BeanDefinition
-    if(!this.isComponentDefinition() && this.class!=serviceDefinitionClass) {
-        //加上返回上一层按钮
-        var html = '<div class="row prop-entry back-to-prev" ><button type="button" lang="' +_belongToId+ '"' +
-            'id="back-to-prev-bean-definition-button" class="btn btn-primary btn-xs">返回</button></div>';
-        form.append(html);
-    }
+BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId) {
+    var me = this;
+    var url = contextPath + getComponentFragmentUrl(me.class);
+    loadPropsConfigForm(url, function() {
+        getPropsConfigForm().append(getCompAndBeanIdHiddenHtml(_compId, me.id));
+    });
 };
 
 
