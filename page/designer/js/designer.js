@@ -10,6 +10,7 @@ var nodeCode = "intranet-switchin";
 var resourceMappingUrl = contextPath + "/data/ResourceMapping.json";
 var componentRegistryUrl = contextPath + "/data/ComponentRegistry.json";
 var refRegistryUrl = contextPath + "/data/RefRegistry.json";
+var fragmentRegistryUrl = contextPath + "/data/FragmentRegistry.json";
 
 var manualConfigRefPropValue = "__ref-prop-from-manual-config__";
 var resourceRefPropValue = "__ref-prop-from-resource__";
@@ -28,6 +29,7 @@ function ComponentDefinitionLoader() {
     this.refMapping = null;
     this.resourceMapping = null;
     this.componentDefinitions = [];
+    this.fragmentRegistry = {};
 }
 
 ComponentDefinitionLoader.instance = null;
@@ -56,6 +58,12 @@ ComponentDefinitionLoader.prototype.load = function() {
     });
     $.getJSON(resourceMappingUrl, function(_data){
         loader.resourceMapping = _data;
+    });
+    //加载代码片段注册表
+    $.getJSON(fragmentRegistryUrl, function(_data) {
+        if(_data) {
+            loader.fragmentRegistry = _data;
+        }
     });
 };
 
@@ -344,7 +352,6 @@ function handleEvents() {
         var key = $(this).prevAll(':text.map-entry-key').val();
         propertyDefinition.remove(key);
         $(this).parent().remove();
-        console.info(propertyDefinition);
     });
 
     //Map属性条目发生改变时
