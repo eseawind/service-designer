@@ -272,8 +272,8 @@ function handleEvents() {
 
     //点击编辑服务定义按钮
     $('#edit-service-definition-button').click(function() {
-        $('#comp-form-panel').find('div.props-config-form').attr('lang', serviceDefinitionId);
         var serviceDefinition = serviceEditor.serviceDefinitionData;
+        setCompPropsConfigFormDivBeanId(serviceDefinition.id);
         serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id);
     });
 
@@ -376,20 +376,19 @@ function handleEvents() {
     });
 
     //当选择资源值改变时
-    $('select.ref-prop-resource').live('change', function(){
+    $('select.ref-prop').live('change', function(){
+        var form = $($(this).parents('form').get(0));
         var propName = $(this).attr('name');
-        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getPropertyDefinitionByForm(form, propName);
         var value = this.value;
+        console.info(value);
         if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
             refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
-            var configSpan = $(this).parent().next('span');
-            configSpan.show();
-            configSpan.find('select.ref-bean-definition-select').val(refPropertyDefinition.selectedBeanDefinitionType);
-            $(this).parent().hide();
         } else {
             refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
             refPropertyDefinition.selectedResource = value;
         }
+        refPropertyDefinition.refreshHtml($(this));
     });
 
 
@@ -554,5 +553,11 @@ function getComponentFragmentUrl(_class) {
     return loader.fragmentRegistry[_class];
 }
 
-
+/**
+ * 设置div.props-config-form的lang属性值
+ * @param _beanId
+ */
+function setCompPropsConfigFormDivBeanId(_beanId) {
+    $('#comp-form-panel').find('div.props-config-form').attr('lang', _beanId);
+}
 

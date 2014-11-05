@@ -1,4 +1,6 @@
 {
-    "com.kingyea.camel.runtime.ServiceDefination" : "/data/fragment/ServiceDefinition.html"
+    "com.kingyea.camel.runtime.ServiceDefination" : "/data/fragment/ServiceDefinition.html",
+    "com.kingyea.esb.components.file.jnotify.FileNotifyComponent" : "/data/fragment/FileNotifyComponent.html",
+    "com.kingyea.esb.components.protocol.jms.JmsProducerComponent" : "/data/fragment/JmsProducerComponent.html"
 }
 

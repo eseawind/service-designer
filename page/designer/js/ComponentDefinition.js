@@ -131,21 +131,23 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId) {
             if(results.length===0) {
                 alert("名为" + _propDef.name + "属性在表单中未找到");
             } else {
-                var target = results.get(0);
+                var target = $(results.get(0));
                 var cssClass = "";
                 if(_propDef.isRef()) {
                     cssClass = propCssClasses.ref;
+                    _propDef.refreshHtml(target);
                 } else if(_propDef.isArrayOrList()) {
                     cssClass = propCssClasses.arrayOrList;
-                    target.value = _propDef.getDisplayString();
+                    target.val(_propDef.getDisplayString());
                 } else if(_propDef.isMap()) {
                     cssClass = propCssClasses.map;
                     target.value = _propDef.getDisplayString();
+                    target.val(_propDef.getDisplayString());
                 } else {//普通属性
                     cssClass = propCssClasses.normal;
-                    target.value = _propDef.getValue();
+                    target.val(_propDef.getValue());
                 }
-                $(target).addClass(cssClass);//添加类别标记
+                target.addClass(cssClass);//添加类别标记
             }
         });
     });

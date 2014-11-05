@@ -191,7 +191,7 @@ RefPropertyDefinition.prototype.getAbstractType = function(){
 RefPropertyDefinition.prototype.loadRefBeanDefinitions = function() {
     var className = this.getAbstractType();
     this.resources = ComponentDefinitionLoader.getInstance().getResourcesByClassName(className);
-    if(this.resources) {
+    if(this.resources) {//如果有资源则，选择资源优先
         this.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
     } else {
         this.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
@@ -236,42 +236,44 @@ RefPropertyDefinition.prototype.getSelectedBeanDefinition = function() {
 
 
 /**
- * 获取该引用属性的显示html字符串，用于Jquery创建并显示
+ * 更新该引用属性显示的HTML
+ * @param _select select元素(jquery)
+ */
+RefPropertyDefinition.prototype.refreshHtml = function(_select) {
+    _select.empty();
+    _select.append(this.getOptionsHtml());
+    _select.parent().next().remove();
+    var html = "";
+    html += '<div class="col-sm-3" style="padding: 0;line-height: 34px;">';
+    if(this.valueMode===RefPropertyDefinition.VALUE_MODE_RESOURCE) {
+        html += '<span>资源选择</span>';
+    } else {
+        html += '<button type="button" class="form-control btn btn-default btn-sm">配置</button>';
+    }
+    html += '</div>';
+    _select.parent().parent().append(html);
+};
+
+/**
+ * 获取该引用属性的显示option字符串，用于Jquery创建并显示
  * @returns {*}
  */
-RefPropertyDefinition.prototype.getInputHtml = function() {
-    //<div class="row prop-entry" >
-        //<div class="prop-label">固定频率:</div>
-        //<div class="prop-input">
-            //<select name="fixRate">
-                //<option value="true">是</option>
-                //<option value="false">否</option>
-            //</select><button>配置</button>
-        //</div>*/
-    //</div>
-    var html = this.getInputLabelHtml();
+RefPropertyDefinition.prototype.getOptionsHtml = function() {
+    var html = "";
     if(this.valueMode===RefPropertyDefinition.VALUE_MODE_RESOURCE) {//如果是选择资源模式
-        //如果有资源，优先选择资源，所以隐藏配置
-        html += this.getResourceHtml(true);
-        html += this.getConfigHtml(false);
-    } else {//手动配置模式
-        if(this.resources) {//如果有资源
-            html += this.getResourceHtml(false);
-        }
-        html += this.getConfigHtml(true);
+        html += this.getResourceOptions();
+    } else {
+        html += this.getConfigOptions();
     }
-    html += '</div></div>';
     return html;
 };
 
 /**
  * 获取资源选择Html字符串
- * @param _show 是否显示
  * @returns {string}
  */
-RefPropertyDefinition.prototype.getResourceHtml = function(_show) {
+RefPropertyDefinition.prototype.getResourceOptions = function() {
     var html = "";
-    var spanHtml = _show ? '<span>' : '<span style="display: none;">';
     if(!this.selectedResource) {//如果还没有选择资源，说明是第一次出现
         if(this.required) {
             this.selectedResource = this.resources[0];
@@ -279,36 +281,30 @@ RefPropertyDefinition.prototype.getResourceHtml = function(_show) {
             this.selectedResource = "";//选择不使用
         }
     }
-    html += '<div class="prop-input">' +spanHtml+ '<select style="width: 100px;" class="ref-prop-resource" name="' +this.name+ '">';
     if(!this.required) {
         html += '<option value="">不使用</option>';
     }
-    for(var i in this.resources) {
-        var resource = this.resources[i];
-        if(this.selectedResource==resource) {
-            html += '<option selected="selected" value="' +resource+ '">' +resource+ '</option>';
+    var refProp = this;
+    $.each(this.resources, function(_index, _resource){
+        if(refProp.selectedResource==_resource) {
+            html += '<option selected="selected" value="' +_resource+ '">' +_resource+ '</option>';
         } else {
-            html += '<option value="' +resource+ '">' +resource+ '</option>';
+            html += '<option value="' +_resource+ '">' +_resource+ '</option>';
         }
-    }
+    });
     html += '<option value="' +manualConfigRefPropValue+ '">手动配置</option>';
-    html += '</select>选择资源</span>';
     return html;
 };
 
 /**
  * 获取手动配置时的Html字符串
- * @param _show 是否显示
  */
-RefPropertyDefinition.prototype.getConfigHtml = function(_show) {
+RefPropertyDefinition.prototype.getConfigOptions = function() {
     var html = "";
-    var spanHtml = _show ? '<span>' : '<span style="display: none;">';
-    html += spanHtml + '<select class="ref-bean-definition-select" name="' +this.name+ '" >';
     if(!this.required) {
         if(!this.selectedBeanDefinitionType && !this.resources) {//如果还没有选择引用Bean类型，说明是第一次出现
             this.selectedBeanDefinitionType = "";
         }
-
         html += '<option value="">不使用</option>';
     }
     for(var i in this.beanDefinitions) {
@@ -321,11 +317,6 @@ RefPropertyDefinition.prototype.getConfigHtml = function(_show) {
     }
     if(this.resources) {//如果有资源则添加一选择资源选项
         html += '<option value="' +resourceRefPropValue+ '">选择资源</option>';
-    }
-    if(!this.selectedBeanDefinitionType) {//如果选择了不使用
-        html += '</select><button disabled="disabled" type="button" class="ref-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></span>';
-    } else {
-        html += '</select><button type="button" class="ref-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></span>';
     }
     return html;
 };

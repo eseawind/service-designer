@@ -494,6 +494,7 @@ ComponentNode.prototype.setOutputPoint = function(_label) {
  */
 ComponentNode.prototype.refreshPropertiesConfigForm = function() {
     var componentDefinition = this.data;
+    setCompPropsConfigFormDivBeanId(componentDefinition.id);
     if(componentDefinition.class!=startComponentClass) {
         componentDefinition.refreshPropertiesConfigForm(componentDefinition.id);
     }
