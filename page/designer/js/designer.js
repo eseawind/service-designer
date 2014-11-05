@@ -22,6 +22,13 @@ var expressionLanguages = ["ognl", "javascript", "el", "xpath"];
 var transitionClass = "com.kingyea.camel.runtime.Transition";
 var expressionTransitionClass = "com.kingyea.camel.runtime.ExpressionTransition";
 
+var propCssClasses = {
+    ref : "ref-prop",
+    normal : "normal-prop",
+    arrayOrList : "array-or-list-prop",
+    map : "map-prop"
+};
+
 function ComponentDefinitionLoader() {
     this.loadSuccess = null;
     this.loadRefSuccess = null;
@@ -249,23 +256,23 @@ function handleEvents() {
         preBeanDefinition.refreshPropertiesConfigForm(compId, belongToId);
     });
 
+    /**
+     * 普通属性class:normal-prop
+     * 数组或列表class:array-or-list-prop
+     * Map class:map-prop
+     * 引用属性class:ref-prop
+     */
     //当普通属性值被修改时
-    $('#comp-props-display-form').find("input.bean-prop[type='text'],select.normal-prop").live('change', function(){
+    $('div.props-config-form').find("input.normal-prop[type='text'],select.normal-prop").live('change', function(){
+        var form = $($(this).parents('form').get(0));
         var propName = $(this).attr('name');
-        var compId = $('#comp-definition-id-hidden').val();
-        //检查是否是ServiceDefination
-        if(compId.indexOf(serviceDefinitionId)!=-1) {
-            var serviceDefinition = serviceEditor.serviceDefinitionData;
-            var propertyDefinition = serviceDefinition.getPropertyDefinition(propName);
-            propertyDefinition.value = this.value;
-            return;
-        }
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.value = this.value;
     });
 
     //点击编辑服务定义按钮
     $('#edit-service-definition-button').click(function() {
+        $('#comp-form-panel').find('div.props-config-form').attr('lang', serviceDefinitionId);
         var serviceDefinition = serviceEditor.serviceDefinitionData;
         serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id);
     });
@@ -474,9 +481,13 @@ function getRefPropertyDefinitionByForm(_propName) {
 }
 
 //根据Form表单中的信息，查找属性名称为_propName的属性定义
-function getPropertyDefinitionByForm(_propName) {
-    var beanDefinitionId = $('#bean-definition-id-hidden').val();
-    var compId = $('#comp-definition-id-hidden').val();
+function getPropertyDefinitionByForm(_form, _propName) {
+    var compId = _form.find(':hidden.comp-definition-id-hidden').val();
+    if(compId.indexOf(serviceDefinitionId)!=-1) {//判断是否是服务定义
+        var serviceDefinition = serviceEditor.serviceDefinitionData;
+        return serviceDefinition.getPropertyDefinition(_propName);
+    }
+    var beanDefinitionId = _form.find(':hidden.bean-definition-id-hidden').val();
     var node = serviceEditor.getNodeById(compId);
     var beanDefinition = node.data.searchById(beanDefinitionId);
     return beanDefinition.getPropertyDefinition(_propName);
@@ -490,13 +501,20 @@ function getBeanDefinitionByForm(_beanDefinitionId) {
 }
 
 //获取属性配置div对象(jquery)
-function getPropsConfigDiv() {
-    return $('#props-config-form-div');
+//_beanId为当前配置的Bean或组件ID，因为可能存在多个Bean处于配置中
+function getPropsConfigDiv(_beanId) {
+    var divs = $('div.props-config-form');
+    for(var i in divs) {
+        if($(divs[i]).attr('lang')===_beanId) {//用lang属性值标识BeanId
+            return $(divs[i]);
+        }
+    }
+    return null;
 }
 
 //获取属性配置form对象(jquery)
-function getPropsConfigForm() {
-    var forms = getPropsConfigDiv().find("form");
+function getPropsConfigForm(_beanId) {
+    var forms = getPropsConfigDiv(_beanId).find("form");
     if(forms.length===0) {
         alert("属性配置表单未找到");
         return null;
@@ -514,13 +532,14 @@ function getCompAndBeanIdHiddenHtml(_compId, _beanId) {
 
 /**
  * 加载属性配置表单至DIV中
+ * @param _beanId 当前配置的Bean或组件ID，因为可能存在多个Bean处于配置中
  * @param _url 表单URL
  * @param _callback 回调函数
  */
-function loadPropsConfigForm(_url, _callback) {
-    var configDiv = getPropsConfigDiv();
+function loadPropsConfigForm(_beanId, _url, _callback) {
+    var configDiv = getPropsConfigDiv(_beanId);
     configDiv.empty();
-    getPropsConfigDiv().load(_url, function(){
+    configDiv.load(_url, function(){
         _callback();
     });
 }

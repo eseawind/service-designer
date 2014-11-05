@@ -122,8 +122,32 @@ BeanDefinition.prototype.setId = function(_id) {
 BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId) {
     var me = this;
     var url = contextPath + getComponentFragmentUrl(me.class);
-    loadPropsConfigForm(url, function() {
-        getPropsConfigForm().append(getCompAndBeanIdHiddenHtml(_compId, me.id));
+    loadPropsConfigForm(me.id, url, function() {
+        var form = getPropsConfigForm(me.id);
+        form.append(getCompAndBeanIdHiddenHtml(_compId, me.id));
+        $.each(me.propertyDefinitions, function(_index, _propDef) {
+            var selector = 'input[name="' + _propDef.name + '"],select[name="' + _propDef.name + '"]';
+            var results = form.find(selector);
+            if(results.length===0) {
+                alert("名为" + _propDef.name + "属性在表单中未找到");
+            } else {
+                var target = results.get(0);
+                var cssClass = "";
+                if(_propDef.isRef()) {
+                    cssClass = propCssClasses.ref;
+                } else if(_propDef.isArrayOrList()) {
+                    cssClass = propCssClasses.arrayOrList;
+                    target.value = _propDef.getDisplayString();
+                } else if(_propDef.isMap()) {
+                    cssClass = propCssClasses.map;
+                    target.value = _propDef.getDisplayString();
+                } else {//普通属性
+                    cssClass = propCssClasses.normal;
+                    target.value = _propDef.getValue();
+                }
+                $(target).addClass(cssClass);//添加类别标记
+            }
+        });
     });
 };
 
