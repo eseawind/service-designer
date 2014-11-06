@@ -177,6 +177,21 @@ RefPropertyDefinition.prototype = new PropertyDefinition();
 RefPropertyDefinition.VALUE_MODE_RESOURCE = "resource";
 RefPropertyDefinition.VALUE_MODE_CONFIG = "config";
 
+
+/**
+ * 设置值方法，对当前值模式进行判断
+ * @param _value
+ */
+RefPropertyDefinition.prototype.setValue = function(_value){
+    this.value = _value;
+    if(this.valueMode==RefPropertyDefinition.VALUE_MODE_CONFIG) {
+        this.selectedBeanDefinitionType = _value;
+    }
+    if(this.valueMode==RefPropertyDefinition.VALUE_MODE_RESOURCE) {
+        this.selectedResource = _value;
+    }
+};
+
 /**
  * 获取引用属性声明的抽象类型
  * @returns {*}
@@ -244,11 +259,11 @@ RefPropertyDefinition.prototype.refreshHtml = function(_select) {
     _select.append(this.getOptionsHtml());
     _select.parent().next().remove();
     var html = "";
-    html += '<div class="col-sm-3" style="padding: 0;line-height: 34px;">';
+    html += '<div class="col-sm-3" style="padding: 0;line-height: 34px;padding-right: 15px;">';
     if(this.valueMode===RefPropertyDefinition.VALUE_MODE_RESOURCE) {
         html += '<span>资源选择</span>';
     } else {
-        html += '<button type="button" class="form-control btn btn-default btn-sm">配置</button>';
+        html += '<button type="button" class="form-control btn btn-default btn-sm ' +refConfigButtonCssClass+ '">配置</button>';
     }
     html += '</div>';
     _select.parent().parent().append(html);

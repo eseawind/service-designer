@@ -22,6 +22,8 @@ var expressionLanguages = ["ognl", "javascript", "el", "xpath"];
 var transitionClass = "com.kingyea.camel.runtime.Transition";
 var expressionTransitionClass = "com.kingyea.camel.runtime.ExpressionTransition";
 
+var refConfigButtonCssClass = "ref-config";
+
 var propCssClasses = {
     ref : "ref-prop",
     normal : "normal-prop",
@@ -382,13 +384,25 @@ function handleEvents() {
         var refPropertyDefinition = getPropertyDefinitionByForm(form, propName);
         var value = this.value;
         console.info(value);
-        if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
-            refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
-        } else {
-            refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
-            refPropertyDefinition.selectedResource = value;
+        if(value) {//如果不是不使用
+            if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
+                refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
+                refPropertyDefinition.refreshHtml($(this));
+            } else if(value==resourceRefPropValue) {
+                refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
+                refPropertyDefinition.selectedResource = value;
+                refPropertyDefinition.refreshHtml($(this));
+            } else {
+                refPropertyDefinition.setValue(value);
+                $(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', '');
+            }
+        } else {//选择不使用，禁用配置button
+            if(refPropertyDefinition.valueMode===RefPropertyDefinition.VALUE_MODE_CONFIG) {
+                $(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', 'disabled');
+            }
         }
-        refPropertyDefinition.refreshHtml($(this));
+
+
     });
 
 
