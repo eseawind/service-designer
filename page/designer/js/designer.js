@@ -559,6 +559,11 @@ function loadPropsConfigForm(_beanId, _url, _callback) {
     configDiv.empty();
     configDiv.load(_url, function(){
         _callback();
+        var beanDefinitionId = configDiv.find(':hidden.bean-definition-id-hidden').val();
+        if(beanDefinitionId.split(refPropertySeparator).length>=3) {
+            var buttonHtml = '<button type="button" class="btn btn-default">返回</button>';
+            configDiv.parent().find('div.modal-footer').prepend(buttonHtml);
+        }
     });
 }
 

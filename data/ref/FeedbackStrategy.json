@@ -16,7 +16,8 @@
                 "name" : "connectionFactoryProvider",
                 "value" : "hornetq",
                 "type" : "ref-com.kingyea.esb.jms.ConnectionFactoryProvider",
-                "desc" : "连接工厂提供者"
+                "desc" : "连接工厂提供者",
+                "required" : true
             }]
         }
     }]
