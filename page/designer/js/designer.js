@@ -207,18 +207,25 @@ function listComponent(_componentDefinition) {
 
 
 function handleEvents() {
+
     //单击引用属性配置按钮
     jQuery('button.ref-config').live('click', function() {
-        /*var select = jQuery(jQuery(this).prev('select').get(0));
+        var form = jQuery(jQuery(this).parents('form').get(0));
+        var compId = form.find(':hidden.comp-definition-id-hidden').val();
+        var select = jQuery(this).parent().parent().find('select');
         var propName = select.attr('name');
         var type = select.val();
-        var compId = jQuery('#comp-definition-id-hidden').val();
-        var refPropertyDefinition = getPropertyDefinitionByForm(propName);
+        var refPropertyDefinition = getPropertyDefinitionByForm(form, propName);
         refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
         var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
-
         var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
-        beanDefinition.refreshPropertiesConfigForm(compId, refPropertyDefinition.belongToId);*/
+
+        jQuery('#ref-modal').find('div.props-config-form').attr('lang', beanDefinition.id);
+        console.info(refPropertyDefinition);
+        beanDefinition.refreshPropertiesConfigForm(compId);
+        $('#ref-modal').modal({
+            keyboard: true
+        });
     });
 
     //引用属性类型改变
@@ -377,20 +384,18 @@ function handleEvents() {
         });
     });
 
-    //当选择资源值改变时
+    //引用属性选择发生改为时，包括手动配置与选择资源配置
     jQuery('select.ref-prop').live('change', function(){
         var form = jQuery(jQuery(this).parents('form').get(0));
         var propName = jQuery(this).attr('name');
         var refPropertyDefinition = getPropertyDefinitionByForm(form, propName);
         var value = this.value;
-        console.info(value);
         if(value) {//如果不是不使用
             if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
                 refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
                 refPropertyDefinition.refreshHtml(jQuery(this));
             } else if(value==resourceRefPropValue) {
                 refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
-                refPropertyDefinition.selectedResource = value;
                 refPropertyDefinition.refreshHtml(jQuery(this));
             } else {
                 refPropertyDefinition.setValue(value);
@@ -538,7 +543,7 @@ function getPropsConfigForm(_beanId) {
 function getCompAndBeanIdHiddenHtml(_compId, _beanId) {
     var html = '<input type="hidden" class="comp-definition-id-hidden" value="' + _compId;
     html += '" />';
-    html += '<input type="hidden" class="bean-definition-id-hidden" value="' + _beanId;
+    html += '<input type="hidden" class="bean-definition-id-hidden" value="' + _beanId;//下在配置的Bean ID
     html += '" />';
     return html;
 }

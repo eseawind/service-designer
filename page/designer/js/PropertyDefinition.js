@@ -264,7 +264,7 @@ RefPropertyDefinition.prototype.refreshHtml = function(_select) {
         html += '<span>资源选择</span>';
     } else {
         html += '<button type="button" class="form-control btn btn-default btn-sm '
-            +refConfigButtonCssClass+ '" data-target="#ref-modal" data-toggle="modal">配置</button>';
+            +refConfigButtonCssClass+ '" >配置</button>';
     }
     html += '</div>';
     _select.parent().parent().append(html);
@@ -296,6 +296,8 @@ RefPropertyDefinition.prototype.getResourceOptions = function() {
         } else {
             this.selectedResource = "";//选择不使用
         }
+    } else {//从手动配置切换到选择资源模式
+        this.selectedResource = this.resources[0];
     }
     if(!this.required) {
         html += '<option value="">不使用</option>';

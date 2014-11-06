@@ -118,8 +118,9 @@ BeanDefinition.prototype.setId = function(_id) {
 /**
  * 刷新ComponentDefinition属性配置表单
  * @param _compId 当前配置的ComponentDefinition ID
+ * @param _beanId 引用属性所属Bean ID
  */
-BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId) {
+BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId, _beanId) {
     var me = this;
     var url = contextPath + getComponentFragmentUrl(me.class);
     loadPropsConfigForm(me.id, url, function() {
