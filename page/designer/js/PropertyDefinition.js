@@ -301,7 +301,7 @@ RefPropertyDefinition.prototype.getResourceOptions = function() {
         html += '<option value="">不使用</option>';
     }
     var refProp = this;
-    $.each(this.resources, function(_index, _resource){
+    jQuery.each(this.resources, function(_index, _resource){
         if(refProp.selectedResource==_resource) {
             html += '<option selected="selected" value="' +_resource+ '">' +_resource+ '</option>';
         } else {
@@ -467,9 +467,9 @@ ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
 
 //当点击配置数据或列表属性时，更新属性配置表单
 ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
-    var beanDefinitionId = $('#bean-definition-id-hidden').val();
-    var compId = $('#comp-definition-id-hidden').val();
-    var form = $('#comp-props-display-form');
+    var beanDefinitionId = jQuery('#bean-definition-id-hidden').val();
+    var compId = jQuery('#comp-definition-id-hidden').val();
+    var form = jQuery('#comp-props-display-form');
     form.empty();
     form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass"' +
         ' value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
@@ -588,9 +588,9 @@ MapPropertyDefinition.prototype.isEmpty = function() {
 
 //当点击配置Map属性时，更新属性配置表单
 MapPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
-    var beanDefinitionId = $('#bean-definition-id-hidden').val();
-    var compId = $('#comp-definition-id-hidden').val();
-    var form = $('#comp-props-display-form');
+    var beanDefinitionId = jQuery('#bean-definition-id-hidden').val();
+    var compId = jQuery('#comp-definition-id-hidden').val();
+    var form = jQuery('#comp-props-display-form');
     form.empty();
     form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass" ' +
         'value="' +compId+ '" id="comp-definition-id-hidden"/></div>');

@@ -125,13 +125,13 @@ BeanDefinition.prototype.refreshPropertiesConfigForm = function(_compId) {
     loadPropsConfigForm(me.id, url, function() {
         var form = getPropsConfigForm(me.id);
         form.append(getCompAndBeanIdHiddenHtml(_compId, me.id));
-        $.each(me.propertyDefinitions, function(_index, _propDef) {
+        jQuery.each(me.propertyDefinitions, function(_index, _propDef) {
             var selector = 'input[name="' + _propDef.name + '"],select[name="' + _propDef.name + '"]';
             var results = form.find(selector);
             if(results.length===0) {
                 alert("名为" + _propDef.name + "属性在表单中未找到");
             } else {
-                var target = $(results.get(0));
+                var target = jQuery(results.get(0));
                 var cssClass = "";
                 if(_propDef.isRef()) {
                     cssClass = propCssClasses.ref;

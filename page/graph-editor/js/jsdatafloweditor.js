@@ -186,7 +186,7 @@ ServiceEditor.prototype.rigConnections = function(point) {
 				connecting = point;
 			var line = sthis.raphael.connection(connecting.circle, circle, sthis.theme.connectingFill,
                 sthis.theme.connectingStroke + '|' + sthis.theme.connectingStrokeWidth);
-			var jo = $(sthis.raphael.element);
+			var jo = jQuery(sthis.raphael.element);
 			var mouseup = function() {
 				circle.remove();
 				sthis.raphael.removeConnection(line);
@@ -763,7 +763,7 @@ Transition.prototype.getToTargetRef = function() {
  * 刷新配置表单
  */
 Transition.prototype.refreshPropertiesConfigForm = function() {
-    var form = $('#comp-props-display-form');
+    var form = jQuery('#comp-props-display-form');
     form.empty();
     form.append('<div class="row prop-entry" >' +
         '<input type="hidden" value="' +this.id+ '" id="transition-id-hidden"/></div>');
@@ -849,7 +849,7 @@ ExpressionTransition.prototype.toNormal = function() {
  * 刷新配置表单
  */
 ExpressionTransition.prototype.refreshPropertiesConfigForm = function() {
-    var form = $('#comp-props-display-form');
+    var form = jQuery('#comp-props-display-form');
     form.empty();
     form.append('<div class="row prop-entry" >' +
         '<input type="hidden" value="' +this.id+ '" id="transition-id-hidden"/></div>');
