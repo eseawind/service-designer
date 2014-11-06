@@ -3,6 +3,11 @@
     "com.kingyea.esb.components.file.jnotify.FileNotifyComponent" : "/data/fragment/FileNotifyComponent.html",
     "com.kingyea.esb.components.protocol.jms.JmsProducerComponent" : "/data/fragment/JmsProducerComponent.html",
     "org.apache.camel.processor.idempotent.FileIdempotentRepository" : "/data/fragment/FileIdempotentRepository.html",
-    "com.kingyea.esb.jms.hornetq.HornetQConnectionFactoryProvider" : "/data/fragment/HornetQConnectionFactoryProvider.html"
+    "com.kingyea.esb.jms.hornetq.HornetQConnectionFactoryProvider" : "/data/fragment/HornetQConnectionFactoryProvider.html",
+    "com.kingyea.esb.components.file.multi.split.MultiFileSplitComponent" : "/data/fragment/MultiFileSplitComponent.html",
+    "com.kingyea.esb.components.file.feedback.JmsFeedbackStrategy" : "/data/fragment/JmsFeedbackStrategy.html",
+    "com.kingyea.esb.components.file.multi.split.XMLMultiSplitProvider" : "/data/fragment/XMLMultiSplitProvider.html",
+    "com.kingyea.esb.components.file.multi.split.SingleFileSplitProvider" : "/data/fragment/SingleFileSplitProvider.html",
+    "com.kingyea.esb.jms.activemq.ActiveMQConnectionFactoryProvider" : "/data/fragment/ActiveMQConnectionFactoryProvider.html"
 }
 
