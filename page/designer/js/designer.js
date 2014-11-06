@@ -221,7 +221,6 @@ function handleEvents() {
         var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
 
         jQuery('#ref-modal').find('div.props-config-form').attr('lang', beanDefinition.id);
-        console.info(refPropertyDefinition);
         beanDefinition.refreshPropertiesConfigForm(compId);
         $('#ref-modal').modal({
             keyboard: true
@@ -255,14 +254,16 @@ function handleEvents() {
     });
 
     //反回上一层按钮被点击
-    jQuery('#back-to-prev-bean-definition-button').live('click', function() {
-        var prevBeanDefinitionId = jQuery(this).attr('lang');
-        var preBeanDefinition = getBeanDefinitionByForm(prevBeanDefinitionId);
+    jQuery('button.back-to-prev-bean-definition').live('click', function() {
+        var form = jQuery(this).parent().siblings('div.props-config-form').find('form');
+        var compId = form.find(':hidden.comp-definition-id-hidden').val();
+        var currentBeanDefinitionId = form.find(':hidden.bean-definition-id-hidden').val();
         //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
-        var lastIndex = preBeanDefinition.id.lastIndexOf("-");
-        var belongToId = preBeanDefinition.id.substring(0, lastIndex);
-        var compId = jQuery('#comp-definition-id-hidden').val();
-        preBeanDefinition.refreshPropertiesConfigForm(compId, belongToId);
+        var lastIndex = currentBeanDefinitionId.lastIndexOf(refPropertySeparator);
+        var prevBeanDefinitionId = currentBeanDefinitionId.substring(0, lastIndex);
+        var preBeanDefinition = getBeanDefinitionByForm(compId, prevBeanDefinitionId);
+        jQuery('#ref-modal').find('div.props-config-form').attr('lang', preBeanDefinition.id);
+        preBeanDefinition.refreshPropertiesConfigForm(compId);
     });
 
     /**
@@ -512,9 +513,8 @@ function getPropertyDefinitionByForm(_form, _propName) {
 }
 
 //根据Form表单中的信息，查找名称为_beanDefinitionId的Bean定义
-function getBeanDefinitionByForm(_beanDefinitionId) {
-    var compId = jQuery('#comp-definition-id-hidden').val();
-    var node = serviceEditor.getNodeById(compId);
+function getBeanDefinitionByForm(_compId, _beanDefinitionId) {
+    var node = serviceEditor.getNodeById(_compId);
     return node.data.searchById(_beanDefinitionId);
 }
 
@@ -560,9 +560,16 @@ function loadPropsConfigForm(_beanId, _url, _callback) {
     configDiv.load(_url, function(){
         _callback();
         var beanDefinitionId = configDiv.find(':hidden.bean-definition-id-hidden').val();
-        if(beanDefinitionId.split(refPropertySeparator).length>=3) {
-            var buttonHtml = '<button type="button" class="btn btn-default">返回</button>';
-            configDiv.parent().find('div.modal-footer').prepend(buttonHtml);
+        console.info(beanDefinitionId.split(refPropertySeparator));
+        if(beanDefinitionId.split(refPropertySeparator).length>=3) {//超过三层添加返回按钮
+            var footer = configDiv.parent().find('div.modal-footer');
+            if(footer.find('button.back-to-prev-bean-definition').length==0) {//如果还没有返回按钮则添加，有了就不能重复添加
+                var buttonHtml = '<button type="button" class="btn btn-default back-to-prev-bean-definition">返回</button>';
+                footer.prepend(buttonHtml);
+            }
+        } else {
+            //移除返回按钮，因为前面的操作添加了返回按钮
+            configDiv.parent().find('div.modal-footer').find('button.back-to-prev-bean-definition').remove();
         }
     });
 }
