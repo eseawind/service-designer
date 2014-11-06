@@ -52,12 +52,12 @@ ComponentDefinitionLoader.getInstance = function() {
 ComponentDefinitionLoader.prototype.load = function() {
     var loader = this;
     loader.refMapping = {};
-    $.getJSON(refRegistryUrl, function(_registry){
+    jQuery.getJSON(refRegistryUrl, function(_registry){
         var count = 0;
         for(var i in _registry) {
             var refUrl = _registry[i];
-            $.getJSON(contextPath + refUrl, function(_data){
-                $.extend(loader.refMapping, _data);
+            jQuery.getJSON(contextPath + refUrl, function(_data){
+                jQuery.extend(loader.refMapping, _data);
                 count++;
                 if(count==_registry.length) {//引用属性加载完毕
                     loader.loadRefSuccess.call(loader);
@@ -65,11 +65,11 @@ ComponentDefinitionLoader.prototype.load = function() {
             });
         }
     });
-    $.getJSON(resourceMappingUrl, function(_data){
+    jQuery.getJSON(resourceMappingUrl, function(_data){
         loader.resourceMapping = _data;
     });
     //加载代码片段注册表
-    $.getJSON(fragmentRegistryUrl, function(_data) {
+    jQuery.getJSON(fragmentRegistryUrl, function(_data) {
         if(_data) {
             loader.fragmentRegistry = _data;
         }
@@ -79,7 +79,7 @@ ComponentDefinitionLoader.prototype.load = function() {
 /** 加载所有组件定义 **/
 ComponentDefinitionLoader.prototype.loadComponentDefinitions = function (){
     var loader = this;
-    $.getJSON(componentRegistryUrl, function(data){
+    jQuery.getJSON(componentRegistryUrl, function(data){
         loader.componentRegistry = data;
         for(var i in loader.componentRegistry) {
             var entry = loader.componentRegistry[i];
@@ -91,7 +91,7 @@ ComponentDefinitionLoader.prototype.loadComponentDefinitions = function (){
 /** 加载组件定义 **/
 ComponentDefinitionLoader.prototype.loadComponentDefinition = function(_url) {
     var loader = this;
-    $.getJSON(contextPath + _url, function(data) {
+    jQuery.getJSON(contextPath + _url, function(data) {
         var builder = new BeanDefinitionBuilder(data, true);
         var componentDefinition = builder.build();
         //console.info(componentDefinition);
@@ -113,7 +113,7 @@ ComponentDefinitionLoader.prototype.getComponentDefinitionByClassName = function
     for(var i in this.componentDefinitions) {
         var componentDefinition = this.componentDefinitions[i];
         if(componentDefinition.class==_class) {
-            var clonedComponentDefinition = _clone ? $.extend(true, {}, componentDefinition) : componentDefinition;
+            var clonedComponentDefinition = _clone ? jQuery.extend(true, {}, componentDefinition) : componentDefinition;
             return clonedComponentDefinition;
         }
     }
@@ -132,7 +132,7 @@ ComponentDefinitionLoader.prototype.getResourcesByClassName = function(_class) {
 
 
 //-----------------------------------------------------------------------------------------
-$(function(){
+jQuery(function(){
     var loader = ComponentDefinitionLoader.getInstance();
     loader.loadSuccess = function() {
         initCanvas();
@@ -162,7 +162,7 @@ function initCanvas() {
     addNode(5, 200, start);
 
     //触发编辑服务定义按钮点击事件，显示其属性配置表单
-    $('#edit-service-definition-button').trigger('click');
+    jQuery('#edit-service-definition-button').trigger('click');
 }
 
 function addNode(_x, _y, _componentDefinition) {
@@ -201,39 +201,39 @@ function listComponent(_componentDefinition) {
     //<li class="list-group-item"><span class="badge">新</span>FilePollingComponent</li>
     var className = getSimpleClassName(_componentDefinition.class);
     var ulId = "#" + _componentDefinition.getUlId();
-    $(ulId).append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
+    jQuery(ulId).append('<li class="list-group-item" lang="' +_componentDefinition.class+ '">' +
         '<span class="badge" title="添加组件">&gt;&gt;</span>' +className+ '</li>')
 }
 
 
 function handleEvents() {
     //单击引用属性配置按钮
-    $('button.ref-config').live('click', function() {
-        var select = $($(this).prev('select').get(0));
+    jQuery('button.ref-config').live('click', function() {
+        /*var select = jQuery(jQuery(this).prev('select').get(0));
         var propName = select.attr('name');
         var type = select.val();
-        var compId = $('#comp-definition-id-hidden').val();
+        var compId = jQuery('#comp-definition-id-hidden').val();
         var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         refPropertyDefinition.selectedBeanDefinitionType = type;//更新引用属性所选择的BeanDefinition类型
         var selectedBeanDefinition = refPropertyDefinition.getSelectedBeanDefinition();
 
         var beanDefinition = selectedBeanDefinition.definition;//当前选择的BeanDefinition
-        beanDefinition.refreshPropertiesConfigForm(compId, refPropertyDefinition.belongToId);
+        beanDefinition.refreshPropertiesConfigForm(compId, refPropertyDefinition.belongToId);*/
     });
 
     //引用属性类型改变
-    $('select.ref-bean-definition-select').live('change', function(){
-        var propName = $(this).attr('name');
+    jQuery('select.ref-bean-definition-select').live('change', function(){
+        var propName = jQuery(this).attr('name');
         var refPropertyDefinition = getPropertyDefinitionByForm(propName);
         var value = this.value;
         if(value) {//
-            $(this).next('button').attr('disabled', '');//启用配置按钮
+            jQuery(this).next('button').attr('disabled', '');//启用配置按钮
             if(value==resourceRefPropValue) {//选择从资源中选择，将资源选择界面调出
                 refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
-                var resourceSpan = $(this).parent().prev('span');
+                var resourceSpan = jQuery(this).parent().prev('span');
                 resourceSpan.show();
                 resourceSpan.find('select.ref-prop-resource').val(refPropertyDefinition.selectedResource);
-                $(this).parent().hide();
+                jQuery(this).parent().hide();
             } else {//手动配置
                 if(refPropertyDefinition.isRef()) {//如果是引用属性
                     refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
@@ -241,20 +241,20 @@ function handleEvents() {
                 }
             }
         } else {//选择了不使用该属性
-            $(this).next('button').attr('disabled', 'disabled');//禁用配置按钮
+            jQuery(this).next('button').attr('disabled', 'disabled');//禁用配置按钮
         }
 
 
     });
 
     //反回上一层按钮被点击
-    $('#back-to-prev-bean-definition-button').live('click', function() {
-        var prevBeanDefinitionId = $(this).attr('lang');
+    jQuery('#back-to-prev-bean-definition-button').live('click', function() {
+        var prevBeanDefinitionId = jQuery(this).attr('lang');
         var preBeanDefinition = getBeanDefinitionByForm(prevBeanDefinitionId);
         //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
         var lastIndex = preBeanDefinition.id.lastIndexOf("-");
         var belongToId = preBeanDefinition.id.substring(0, lastIndex);
-        var compId = $('#comp-definition-id-hidden').val();
+        var compId = jQuery('#comp-definition-id-hidden').val();
         preBeanDefinition.refreshPropertiesConfigForm(compId, belongToId);
     });
 
@@ -265,22 +265,22 @@ function handleEvents() {
      * 引用属性class:ref-prop
      */
     //当普通属性值被修改时
-    $('div.props-config-form').find("input.normal-prop[type='text'],select.normal-prop").live('change', function(){
-        var form = $($(this).parents('form').get(0));
-        var propName = $(this).attr('name');
+    jQuery('div.props-config-form').find("input.normal-prop[type='text'],select.normal-prop").live('change', function(){
+        var form = jQuery(jQuery(this).parents('form').get(0));
+        var propName = jQuery(this).attr('name');
         var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.value = this.value;
     });
 
     //点击编辑服务定义按钮
-    $('#edit-service-definition-button').click(function() {
+    jQuery('#edit-service-definition-button').click(function() {
         var serviceDefinition = serviceEditor.serviceDefinitionData;
         setCompPropsConfigFormDivBeanId(serviceDefinition.id);
         serviceDefinition.refreshPropertiesConfigForm(serviceDefinition.id);
     });
 
     //点击输出服务定义按钮
-    $('#output-service-definition-button').click(function(){
+    jQuery('#output-service-definition-button').click(function(){
         var serviceDefinition = serviceEditor.serviceDefinitionData.toServiceDefinition();
         delete serviceDefinition.class;
         delete serviceDefinition.id;
@@ -291,9 +291,9 @@ function handleEvents() {
         console.info(JSON.stringify(serviceDefinition));
     });
 
-    $('#upload-service-definition-button').click(function() {
+    jQuery('#upload-service-definition-button').click(function() {
         var url = "http://127.0.0.1:8080/console/service_definition/parse.do?definition=你妹";
-        $.post(url, null, function(_data){
+        jQuery.post(url, null, function(_data){
             console.info(_data);
         }, 'json');
 
@@ -302,35 +302,35 @@ function handleEvents() {
 
     //---------------------------------ArrayOrList属性相关事件--------------------------------
     //点击配置数组或列表元素按钮
-    $('button.arrayorlist-config').live('click', function() {
-        var input = $($(this).prev('input').get(0));
+    jQuery('button.arrayorlist-config').live('click', function() {
+        var input = jQuery(jQuery(this).prev('input').get(0));
         var propName = input.attr('name');
         var propertyDefinition = getPropertyDefinitionByForm(propName);
         propertyDefinition.refreshPropertiesConfigForm();
     });
 
     //添加数组或列表元素
-    $('#add-array-or-list-element-button').live('click', function(){
-        $(this).parent().before('<div class="row prop-entry"><input class="array-or-list-element"/>' +
+    jQuery('#add-array-or-list-element-button').live('click', function(){
+        jQuery(this).parent().before('<div class="row prop-entry"><input class="array-or-list-element"/>' +
             '<button type="button" class="remove-array-or-list-element btn btn-primary btn-xs">移除</button></div>')
     });
 
     //移除数组或列表的一个元素
-    $('button.remove-array-or-list-element').live('click', function(){
-        var propName = $('#bean-definition-propname-hidden').val();
+    jQuery('button.remove-array-or-list-element').live('click', function(){
+        var propName = jQuery('#bean-definition-propname-hidden').val();
         var propertyDefinition = getPropertyDefinitionByForm(propName);
-        var value = $(this).prev(':text').val();
+        var value = jQuery(this).prev(':text').val();
         propertyDefinition.remove(value);
-        $(this).parent().remove();
+        jQuery(this).parent().remove();
     });
 
     //数组或列表的一个元素值发生改变时
-    $(':text.array-or-list-element').live('change', function() {
-        var propName = $('#bean-definition-propname-hidden').val();
+    jQuery(':text.array-or-list-element').live('change', function() {
+        var propName = jQuery('#bean-definition-propname-hidden').val();
         var propertyDefinition = getPropertyDefinitionByForm(propName);
         propertyDefinition.clear();
-        $('#comp-props-display-form').find(':text.array-or-list-element').each(function(){
-            var currentValue = $(this).val();
+        jQuery('#comp-props-display-form').find(':text.array-or-list-element').each(function(){
+            var currentValue = jQuery(this).val();
             if(currentValue) {//空字符串也为false
                 propertyDefinition.add(currentValue);
             }
@@ -340,65 +340,65 @@ function handleEvents() {
 
     //---------------------------------Map属性相关事件--------------------------------
     //点击配置Map元素按钮
-    $('button.map-config').live('click', function() {
-        var input = $($(this).prev('input').get(0));
+    jQuery('button.map-config').live('click', function() {
+        var input = jQuery(jQuery(this).prev('input').get(0));
         var propName = input.attr('name');
         var propertyDefinition = getPropertyDefinitionByForm(propName);
         propertyDefinition.refreshPropertiesConfigForm();
     });
 
     //添加Map属性条目元素
-    $('#add-map-entry-button').live('click', function() {
-        $(this).parent().before('<div class="row prop-entry" >' +
+    jQuery('#add-map-entry-button').live('click', function() {
+        jQuery(this).parent().before('<div class="row prop-entry" >' +
             '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
             '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>')
     });
 
     //移除Map属性的一个条目
-    $('button.remove-map-entry').live('click', function(){
-        var propName = $('#bean-definition-propname-hidden').val();
+    jQuery('button.remove-map-entry').live('click', function(){
+        var propName = jQuery('#bean-definition-propname-hidden').val();
         var propertyDefinition = getPropertyDefinitionByForm(propName);
-        var key = $(this).prevAll(':text.map-entry-key').val();
+        var key = jQuery(this).prevAll(':text.map-entry-key').val();
         propertyDefinition.remove(key);
-        $(this).parent().remove();
+        jQuery(this).parent().remove();
     });
 
     //Map属性条目发生改变时
-    $(':text.map-entry-key,:text.map-entry-value').live('change', function() {
-        var propName = $('#bean-definition-propname-hidden').val();
+    jQuery(':text.map-entry-key,:text.map-entry-value').live('change', function() {
+        var propName = jQuery('#bean-definition-propname-hidden').val();
         var propertyDefinition = getPropertyDefinitionByForm(propName);
         propertyDefinition.clear();
-        $('#comp-props-display-form').find(':text.map-entry-key').each(function(){
-            var currentKey = $(this).val();
+        jQuery('#comp-props-display-form').find(':text.map-entry-key').each(function(){
+            var currentKey = jQuery(this).val();
             if(currentKey) {//空字符串也为false
-                var currentValue = $(this).next(':text.map-entry-value').val();
+                var currentValue = jQuery(this).next(':text.map-entry-value').val();
                 propertyDefinition.add(currentKey, currentValue);
             }
         });
     });
 
     //当选择资源值改变时
-    $('select.ref-prop').live('change', function(){
-        var form = $($(this).parents('form').get(0));
-        var propName = $(this).attr('name');
+    jQuery('select.ref-prop').live('change', function(){
+        var form = jQuery(jQuery(this).parents('form').get(0));
+        var propName = jQuery(this).attr('name');
         var refPropertyDefinition = getPropertyDefinitionByForm(form, propName);
         var value = this.value;
         console.info(value);
         if(value) {//如果不是不使用
             if(value==manualConfigRefPropValue) {//选择了手动配置，将手动配置界面调出
                 refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_CONFIG;
-                refPropertyDefinition.refreshHtml($(this));
+                refPropertyDefinition.refreshHtml(jQuery(this));
             } else if(value==resourceRefPropValue) {
                 refPropertyDefinition.valueMode = RefPropertyDefinition.VALUE_MODE_RESOURCE;
                 refPropertyDefinition.selectedResource = value;
-                refPropertyDefinition.refreshHtml($(this));
+                refPropertyDefinition.refreshHtml(jQuery(this));
             } else {
                 refPropertyDefinition.setValue(value);
-                $(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', '');
+                jQuery(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', '');
             }
         } else {//选择不使用，禁用配置button
             if(refPropertyDefinition.valueMode===RefPropertyDefinition.VALUE_MODE_CONFIG) {
-                $(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', 'disabled');
+                jQuery(this).parent().parent().find('button.'+refConfigButtonCssClass).attr('disabled', 'disabled');
             }
         }
 
@@ -407,28 +407,28 @@ function handleEvents() {
 
 
     //处理添加组件
-    $('span.badge').live('click', function(){
-        var className = $(this).parent().attr('lang');
+    jQuery('span.badge').live('click', function(){
+        var className = jQuery(this).parent().attr('lang');
         var loader = ComponentDefinitionLoader.getInstance();
         addNode(5, 10, loader.getComponentDefinitionByClassName(className, true));
     });
 
     //处理移除组件
-    $('#remove-component-definition-button').click(function(){
+    jQuery('#remove-component-definition-button').click(function(){
         serviceEditor.removeSelectedComponentNode();
     });
 
     //只有一个字段时，按下回车表单会自动提交
-    $('input').live('keydown', function(_event){
+    jQuery('input').live('keydown', function(_event){
         if(_event.keyCode==13) {
             return false;
         }
     });
 
     //当连线类型改变时
-    $('#transition-type-select').live('change', function() {
+    jQuery('#transition-type-select').live('change', function() {
         //transitionId由相互连接的组件定义ID构成
-        var transitionId = $('#transition-id-hidden').val();
+        var transitionId = jQuery('#transition-id-hidden').val();
         var compIds = transitionId.split(transitionIdSeparator);
         var fromNode = serviceEditor.getNodeById(compIds[0]);
         var toNode = serviceEditor.getNodeById(compIds[1]);
@@ -455,10 +455,10 @@ function handleEvents() {
     });
 
     //修改连线属性值时
-    $('.transition-prop').live('change', function(){
-        var propName = $(this).attr("name");
+    jQuery('.transition-prop').live('change', function(){
+        var propName = jQuery(this).attr("name");
         //transitionId由相互连接的组件定义ID构成
-        var transitionId = $('#transition-id-hidden').val();
+        var transitionId = jQuery('#transition-id-hidden').val();
         var compIds = transitionId.split(transitionIdSeparator);
         var fromNode = serviceEditor.getNodeById(compIds[0]);
         var transition = fromNode.getTransitionById(transitionId);
@@ -466,13 +466,13 @@ function handleEvents() {
     });
 
     //加载服务定义按钮被点击
-    $('#load-service-definition-button').click(function(){
+    jQuery('#load-service-definition-button').click(function(){
         var url = contextPath + '/data/service/SEND_FILE_SERVICE.json';
-        $.getJSON(url, function(_data){
+        jQuery.getJSON(url, function(_data){
             serviceEditor.reset();
             serviceEditor.restore(_data);
             //触发编辑服务定义按钮点击事件，显示其属性配置表单
-            $('#edit-service-definition-button').trigger('click');
+            jQuery('#edit-service-definition-button').trigger('click');
         });
     });
 }
@@ -487,8 +487,8 @@ function getSimpleClassName(_class) {
 }
 
 function getRefPropertyDefinitionByForm(_propName) {
-    var beanDefinitionId = $('#bean-definition-id-hidden').val();
-    var compId = $('#comp-definition-id-hidden').val();
+    var beanDefinitionId = jQuery('#bean-definition-id-hidden').val();
+    var compId = jQuery('#comp-definition-id-hidden').val();
     var node = serviceEditor.getNodeById(compId);
     return node.data.getRefPropertyDefinition(beanDefinitionId, _propName);
 }
@@ -508,7 +508,7 @@ function getPropertyDefinitionByForm(_form, _propName) {
 
 //根据Form表单中的信息，查找名称为_beanDefinitionId的Bean定义
 function getBeanDefinitionByForm(_beanDefinitionId) {
-    var compId = $('#comp-definition-id-hidden').val();
+    var compId = jQuery('#comp-definition-id-hidden').val();
     var node = serviceEditor.getNodeById(compId);
     return node.data.searchById(_beanDefinitionId);
 }
@@ -516,10 +516,10 @@ function getBeanDefinitionByForm(_beanDefinitionId) {
 //获取属性配置div对象(jquery)
 //_beanId为当前配置的Bean或组件ID，因为可能存在多个Bean处于配置中
 function getPropsConfigDiv(_beanId) {
-    var divs = $('div.props-config-form');
+    var divs = jQuery('div.props-config-form');
     for(var i in divs) {
-        if($(divs[i]).attr('lang')===_beanId) {//用lang属性值标识BeanId
-            return $(divs[i]);
+        if(jQuery(divs[i]).attr('lang')===_beanId) {//用lang属性值标识BeanId
+            return jQuery(divs[i]);
         }
     }
     return null;
@@ -532,7 +532,7 @@ function getPropsConfigForm(_beanId) {
         alert("属性配置表单未找到");
         return null;
     }
-    return $(forms.get(0));
+    return jQuery(forms.get(0));
 }
 
 function getCompAndBeanIdHiddenHtml(_compId, _beanId) {
@@ -572,6 +572,6 @@ function getComponentFragmentUrl(_class) {
  * @param _beanId
  */
 function setCompPropsConfigFormDivBeanId(_beanId) {
-    $('#comp-form-panel').find('div.props-config-form').attr('lang', _beanId);
+    jQuery('#comp-form-panel').find('div.props-config-form').attr('lang', _beanId);
 }
 

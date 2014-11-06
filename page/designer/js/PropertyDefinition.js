@@ -263,7 +263,8 @@ RefPropertyDefinition.prototype.refreshHtml = function(_select) {
     if(this.valueMode===RefPropertyDefinition.VALUE_MODE_RESOURCE) {
         html += '<span>资源选择</span>';
     } else {
-        html += '<button type="button" class="form-control btn btn-default btn-sm ' +refConfigButtonCssClass+ '">配置</button>';
+        html += '<button type="button" class="form-control btn btn-default btn-sm '
+            +refConfigButtonCssClass+ '" data-target="#ref-modal" data-toggle="modal">配置</button>';
     }
     html += '</div>';
     _select.parent().parent().append(html);
