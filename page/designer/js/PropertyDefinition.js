@@ -263,8 +263,9 @@ RefPropertyDefinition.prototype.refreshHtml = function(_select) {
     if(this.valueMode===RefPropertyDefinition.VALUE_MODE_RESOURCE) {
         html += '<span>资源选择</span>';
     } else {
+        var disabledHtml = this.selectedBeanDefinitionType ? "" : 'disabled="disabled"';
         html += '<button type="button" class="form-control btn btn-default btn-sm '
-            +refConfigButtonCssClass+ '" >配置</button>';
+            +refConfigButtonCssClass+ '" ' +disabledHtml+ '>配置</button>';
     }
     html += '</div>';
     _select.parent().parent().append(html);

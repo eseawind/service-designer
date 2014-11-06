@@ -560,7 +560,6 @@ function loadPropsConfigForm(_beanId, _url, _callback) {
     configDiv.load(_url, function(){
         _callback();
         var beanDefinitionId = configDiv.find(':hidden.bean-definition-id-hidden').val();
-        console.info(beanDefinitionId.split(refPropertySeparator));
         if(beanDefinitionId.split(refPropertySeparator).length>=3) {//超过三层添加返回按钮
             var footer = configDiv.parent().find('div.modal-footer');
             if(footer.find('button.back-to-prev-bean-definition').length==0) {//如果还没有返回按钮则添加，有了就不能重复添加
