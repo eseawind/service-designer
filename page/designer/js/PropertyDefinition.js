@@ -477,12 +477,16 @@ ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function()
     var beanId = form.find(':hidden.bean-definition-id-hidden').val();
     console.info(form);
     form.empty();
-    var html = '<div class="form-group"><div class="col-sm-8">';
-    html += '<input type="text" class="form-control array-or-list-element"></div>';
-    html += '<div class="col-sm-4">';
-    html += '<button type="button" class="form-control btn btn-default btn-sm remove-array-or-list-element">移除</button>';
-    html += '</div></div>';
-    form.append(html);
+
+    for(var i in this.value) {
+        var html = '<div class="form-group"><div class="col-sm-8">';
+        html += '<input type="text" class="form-control array-or-list-element" value="' +this.value[i]+ '"></div>';
+        html += '<div class="col-sm-4">';
+        html += '<button type="button" class="form-control btn btn-default btn-sm remove-array-or-list-element">移除</button>';
+        html += '</div></div>';
+        form.append(html);
+    }
+
     form.append(getCompAndBeanIdHiddenHtml(compId, beanId));
     var propNameHtml = '<input type="hidden" class="bean-definition-propname-hidden" value="' +this.name+ '"/>';
     form.append(propNameHtml);

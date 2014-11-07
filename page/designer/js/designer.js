@@ -336,18 +336,24 @@ function handleEvents() {
     });
 
     //添加数组或列表元素
-    jQuery('#add-array-or-list-element-button').live('click', function(){
-        jQuery(this).parent().before('<div class="row prop-entry"><input class="array-or-list-element"/>' +
-            '<button type="button" class="remove-array-or-list-element btn btn-primary btn-xs">移除</button></div>')
+    jQuery('button.add-array-or-list-element').live('click', function(){
+        var form = jQuery(this).parent().parent().find('form');
+        var html = '<div class="form-group"><div class="col-sm-8">';
+        html += '<input type="text" class="form-control array-or-list-element" value=""></div>';
+        html += '<div class="col-sm-4">';
+        html += '<button type="button" class="form-control btn btn-default btn-sm remove-array-or-list-element">移除</button>';
+        html += '</div></div>';
+        form.append(html);
     });
 
     //移除数组或列表的一个元素
     jQuery('button.remove-array-or-list-element').live('click', function(){
-        var propName = jQuery('#bean-definition-propname-hidden').val();
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var form = jQuery(this).parents('form');
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         var value = jQuery(this).prev(':text').val();
         propertyDefinition.remove(value);
-        jQuery(this).parent().remove();
+        jQuery(this).parent().parent().remove();
     });
 
     //数组或列表的一个元素值发生改变时
