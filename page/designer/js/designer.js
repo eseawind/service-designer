@@ -358,10 +358,11 @@ function handleEvents() {
 
     //数组或列表的一个元素值发生改变时
     jQuery(':text.array-or-list-element').live('change', function() {
-        var propName = jQuery('#bean-definition-propname-hidden').val();
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var form = jQuery(this).parents('form');
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.clear();
-        jQuery('#comp-props-display-form').find(':text.array-or-list-element').each(function(){
+        form.find(':text.array-or-list-element').each(function(){
             var currentValue = jQuery(this).val();
             if(currentValue) {//空字符串也为false
                 propertyDefinition.add(currentValue);
