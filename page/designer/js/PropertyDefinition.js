@@ -475,7 +475,17 @@ ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function()
     var form = getPropsConfigForm(this.belongToId);
     var compId = form.find(':hidden.comp-definition-id-hidden').val();
     var beanId = form.find(':hidden.bean-definition-id-hidden').val();
-    console.info(form);
+    var compForm = false;
+    if(form.parents('#comp-form-panel').length!==0) {//说明是在组件配置表单中，实际上应该弹框
+        compForm = true;
+        var formDiv = jQuery('#ref-modal').find('div.props-config-form');
+        form = formDiv.find('form');
+        if(form.length===0) {
+            formDiv.append('<form class="form-horizontal" ></form>');
+            form = formDiv.find('form');
+        }
+    }
+
     form.empty();
 
     for(var i in this.value) {
@@ -495,8 +505,16 @@ ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function()
     var footer = form.parent().parent().find('div.modal-footer');
     if(footer.find('button').length===1) {
         var buttonHtml = '<button type="button" class="btn btn-default add-array-or-list-element">添加</button>';
-        buttonHtml += '<button type="button" class="btn btn-default back-to-prev-bean-definition">返回</button>';
+        if(!compForm) {
+            buttonHtml += '<button type="button" class="btn btn-default back-to-prev-bean-definition">返回</button>';
+        }
         footer.prepend(buttonHtml);
+    }
+
+    if(compForm) {
+        $('#ref-modal').modal({
+            keyboard: true
+        });
     }
 };
 
@@ -595,29 +613,62 @@ MapPropertyDefinition.prototype.isEmpty = function() {
 
 //当点击配置Map属性时，更新属性配置表单
 MapPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
-    var beanDefinitionId = jQuery('#bean-definition-id-hidden').val();
-    var compId = jQuery('#comp-definition-id-hidden').val();
-    var form = jQuery('#comp-props-display-form');
-    form.empty();
-    form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass" ' +
-        'value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionId" ' +
-        'value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionPropName" ' +
-        'value="' +this.name+ '" id="bean-definition-propname-hidden"/></div>');
-    if(this.isEmpty()) {
-        form.append('<div class="row prop-entry" >' +
-            '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
-            '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>');
-    } else {
-        for(var key in this.value) {
-            form.append('<div class="row prop-entry" >' +
-                '<input class="map-entry-key" size="10" value="' +key+ '"/>=' +
-                '<input class="map-entry-value" size="10" value="' +this.value[key]+ '"/>' +
-                '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>');
+    var form = getPropsConfigForm(this.belongToId);
+    var compId = form.find(':hidden.comp-definition-id-hidden').val();
+    var beanId = form.find(':hidden.bean-definition-id-hidden').val();
+    var compForm = false;
+    if(form.parents('#comp-form-panel').length!==0) {//说明是在组件配置表单中，实际上应该弹框
+        compForm = true;
+        var formDiv = jQuery('#ref-modal').find('div.props-config-form');
+        form = formDiv.find('form');
+        if(form.length===0) {
+            formDiv.append('<form class="form-horizontal" ></form>');
+            form = formDiv.find('form');
         }
     }
-    form.append('<div class="row prop-entry"><button class="btn btn-primary btn-xs" type="button" id="add-map-entry-button">添加</button>' +
-        '<button type="button" id="back-to-prev-bean-definition-button" class="btn btn-primary btn-xs" ' +
-        'lang="' +beanDefinitionId+ '">返回</button></div>');
+    form.empty();
+
+    /**
+     * <div class="form-group">
+     *     <div class="col-sm-4">
+     *         <input type="text" class="form-control map-entry-key" value=key/>
+     *     </div><label class="col-sm-1 control-label">=</label>
+     *     <div class="col-sm-4">
+     *         <input type="text" class="form-control map-entry-value" value=value/>
+     *     </div>
+     *     <div class="col-sm-3">
+     *         <button type="button" class="form-control btn btn-default btn-sm map-entry">移除</button>
+     *     </div>
+     *
+     */
+    for(var key in this.value) {
+        var html = '<div class="form-group">';
+        html += '<div class="col-sm-4"><input type="text" class="form-control map-entry-key" value="' +key+ '"></div>';
+        html += '<label class="col-sm-1 control-label">=</label>';
+        html += '<div class="col-sm-4"><input type="text" class="form-control map-entry-value" value="' +this.value[key]+ '"></div>';
+
+        html += '<div class="col-sm-3">';
+        html += '<button type="button" class="form-control btn btn-default btn-sm remove-map-entry">移除</button>';
+        html += '</div></div>';
+        form.append(html);
+    }
+
+    form.append(getCompAndBeanIdHiddenHtml(compId, beanId));
+    var propNameHtml = '<input type="hidden" class="bean-definition-propname-hidden" value="' +this.name+ '"/>';
+    form.append(propNameHtml);
+    form.parent().next().hide();//隐藏属性提示框
+
+    var footer = form.parent().parent().find('div.modal-footer');
+    if(footer.find('button').length===1) {
+        var buttonHtml = '<button type="button" class="btn btn-default add-map-entry">添加</button>';
+        if(!compForm) {
+            buttonHtml += '<button type="button" class="btn btn-default back-to-prev-bean-definition">返回</button>';
+        }
+        footer.prepend(buttonHtml);
+    }
+    if(compForm) {
+        $('#ref-modal').modal({
+            keyboard: true
+        });
+    }
 };

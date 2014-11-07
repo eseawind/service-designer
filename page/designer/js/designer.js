@@ -287,7 +287,8 @@ function handleEvents() {
     });
 
     //属性被点击时，更新该属性提示，排除掉数组或列表与Map属性
-    jQuery('div.props-config-form').find(':text:not(.array-or-list-element),select').live('click', function(){
+    var propClickSelector = ':text:not(.array-or-list-element):not(.map-entry-key):not(.map-entry-value),select';
+    jQuery('div.props-config-form').find(propClickSelector).live('click', function(){
         var form = jQuery(jQuery(this).parents('form').get(0));
         var propName = jQuery(this).attr('name');
         var propertyDefinition = getPropertyDefinitionByForm(form, propName);
@@ -374,9 +375,9 @@ function handleEvents() {
     //---------------------------------Map属性相关事件--------------------------------
     //点击配置Map元素按钮
     jQuery('button.map-config').live('click', function() {
-        var input = jQuery(jQuery(this).prev('input').get(0));
-        var propName = input.attr('name');
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var form = jQuery(this).parents('form');
+        var propName = jQuery(this).parent().parent().find(':text').attr('name');
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.refreshPropertiesConfigForm();
     });
 

@@ -8,6 +8,7 @@
     "com.kingyea.esb.components.file.feedback.JmsFeedbackStrategy" : "/data/fragment/JmsFeedbackStrategy.html",
     "com.kingyea.esb.components.file.multi.split.XMLMultiSplitProvider" : "/data/fragment/XMLMultiSplitProvider.html",
     "com.kingyea.esb.components.file.multi.split.SingleFileSplitProvider" : "/data/fragment/SingleFileSplitProvider.html",
-    "com.kingyea.esb.jms.activemq.ActiveMQConnectionFactoryProvider" : "/data/fragment/ActiveMQConnectionFactoryProvider.html"
+    "com.kingyea.esb.jms.activemq.ActiveMQConnectionFactoryProvider" : "/data/fragment/ActiveMQConnectionFactoryProvider.html",
+    "com.kingyea.esb.components.protocol.mail.MailSenderSourceComponent" : "/data/fragment/MailSenderSourceComponent.html"
 }
 
