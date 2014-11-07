@@ -258,9 +258,15 @@ function handleEvents() {
         var form = jQuery(this).parent().siblings('div.props-config-form').find('form');
         var compId = form.find(':hidden.comp-definition-id-hidden').val();
         var currentBeanDefinitionId = form.find(':hidden.bean-definition-id-hidden').val();
-        //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
-        var lastIndex = currentBeanDefinitionId.lastIndexOf(refPropertySeparator);
-        var prevBeanDefinitionId = currentBeanDefinitionId.substring(0, lastIndex);
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        var prevBeanDefinitionId = null;
+        if(propName) {//如果有属性名称，说明正在配置的是数据或列表或Map属性
+            prevBeanDefinitionId = currentBeanDefinitionId;
+        } else {
+            //因为下一层BeanDefinition的ID包含了上一层BeanDefinition的ID值，由"-"进行连接
+            var lastIndex = currentBeanDefinitionId.lastIndexOf(refPropertySeparator);
+            prevBeanDefinitionId = currentBeanDefinitionId.substring(0, lastIndex);
+        }
         var preBeanDefinition = getBeanDefinitionByForm(compId, prevBeanDefinitionId);
         jQuery('#ref-modal').find('div.props-config-form').attr('lang', preBeanDefinition.id);
         preBeanDefinition.refreshPropertiesConfigForm(compId);
@@ -280,8 +286,8 @@ function handleEvents() {
         propertyDefinition.value = this.value;
     });
 
-    //属性被点击时，更新该属性提示
-    jQuery('div.props-config-form').find(':text,select').live('click', function(){
+    //属性被点击时，更新该属性提示，排除掉数组或列表与Map属性
+    jQuery('div.props-config-form').find(':text:not(.array-or-list-element),select').live('click', function(){
         var form = jQuery(jQuery(this).parents('form').get(0));
         var propName = jQuery(this).attr('name');
         var propertyDefinition = getPropertyDefinitionByForm(form, propName);
@@ -322,10 +328,10 @@ function handleEvents() {
 
     //---------------------------------ArrayOrList属性相关事件--------------------------------
     //点击配置数组或列表元素按钮
-    jQuery('button.arrayorlist-config').live('click', function() {
-        var input = jQuery(jQuery(this).prev('input').get(0));
-        var propName = input.attr('name');
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+    jQuery('button.array-or-list-config').live('click', function() {
+        var form = jQuery(jQuery(this).parents('form').get(0));
+        var propName = jQuery(this).parent().parent().find(':text').attr('name');
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.refreshPropertiesConfigForm();
     });
 
@@ -579,8 +585,8 @@ function loadPropsConfigForm(_beanId, _url, _callback) {
                 footer.prepend(buttonHtml);
             }
         } else {
-            //移除返回按钮，因为前面的操作添加了返回按钮
-            configDiv.parent().find('div.modal-footer').find('button.back-to-prev-bean-definition').remove();
+            //移除非最后一个按钮(关闭按钮)，因为前面的操作添加了返回按钮
+            configDiv.parent().find('div.modal-footer').find('button:not(:last)').remove();
         }
         configDiv.parent().find('textarea.prop-tip').val("");
     });

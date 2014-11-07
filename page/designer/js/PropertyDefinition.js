@@ -472,30 +472,28 @@ ArrayOrListPropertyDefinition.prototype.toServiceDefinition = function() {
 
 //当点击配置数据或列表属性时，更新属性配置表单
 ArrayOrListPropertyDefinition.prototype.refreshPropertiesConfigForm = function() {
-    var beanDefinitionId = jQuery('#bean-definition-id-hidden').val();
-    var compId = jQuery('#comp-definition-id-hidden').val();
-    var form = jQuery('#comp-props-display-form');
+    var form = getPropsConfigForm(this.belongToId);
+    var compId = form.find(':hidden.comp-definition-id-hidden').val();
+    var beanId = form.find(':hidden.bean-definition-id-hidden').val();
+    console.info(form);
     form.empty();
-    form.append('<div class="row prop-entry" ><input type="hidden" name="compDefinitionClass"' +
-        ' value="' +compId+ '" id="comp-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionId" ' +
-        'value="' +beanDefinitionId+ '" id="bean-definition-id-hidden"/></div>');
-    form.append('<div class="row prop-entry" ><input type="hidden" name="beanDefinitionPropName" ' +
-        'value="' +this.name+ '" id="bean-definition-propname-hidden"/></div>');
-    if(this.value.length==0) {
-        form.append('<div class="row prop-entry" ><input class="array-or-list-element"/>' +
-            '<button type="button" class="remove-array-or-list-element btn btn-primary btn-xs">移除</button></div>');
-    } else {
-        for(var i in this.value) {
-            var element = this.value[i];
-            form.append('<div class="row prop-entry" >' +
-                '<input class="array-or-list-element"  value="' +element+ '"/>' +
-                '<button type="button" class="remove-array-or-list-element">移除</button></div>');
-        }
+    var html = '<div class="form-group"><div class="col-sm-8">';
+    html += '<input type="text" class="form-control array-or-list-element"></div>';
+    html += '<div class="col-sm-4">';
+    html += '<button type="button" class="form-control btn btn-default btn-sm remove-array-or-list-element">移除</button>';
+    html += '</div></div>';
+    form.append(html);
+    form.append(getCompAndBeanIdHiddenHtml(compId, beanId));
+    var propNameHtml = '<input type="hidden" class="bean-definition-propname-hidden" value="' +this.name+ '"/>';
+    form.append(propNameHtml);
+    form.parent().next().hide();//隐藏属性提示框
+
+    var footer = form.parent().parent().find('div.modal-footer');
+    if(footer.find('button').length===1) {
+        var buttonHtml = '<button type="button" class="btn btn-default add-array-or-list-element">添加</button>';
+        buttonHtml += '<button type="button" class="btn btn-default back-to-prev-bean-definition">返回</button>';
+        footer.prepend(buttonHtml);
     }
-    form.append('<div class="row prop-entry"><button class="btn btn-primary btn-xs" type="button" id="add-array-or-list-element-button">添加</button>' +
-        '<button type="button" id="back-to-prev-bean-definition-button" ' +
-        'lang="' +beanDefinitionId+ '" class="btn btn-primary btn-xs">返回</button></div>');
 };
 
 
