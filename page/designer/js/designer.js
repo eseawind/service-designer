@@ -582,6 +582,7 @@ function loadPropsConfigForm(_beanId, _url, _callback) {
             //移除返回按钮，因为前面的操作添加了返回按钮
             configDiv.parent().find('div.modal-footer').find('button.back-to-prev-bean-definition').remove();
         }
+        configDiv.parent().find('textarea.prop-tip').val("");
     });
 }
 
