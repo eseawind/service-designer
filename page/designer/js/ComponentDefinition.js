@@ -468,6 +468,7 @@ BeanDefinitionBuilder.buildPropertyDefinition = function(_prop) {
         propertyDefinition.inputType = _prop.inputType;
     }
     propertyDefinition.desc = _prop.desc;
+    propertyDefinition.comment = _prop.comment ? _prop.comment : "";
     return propertyDefinition;
 };
 
@@ -486,12 +487,14 @@ BeanDefinitionBuilder.buildServiceDefinitionData = function() {
             "value" : "",
             "type" : "string",
             "desc" : "服务ID",
-            "required" : true
+            "required" : true,
+            "comment" : "服务定义ID，必须唯一"
         }, {
             "name" : "description",
             "value" : "",
             "type" : "string",
-            "desc" : "描述"
+            "desc" : "描述",
+            "comment" : "服务定义描述"
         }, {
             "name" : "serviceName",
             "value" : "",
@@ -511,7 +514,7 @@ BeanDefinitionBuilder.buildServiceDefinitionData = function() {
             "name" : "autoStart",
             "value" : false,
             "type" : "boolean",
-            "desc" : "自启用",
+            "desc" : "自启动",
             "inputType" : 3,
             "selectValues" : [{
                 "display" : "是",
@@ -519,7 +522,8 @@ BeanDefinitionBuilder.buildServiceDefinitionData = function() {
             }, {
                 "display" : "否",
                 "value" : false
-            }]
+            }],
+            "comment" : "是否自动启动"
         }, {
             "name" : "trace",
             "value" : false,
@@ -532,7 +536,8 @@ BeanDefinitionBuilder.buildServiceDefinitionData = function() {
             }, {
                 "display" : "否",
                 "value" : false
-            }]
+            }],
+            "comment" : "是否启用跟踪功能"
         }, {
             "name" : "enableMonitor",
             "value" : true,
@@ -545,12 +550,13 @@ BeanDefinitionBuilder.buildServiceDefinitionData = function() {
             }, {
                 "display" : "否",
                 "value" : false
-            }]
+            }],
+            "comment" : "是否启用监控功能"
         }, {
             "name" : "businessSequence",
             "value" : 1,
             "type" : "int",
-            "desc" : "序列号"
+            "desc" : "业务序列号"
         }]
     };
 

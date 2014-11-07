@@ -280,6 +280,18 @@ function handleEvents() {
         propertyDefinition.value = this.value;
     });
 
+    //属性被点击时，更新该属性提示
+    jQuery('div.props-config-form').find(':text,select').live('click', function(){
+        var form = jQuery(jQuery(this).parents('form').get(0));
+        var propName = jQuery(this).attr('name');
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
+
+        var value = "属性名称：" + propName + '\n';
+        value += propertyDefinition.comment ? "备注：" + propertyDefinition.comment : "";
+        var tipArea = $(this).parents('div.props-config-form').next('div').find('textarea.prop-tip');
+        tipArea.val(value);
+    });
+
     //点击编辑服务定义按钮
     jQuery('#edit-service-definition-button').click(function() {
         var serviceDefinition = serviceEditor.serviceDefinitionData;

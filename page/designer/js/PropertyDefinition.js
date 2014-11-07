@@ -42,7 +42,9 @@ function PropertyDefinition(_name, _value, _type) {
     this.desc = null;
     /** 该属性定义所属的BeanDefinition ID, js循环引用出现问题**/
     //在BeanDefinition.setId()方法中设置
-    this.belongToId = ""
+    this.belongToId = "";
+    //备注
+    this.comment = "";
 }
 PropertyDefinition.input_type_text = 0;
 PropertyDefinition.input_type_radio = 1;
