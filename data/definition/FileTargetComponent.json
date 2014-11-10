@@ -45,19 +45,21 @@
             "display" : "移走原有",
             "value" : "Move"
         }, {
-            "display" : "生命名",
+            "display" : "重命名",
             "value" : "TryRename"
         }]
     }, {
         "name" : "tempFileName",
         "value" : "",
         "type" : "string",
-        "desc" : "临时文件名称"
+        "desc" : "临时文件名称",
+        "comment" : "fileExist=TryRename时生效"
     }, {
         "name" : "moveExisting",
         "value" : "backup",
         "type" : "string",
-        "desc" : "moveExisting"
+        "desc" : "moveExisting",
+        "comment" : "fileExist=Move时生效"
     }, {
         "name" : "charset",
         "value" : "UTF-8",

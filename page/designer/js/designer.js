@@ -470,6 +470,8 @@ function handleEvents() {
     //处理移除组件
     jQuery('#remove-component-definition-button').click(function(){
         serviceEditor.removeSelectedComponentNode();
+        //触发编辑服务定义按钮点击事件，显示其属性配置表单
+        jQuery('#edit-service-definition-button').trigger('click');
     });
 
     //只有一个字段时，按下回车表单会自动提交
