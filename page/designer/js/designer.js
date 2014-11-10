@@ -396,23 +396,25 @@ function handleEvents() {
     });
 
     //移除Map属性的一个条目
-    jQuery('button.remove-map-entry').live('click', function(){
-        var propName = jQuery('#bean-definition-propname-hidden').val();
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
-        var key = jQuery(this).prevAll(':text.map-entry-key').val();
+    jQuery('button.remove-map-entry').live('click', function() {
+        var form = jQuery(this).parents('form');
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
+        var key = jQuery(this).parent().parent().find(':text.map-entry-key').val();
         propertyDefinition.remove(key);
-        jQuery(this).parent().remove();
+        jQuery(this).parent().parent().remove();
     });
 
     //Map属性条目发生改变时
     jQuery(':text.map-entry-key,:text.map-entry-value').live('change', function() {
-        var propName = jQuery('#bean-definition-propname-hidden').val();
-        var propertyDefinition = getPropertyDefinitionByForm(propName);
+        var form = jQuery(this).parents('form');
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        var propertyDefinition = getPropertyDefinitionByForm(form, propName);
         propertyDefinition.clear();
-        jQuery('#comp-props-display-form').find(':text.map-entry-key').each(function(){
+        form.find(':text.map-entry-key').each(function(){
             var currentKey = jQuery(this).val();
             if(currentKey) {//空字符串也为false
-                var currentValue = jQuery(this).next(':text.map-entry-value').val();
+                var currentValue = jQuery(this).parent().parent().find(':text.map-entry-value').val();
                 propertyDefinition.add(currentKey, currentValue);
             }
         });
