@@ -420,6 +420,19 @@ function handleEvents() {
         });
     });
 
+    //监听弹窗关闭事件
+    $('#ref-modal').on('hide.bs.modal', function () {
+        var form = jQuery(this).find('form');
+        var propName = form.find(':hidden.bean-definition-propname-hidden').val();
+        if(propName) {//如果属性名称存在，则表示当前窗口配置的是数据列表或Map属性
+            var propertyDefinition = getPropertyDefinitionByForm(form, propName);
+            var displayString = propertyDefinition.getDisplayString();
+            var propSelector = ':text[name=' +propertyDefinition.name+ ']';
+            var input = jQuery('#comp-form-panel').find('form').find(propSelector);
+            input.val(displayString);
+        }
+    });
+
     //引用属性选择发生改为时，包括手动配置与选择资源配置
     jQuery('select.ref-prop').live('change', function(){
         var form = jQuery(jQuery(this).parents('form').get(0));
