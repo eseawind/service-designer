@@ -318,14 +318,6 @@ function handleEvents() {
         console.info(JSON.stringify(serviceDefinition));
     });
 
-    jQuery('#upload-service-definition-button').click(function() {
-        var url = "http://127.0.0.1:8080/console/service_definition/parse.do?definition=你妹";
-        jQuery.post(url, null, function(_data){
-            console.info(_data);
-        }, 'json');
-
-    });
-
 
     //---------------------------------ArrayOrList属性相关事件--------------------------------
     //点击配置数组或列表元素按钮

@@ -97,35 +97,6 @@ PropertyDefinition.prototype.setBelongToId = function(_id) {
     this.belongToId = _id;
 };
 
-/**
- * 获取属性字段标签
- * @returns {*}
- */
-PropertyDefinition.prototype.getInputLabel = function() {
-    var label = this.name;
-    if(this.desc) {
-        label = this.desc;
-    }
-    return label;
-};
-
-/**
- * 获取属性字段标签的html字符串
- * @returns {string}
- */
-PropertyDefinition.prototype.getInputLabelHtml = function() {
-    return '<div class="row prop-entry" ><div class="prop-label">' + this.getInputLabel() + '：</div>';
-};
-PropertyDefinition.prototype.getInputHtml = function() {
-    //<div class="row prop-entry" >
-        //<div class="prop-label">目录:</div>
-        // <div class="prop-input"><input name="dir" /></div>
-    //</div>
-    var html = this.getInputLabelHtml();
-    html += '<div class="prop-input"><input size="28" class="bean-prop" type="text" name="' +this.name+ '" value="';
-    html += this.value +'" /></div></div>';
-    return html;
-};
 
 
 /** 下拉列表属性定义 **/
@@ -138,32 +109,6 @@ function ComboPropertyDefinition(_name, _value, _type, _selectValues) {
 //继承自PropertyDefinition
 ComboPropertyDefinition.prototype = new PropertyDefinition();
 
-/**
- * 获取html字符串，用于显示表单
- * */
-ComboPropertyDefinition.prototype.getInputHtml = function() {
-    //<div class="row prop-entry" >
-        //<div class="prop-label">固定频率:</div>
-        //<div class="prop-input">
-            //<select name="fixRate">
-                //<option value="true">是</option>
-                //<option value="false">否</option>
-            //</select>
-        //</div>*/
-    //</div>
-    var html = this.getInputLabelHtml();
-    html += '<div class="prop-input"><select class="normal-prop" name="' +this.name+ '">';
-    for(var i in this.selectValues) {
-        var selectValue = this.selectValues[i];
-        if(selectValue.value==this.value) {
-            html += '<option selected="selected" value="' +selectValue.value+ '">' +selectValue.display+ '</option>';
-        } else {
-            html += '<option value="' +selectValue.value+ '">' +selectValue.display+ '</option>';
-        }
-    }
-    html += '</select></div></div>';
-    return html;
-};
 
 /** 引用属性定义 **/
 function RefPropertyDefinition(_name, _value, _type) {
@@ -409,23 +354,6 @@ function ArrayOrListPropertyDefinition(_name, _value, _type) {
 //继承自PropertyDefinition
 ArrayOrListPropertyDefinition.prototype = new PropertyDefinition();
 
-/**
- * 获取该引用属性的显示html字符串，用于Jquery创建并显示
- * @returns {*}
- */
-ArrayOrListPropertyDefinition.prototype.getInputHtml = function() {
-    //<div class="row prop-entry" >
-        //<div class="prop-label">接收者:</div>
-        //<div class="prop-input">
-            //<input name="receiver"/>
-        //</div><button type="button">添加</button>*/
-    //</div>
-    var html = this.getInputLabelHtml();
-    var displayValue = this.getDisplayString();
-    html += '<div class="prop-input"><input readonly="readonly" name="' +this.name+ '" value="' +displayValue+ '"/>';
-    html += '<button type="button" class="arrayorlist-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></div></div></div>';
-    return html;
-};
 
 /**
  * 清空数据
@@ -535,23 +463,6 @@ function MapPropertyDefinition(_name, _value, _type) {
 //继承自PropertyDefinition
 MapPropertyDefinition.prototype = new PropertyDefinition();
 
-/**
- * 获取该引用属性的显示html字符串，用于Jquery创建并显示
- * @returns {*}
- */
-MapPropertyDefinition.prototype.getInputHtml = function() {
-    //<div class="row prop-entry" >
-        //<div class="prop-label">map:</div>
-        //<div class="prop-input">
-            //<input name="map"/><button type="button">配置</button>
-        //</div>
-    //</div>
-    var html = this.getInputLabelHtml();
-    var displayValue = this.getDisplayString();
-    html += '<div class="prop-input"><input readonly="readonly" name="' +this.name+ '" value="' +displayValue+ '"/>';
-    html += '<button type="button" class="map-config btn btn-primary btn-xs" lang="' +this.belongToId+ '">配置</button></div></div></div>';
-    return html;
-};
 
 /**
  * 获取显示字符串
