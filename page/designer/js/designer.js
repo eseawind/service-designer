@@ -382,10 +382,17 @@ function handleEvents() {
     });
 
     //添加Map属性条目元素
-    jQuery('#add-map-entry-button').live('click', function() {
-        jQuery(this).parent().before('<div class="row prop-entry" >' +
-            '<input class="map-entry-key" size="10"/>=<input class="map-entry-value" size="10"/>' +
-            '<button type="button" class="remove-map-entry btn btn-primary btn-xs">移除</button></div>')
+    jQuery('button.add-map-entry').live('click', function() {
+        var form = jQuery(this).parent().parent().find('form');
+        var html = '<div class="form-group">';
+        html += '<div class="col-sm-4"><input type="text" class="form-control map-entry-key"></div>';
+        html += '<label class="col-sm-1 control-label">=</label>';
+        html += '<div class="col-sm-4"><input type="text" class="form-control map-entry-value"></div>';
+
+        html += '<div class="col-sm-3">';
+        html += '<button type="button" class="form-control btn btn-default btn-sm remove-map-entry">移除</button>';
+        html += '</div></div>';
+        form.append(html);
     });
 
     //移除Map属性的一个条目
