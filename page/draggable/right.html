@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <script type="text/javascript" src="../../js-lib/jquery/jquery-1.3.2.js"></script>
+    <script type="text/javascript">
+        var leftWindow = null;//左侧窗口
+        var dragReady = false;//是否准备好拖拽
+        var proxy = null;//proxy元素对象(jquery)
+        $(function(){
+            leftWindow = getLeftWindow();
+            proxy = $("#proxy");
+            $('body').mousemove(function(_event){
+                dragReady = leftWindow.dragReady;
+                if(dragReady) {
+                    if($("#proxy:visible").length===0) {//只显示一次
+                        proxy.show();//两个proxy互斥显示
+                        leftWindow.hideProxy();
+                    }
+                    proxy.html(getLeftWindow().proxyHtml).css("left",_event.pageX).css("top", _event.pageY);
+                }
+            });
+            $(document).mouseup(function(_event) {
+                console.info("mouseup");
+                leftWindow.stopDrag();
+                proxy.hide();
+            });
+
+            //点击时停止拖拽，并隐藏本页面proxy元素
+            $(document).click(function(_event){
+                leftWindow.stopDrag();
+                proxy.hide();
+            });
+        });
+
+        //获取左侧窗口window对象
+        function getLeftWindow(){
+            return window.parent.frames["leftNavFrame"]
+        }
+
+        //隐藏proxy元素
+        function hideProxy() {
+            proxy.hide();
+        }
+    </script>
+    <style type="text/css">
+        .title{
+            margin-bottom:10px;
+        }
+        .dragitem{
+            border:1px solid #ccc;
+            width:50px;
+            height:50px;
+            margin-bottom:10px;
+        }
+        .targetarea{
+            border:1px solid red;
+            height:400px;
+            width: 100%;
+        }
+        #proxy{
+            border:1px solid #ccc;
+            width:80px;
+            background:#fafafa;
+        }
+    </style>
+</head>
+<body>
+<div class="easyui-droppable targetarea" ></div>
+
+<div id="proxy" style="position: absolute;display: none"></div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <script type="text/javascript" src="../../js-lib/jquery/jquery-1.3.2.js"></script>
+    <script>
+        var dragReady = false;
+        var proxyHtml = "";
+        var currentDraggable = null;
+        var proxy = null;
+        var rightWindow = null;
+        $(function() {
+            proxy = $('#proxy');
+            rightWindow = getRightWindow();
+            $('.dragitem').mousedown(function(_event){
+                dragReady = true;
+                proxyHtml = $(this).html();
+                _event.preventDefault();
+            });
+            $(document).mousemove(function(_event){
+                if(dragReady) {
+                    if($("#proxy:visible").length===0) {
+                        proxy.show();//两个proxy互斥显示
+                        rightWindow.hideProxy();
+                    }
+                    proxy.html(proxyHtml).css("left",_event.pageX).css("top", _event.pageY);
+                }
+            });
+
+            $(document).click(function(){
+                stopDrag();
+            });
+            $(document).mouseup(function(){
+                stopDrag();
+            });
+
+        });
+
+        function stopDrag() {
+            proxy.hide();
+            dragReady = false;
+            proxyHtml = "";
+        }
+        function hideProxy() {
+            proxy.hide();
+        }
+
+        function getRightWindow() {
+            return window.parent.frames["midCavasFrame"];
+        }
+    </script>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .title{
+            margin-bottom:10px;
+        }
+        .dragitem{
+            border:1px solid #ccc;
+            width:50px;
+            height:50px;
+            margin-bottom:10px;
+        }
+        .targetarea{
+            border:1px solid red;
+            height:150px;
+            width: 10px;
+            float: right;
+
+        }
+        #proxy {
+            border:1px solid #ccc;
+            width:80px;
+            background:#fafafa;
+        }
+    </style>
+</head>
+<body>
+<div style="margin:20px 0;"></div>
+<div style="float:left;width:200px;margin-right:20px;">
+    <div class="title">Source</div>
+    <div>
+        <div class="dragitem">Apple</div>
+        <div class="dragitem">Peach</div>
+        <div class="dragitem">Orange</div>
+    </div>
+</div>
+<div class="easyui-droppable targetarea" data-options="
+        accept: '.dragitem',
+        onDragEnter:function(e,source){
+            $(this).html('enter');
+        },
+        onDragLeave: function(e,source){
+            $(this).html('leave');
+        },
+        onDrop: function(e,source){
+            $(this).html($(source).html() + ' dropped');
+        }
+    " style="display: none"></div>
+
+<div id="proxy" style="position: absolute;display: none"></div>
+</body>
+</html>

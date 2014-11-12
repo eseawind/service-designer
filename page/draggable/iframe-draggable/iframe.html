@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> Iframe content drag and drop </TITLE>
+  <SCRIPT LANGUAGE="JavaScript" src="jquery-1.3.2.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript">
+  <!--//http://kjah.javaeye.com
+	$(function(){
+			$("body").append("<div style='position:absolute' id='fly'></div>");
+			$("body").mousemove(function(e){
+				var f=$("#fly:visible");
+					if(f[0]){
+						f.css("left",e.pageX+10);
+						f.css("top",e.pageY+10);
+					}
+				$("#show").html(e.pageX+"|"+e.pageY);
+			});
+			$("body").mouseup(function(){$("#fly").hide();});
+			
+			$("#f2")[0].onload=function(){
+				var f1=$("#f1");
+				var f2=$("#f2");
+				var f1_body=$(f1[0].contentWindow.document.body);
+				var f2_body=$(f2[0].contentWindow.document.body);
+
+				f1_body.mousemove(function(e){
+					var f=$("#fly:visible");
+					f.css("left",e.pageX+f1.offset().left+10);
+					f.css("top",e.pageY+f1.offset().top+10);
+					$(this).find("#show").html(e.pageX+"|"+e.pageY);
+				}).mouseup(function(){$("#fly").hide();});
+
+				f1_body.find(".drop_area").mouseup(function(e){
+					$(this).append($("#fly:visible").html());//��iframe������clone�Ķ���append,���ܿ�¡�Ķ����������document�±���
+					$("#fly:visible div").empty();
+				}).hover(function(){
+					if($("#fly:visible")[0]){
+						$(this).css("background-color","#ddd");
+					}
+				},function(){
+					$(this).css("background-color","#ccc");
+				});
+
+				$("#test").mouseup(function(e){
+					$(this).append($("#fly:visible div").clone());//�ǿ�iframe
+					$("#fly:visible div").empty();
+				});
+
+				f2_body.mousemove(function(e){
+					$(this).find("#show").html(e.pageX+"|"+e.pageY);
+					var f=$("#fly:visible");
+					if(f[0]){
+						f.css("left",e.pageX+f2.offset().left+10);
+						f.css("top",e.pageY+f2.offset().top+10);
+					}
+				}).mouseup(function(){$("#fly").hide();}).bind("selectstart",function(e){e.preventDefault();});
+
+				f2_body.find(".div1").mousedown(function(e){
+					e.preventDefault();
+					$("#fly").empty().append($(this).clone())
+                            .css({left:(f2.offset().left+e.pageX+10)+"px",top:(f2.offset().top+e.pageY+10)+"px"}).show();
+				});				
+			};
+	});
+
+  //-->
+  </SCRIPT>
+ </HEAD>
+
+ <BODY style="height:100%">
+  <!--  http://kjah.javaeye.com -->
+  <iframe src="left.html" style="width:50%;height:50%" id="f1" ></iframe>
+  <iframe src="right.html" style="width:200px;height:200px;margin:50px" id="f2"></iframe>
+  <span id="show"></span>
+  <div style="width:300px;height:200px;border:1px solid red" id="test"></div>
+ </BODY>
+</HTML>
