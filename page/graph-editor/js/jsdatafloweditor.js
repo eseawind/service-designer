@@ -621,6 +621,8 @@ Point.prototype.connect = function(raphael, other, sub) {
         alert("源组件不能连接源组件");
         return null;
     }
+    var inputPoint = this.isInput() ? this : other;
+    var outputPoint = this.isOutput() ? this : other;
 
 	var sthis = this;
 	var editor = this.parent.parent;
@@ -645,7 +647,8 @@ Point.prototype.connect = function(raphael, other, sub) {
 		other.connect(raphael, this, true);
 		line = raphael.connection(this.circle, other.circle, editor.theme.lineFill,
             editor.theme.lineStroke + '|' + editor.theme.lineStrokeWidth, remove);
-        line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
+        //line.id = this.parent.data.id + transitionIdSeparator + other.parent.data.id;
+        line.id = outputPoint.parent.data.id + transitionIdSeparator + inputPoint.parent.data.id;
 	}
 	
 	this.parent.connect(this, other);
@@ -653,8 +656,8 @@ Point.prototype.connect = function(raphael, other, sub) {
     //连接完成之后，把前后ComponentDefinition连接起来
     //sub为true时，没有再执行连接代码，所以line为null
     if(!sub) {
-        this.parent.data.addOutput(line);
-        other.parent.data.addInput(line);
+        inputPoint.parent.data.addInput(line);
+        outputPoint.parent.data.addOutput(line);
     }
 	return line;
 };
